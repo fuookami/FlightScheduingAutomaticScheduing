@@ -13,21 +13,42 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="头文件\Flight">
+      <UniqueIdentifier>{2e3ba742-4eda-4e1d-9d7b-2cafa5da24ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\GeneticAlgorithm">
+      <UniqueIdentifier>{df651250-8354-463e-8391-890baa9f2443}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Flight">
+      <UniqueIdentifier>{165859fc-ba38-4c40-bc6b-4e2b55720d2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\GeneticAlogorithm">
+      <UniqueIdentifier>{e0b2547c-0d91-48df-8a43-10fedcba719c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Time.cpp">
-      <Filter>头文件</Filter>
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FlightBunch.cpp">
+      <Filter>源文件\Flight</Filter>
     </ClCompile>
     <ClCompile Include="FlightPlan.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Flight</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Time.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="FlightBunch.h">
+      <Filter>头文件\Flight</Filter>
+    </ClInclude>
     <ClInclude Include="FlightPlan.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\Flight</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneticAlgorithm.h">
+      <Filter>头文件\GeneticAlgorithm</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -110,11 +110,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FlightBunch.cpp" />
     <ClCompile Include="FlightPlan.cpp" />
     <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FlightBunch.h" />
     <ClInclude Include="FlightPlan.h" />
+    <ClInclude Include="GeneticAlgorithm.h" />
     <ClInclude Include="Time.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
