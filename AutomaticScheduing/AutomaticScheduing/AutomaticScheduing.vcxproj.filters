@@ -18,9 +18,15 @@
     <ClCompile Include="Time.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
+    <ClCompile Include="Flight.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Time.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Fligh.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
