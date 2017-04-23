@@ -18,7 +18,7 @@
     <ClCompile Include="Time.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="Flight.cpp">
+    <ClCompile Include="FlightPlan.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,7 +26,7 @@
     <ClInclude Include="Time.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Fligh.h">
+    <ClInclude Include="FlighPlan.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
