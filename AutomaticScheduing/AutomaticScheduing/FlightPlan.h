@@ -7,22 +7,22 @@
 
 struct FlightInfo
 {
-	int flight_id;
+	unsigned int id;
 	std::string name;
 
-	std::string dep_airport;
-	std::string arr_airport;
+	std::string depAirport;
+	std::string arrAirport;
 
-	Time plan_dep_time;
-	Time plan_arr_time;
+	Time planDepTime;
+	Time planArrTime;
 
 	Time delay;
 
-	FlightInfo(int _flight_id, std::string _name, std::string _dep_airport, std::string _arr_airport, Time _plan_dep_time,
-		Time _plan_arr_time, Time _delay, Time _propagated_delay) : name(_name), flight_id(_flight_id), dep_airport(_dep_airport),
-		arr_airport(_arr_airport), plan_dep_time(_plan_dep_time), plan_arr_time(_plan_arr_time), delay(_delay) {};
-	FlightInfo(const FlightInfo &ano) : name(ano.name), flight_id(ano.flight_id), dep_airport(ano.dep_airport), arr_airport(ano.arr_airport),
-		plan_dep_time(ano.plan_dep_time), plan_arr_time(ano.plan_arr_time), delay(ano.delay) {};
+	FlightInfo(int ID, std::string Name, std::string DepAirport, std::string ArrAirport, Time PlanDepTime,
+		Time PlanArrTime, Time Delay) : name(Name), id(ID), depAirport(DepAirport), arrAirport(ArrAirport), 
+		planDepTime(PlanDepTime), planArrTime(PlanArrTime), delay(Delay) {};
+	FlightInfo(const FlightInfo &ano) : name(ano.name), id(ano.id), depAirport(ano.depAirport), arrAirport(ano.arrAirport),
+		planDepTime(ano.planDepTime), planArrTime(ano.planArrTime), delay(ano.delay) {};
 	FlightInfo(int _flight_id, const std::string &data);
 
 	bool canBeFollowedBy(const FlightInfo &ano) const;
@@ -41,8 +41,12 @@ class Flight
 public:
 	Flight(std::shared_ptr<FlightInfo> _ptrInfo, const Time &_propagatedDelay = Time(0, 0)) : ptrInfo(_ptrInfo) {}
 
-	bool canBeFollowedBy(const FlightInfo &anoInfo) const;
-	bool canBeFollowedBy(const Flight &ano) const;
+	const FlightInfo &info(void) const;
+	const Time &delay(void) const;
+
+	void setPropagatedDelayFollowed(const Flight &preFlight);
+	bool canBeFollowedBy(const FlightInfo &nextFlightInfo) const;
+	bool canBeFollowedBy(const Flight &nextFlight) const;
 
 	std::string toString(void) const;
 private:
@@ -60,6 +64,8 @@ public:
 	bool eraseFlight(const std::deque<Flight>::iterator it);
 
 	std::deque<Flight>::size_type size() const;
+	std::deque<Flight> &flights(void) const;
+	std::set<unsigned int> &ids(void) const;
 
 	std::deque<Flight>::iterator begin() const;
 	std::deque<Flight>::const_iterator cbegin() const;
@@ -70,7 +76,8 @@ private:
 	void sortFlights(void);
 	void calDelayTime(void);
 
-	std::deque<Flight> flights;
+	std::set<unsigned int> flightId;
+	std::deque<Flight> flight;
 	Time totalDelay;
 };
 

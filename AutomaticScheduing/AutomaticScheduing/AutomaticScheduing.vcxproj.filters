@@ -19,14 +19,14 @@
       <Filter>头文件</Filter>
     </ClCompile>
     <ClCompile Include="FlightPlan.cpp">
-      <Filter>头文件</Filter>
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Time.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="FlighPlan.h">
+    <ClInclude Include="FlightPlan.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
