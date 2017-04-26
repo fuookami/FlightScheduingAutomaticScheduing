@@ -61,21 +61,24 @@ class FlightBunch
 public:
 	FlightBunch() : totalDelay(0, 0) {};
 
-	bool addFlight(const Flight &flight);
+	bool addFlight(const std::shared_ptr<FlightInfo> pFlightInfo);
+	std::deque<Flight>::iterator findFlighById(const unsigned int id);
 	bool eraseFlight(const std::deque<Flight>::size_type i);
 	bool eraseFlight(const std::deque<Flight>::iterator it);
 
-	std::deque<Flight>::size_type size() const;
-	std::deque<Flight> &flights(void) const;
-	std::set<unsigned int> &ids(void) const;
+	const Time &delay(void) const;
 
-	std::deque<Flight>::iterator begin() const;
+	Flight &operator[](const int i);
+	std::deque<Flight>::size_type size() const;
+	std::deque<Flight> &flights(void);
+	std::set<unsigned int> &ids(void);
+
+	std::deque<Flight>::iterator begin();
 	std::deque<Flight>::const_iterator cbegin() const;
-	std::deque<Flight>::iterator end() const;
+	std::deque<Flight>::iterator end();
 	std::deque<Flight>::const_iterator cend() const;
 
 private:
-	void sortFlights(void);
 	void calDelayTime(void);
 
 	std::set<unsigned int> flightId;
