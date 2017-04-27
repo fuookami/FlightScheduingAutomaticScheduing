@@ -117,6 +117,7 @@
   <ItemGroup>
     <ClInclude Include="FlightBunch.h" />
     <ClInclude Include="FlightPlan.h" />
+    <ClInclude Include="GenerateFlightPlan.h" />
     <ClInclude Include="GeneticAlgorithm.h" />
     <ClInclude Include="Time.h" />
   </ItemGroup>

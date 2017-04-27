@@ -50,6 +50,9 @@
     <ClInclude Include="GeneticAlgorithm.h">
       <Filter>头文件\GeneticAlgorithm</Filter>
     </ClInclude>
+    <ClInclude Include="GenerateFlightPlan.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data.txt">
