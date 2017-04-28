@@ -72,7 +72,7 @@ public:
 	bool eraseFlight(const std::deque<Flight>::size_type i);
 	bool eraseFlight(const std::deque<Flight>::iterator it);
 
-	Time addedDelayIfAddFlight(const std::shared_ptr<FlightInfo> pFlightInfo);
+	Time addedDelayIfAddFlight(const std::shared_ptr<FlightInfo> pFlightInfo) const;
 	const Time &delay(void) const;
 
 	Flight &operator[](const int i);

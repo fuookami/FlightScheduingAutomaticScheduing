@@ -182,7 +182,7 @@ bool FlightBunch::eraseFlight(const std::deque<Flight>::iterator it)
 	return true;
 }
 
-Time FlightBunch::addedDelayIfAddFlight(const std::shared_ptr<FlightInfo> pFlightInfo)
+Time FlightBunch::addedDelayIfAddFlight(const std::shared_ptr<FlightInfo> pFlightInfo) const
 {
 	Time addedDelay(0, 0);
 
