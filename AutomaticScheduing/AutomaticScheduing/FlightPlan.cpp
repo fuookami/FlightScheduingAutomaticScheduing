@@ -7,6 +7,11 @@ void FlightPlan::setFlighterNums(const unsigned int i)
 	orgBunches.insert(orgBunches.begin(), i, FlightBunch());
 }
 
+void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable & ret, const FlightInfoMap & infoMap)
+{
+	// to do
+}
+
 std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTable(PlanTable & t, const FlightInfoMap & infoMap)
 {
 	std::shared_ptr<FlightPlan> pNewPlan(new FlightPlan());

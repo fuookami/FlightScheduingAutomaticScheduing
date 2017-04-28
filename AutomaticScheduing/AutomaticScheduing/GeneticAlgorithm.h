@@ -2,9 +2,9 @@
 
 #include <vector>
 
-using Solution = std::vector<unsigned int>;
+using UIntegerCodeSolution = std::vector<unsigned int>;
 
-namespace IntegerCodeGeneticAlgorithm
+namespace UIntegerCodeGeneticAlgorithm
 {
 
 };
