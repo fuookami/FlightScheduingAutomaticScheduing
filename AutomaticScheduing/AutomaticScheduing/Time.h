@@ -20,6 +20,7 @@ public:
 	Time(int mins) : totalMin(mins) {}
 	Time(int hour, int min) : totalMin(hour * MinsOfOneHour + min) {}
 	Time(const Time &ano) : totalMin(ano.totalMin) {}
+	Time(const Time &&ano) : totalMin(std::move(ano.totalMin)) {}
 
 	Time &setHour(int hour) { totalMin = hour * MinsOfOneHour + totalMin % MinsOfOneHour; return *this; }
 	Time &setMin(int min) { totalMin = MinsOfOneHour * (totalMin / MinsOfOneHour) + min; return *this; }
@@ -31,6 +32,8 @@ public:
 	int hour() const { return totalMin / MinsOfOneHour % 24; }
 	int min() const { return totalMin % MinsOfOneHour; }
 
+	Time &operator=(const Time &ano);
+	Time &operator=(const Time &&ano);
 	Time operator+(const Time &ano) const;
 	Time operator+(const int min) const;
 	Time &operator+=(const Time &ano);
@@ -39,6 +42,8 @@ public:
 	Time operator-(const int min) const;
 	Time &operator-=(const Time &ano);
 	Time &operator-=(const int min);
+	Time operator*(const int times);
+	Time &operator*=(const int times);
 
 private:
 	static const int MinsOfOneHour = 60;
@@ -50,5 +55,7 @@ private:
 
 namespace SpecialTime
 {
+	static const Time ZeroTime(0, 0);
+	static const Time MaxTime(INT_MAX);
 	static const Time MinMCT(0, 45);
 }

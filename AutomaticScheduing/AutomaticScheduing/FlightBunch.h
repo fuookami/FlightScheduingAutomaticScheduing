@@ -46,11 +46,17 @@ public:
 	const FlightInfo &info(void) const;
 	const Time &delay(void) const;
 
-	void setPropagatedDelayFollowed(const Flight &preFlight);
+	void setPropagatedDelayFollow(const Flight &preFlight);
+	Time getPropagatedDelayIfFollowedBy(const std::shared_ptr<FlightInfo> ptrNextInfo) const;
+	Time getPropagatedDelayIfFollow(const std::shared_ptr<FlightInfo> ptrPrepInfo, const Time &prepPropagatedDealy) const;
 	bool canBeFollowedBy(const FlightInfo &nextFlightInfo) const;
 	bool canBeFollowedBy(const Flight &nextFlight) const;
 
 	std::string toString(void) const;
+
+private:
+	static Time calPropagatedDealy(const std::shared_ptr<FlightInfo> ptrPrepInfo, const Time &prepPropagatedDealyconst, std::shared_ptr<FlightInfo> ptrThisInfo);
+
 private:
 	std::shared_ptr<FlightInfo> ptrInfo;
 	Time propagatedDelay;
@@ -66,6 +72,7 @@ public:
 	bool eraseFlight(const std::deque<Flight>::size_type i);
 	bool eraseFlight(const std::deque<Flight>::iterator it);
 
+	Time addedDelayIfAddFlight(const std::shared_ptr<FlightInfo> pFlightInfo);
 	const Time &delay(void) const;
 
 	Flight &operator[](const int i);

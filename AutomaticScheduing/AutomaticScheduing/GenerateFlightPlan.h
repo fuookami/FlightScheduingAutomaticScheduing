@@ -5,5 +5,5 @@
 
 namespace GenerateFlightPlan
 {
-
+	void generateInitialSolution(const FlightInfoSet &flightInfoSet);
 }

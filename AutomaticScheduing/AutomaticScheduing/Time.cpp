@@ -61,6 +61,16 @@ std::string Time::toString() const
 		return _hour + ':' + _min;
 }
 
+Time & Time::operator=(const Time & ano)
+{
+	totalMin = ano.totalMin;
+}
+
+Time & Time::operator=(const Time && ano)
+{
+	totalMin = std::move(ano.totalMin);
+}
+
 Time Time::operator+(const Time & ano) const
 {
 	return Time(totalMin + ano.totalMin);
@@ -102,5 +112,16 @@ Time & Time::operator-=(const Time & ano)
 Time & Time::operator-=(const int min)
 {
 	this->totalMin -= min;
+	return *this;
+}
+
+Time Time::operator*(const int times)
+{
+	return Time(totalMin * times);
+}
+
+Time &Time::operator*=(const int times)
+{
+	totalMin *= times;
 	return *this;
 }

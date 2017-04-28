@@ -12,7 +12,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTable(const PlanTable & 
 	std::shared_ptr<FlightPlan> pNewPlan(new FlightPlan());
 	for (unsigned int i(0), j(t.size()); i != j; ++i)
 	{
-		if (!pNewPlan->bunches[t[i]].addFlight(infoMap.find(i)->second));
+		if (!pNewPlan->bunches[t[i]].addFlight(infoMap.find(i)->second))
 			return nullptr;
 	}
 
@@ -20,6 +20,18 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTable(const PlanTable & 
 		pNewPlan->totalDelay += bunch.delay();
 
 	return pNewPlan;
+}
+
+std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(PlanTable & t, const FlightInfoMap & infoMap)
+{
+	std::shared_ptr<FlightPlan> pNewPlan(new FlightPlan());
+	for (unsigned int i(0), j(t.size()); i != j; ++i)
+	{
+		if (!pNewPlan->bunches[t[i]].addFlight(infoMap.find(i)->second))
+			t[i] = -1;
+	}
+
+	
 }
 
 const Time &FlightPlan::delay(void) const

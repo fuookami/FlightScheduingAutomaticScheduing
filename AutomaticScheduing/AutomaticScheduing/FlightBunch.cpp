@@ -69,12 +69,19 @@ const Time & Flight::delay(void) const
 	return propagatedDelay;
 }
 
-void Flight::setPropagatedDelayFollowed(const Flight & preFlight)
+void Flight::setPropagatedDelayFollow(const Flight & preFlight)
 {
-	propagatedDelay = preFlight.ptrInfo->delay + preFlight.propagatedDelay + preFlight.ptrInfo->planArrTime
-		+ SpecialTime::MinMCT - ptrInfo->planDepTime;
-	if (propagatedDelay < Time(0, 0))
-		propagatedDelay.setHourMin(0, 0);
+	propagatedDelay = calPropagatedDealy(preFlight.ptrInfo, preFlight.propagatedDelay, ptrInfo);
+}
+
+Time Flight::getPropagatedDelayIfFollowedBy(const std::shared_ptr<FlightInfo> ptrNextInfo) const
+{
+	return std::move(calPropagatedDealy(ptrInfo, propagatedDelay, ptrNextInfo));
+}
+
+Time Flight::getPropagatedDelayIfFollow(const std::shared_ptr<FlightInfo> ptrPrepInfo, const Time & prepPropagatedDealy) const
+{
+	return std::move(calPropagatedDealy(ptrPrepInfo, prepPropagatedDealy, ptrInfo));
 }
 
 bool Flight::canBeFollowedBy(const FlightInfo & nextFlightInfo) const
@@ -95,11 +102,20 @@ std::string Flight::toString(void) const
 	return std::move(str);
 }
 
+Time Flight::calPropagatedDealy(const std::shared_ptr<FlightInfo> ptrPrepInfo, const Time & prepPropagatedDealy, const std::shared_ptr<FlightInfo> ptrThisInfo)
+{
+	Time propagatedDelay = ptrPrepInfo->delay + prepPropagatedDealy + ptrPrepInfo->planArrTime
+		+ SpecialTime::MinMCT - ptrThisInfo->planDepTime;
+	if (propagatedDelay < SpecialTime::ZeroTime)
+		propagatedDelay = SpecialTime::ZeroTime;
+	return std::move(propagatedDelay);
+}
+
 bool FlightBunch::addFlight(const std::shared_ptr<FlightInfo> pFlightInfo)
 {
 	if (flight.empty())
 	{
-		flight.push_back(pFlightInfo);
+		flight.emplace_back(Flight(pFlightInfo));
 		return true;
 	}
 	else if (pFlightInfo->canBeFollowedBy(flight.front().info()))
@@ -126,6 +142,7 @@ bool FlightBunch::addFlight(const std::shared_ptr<FlightInfo> pFlightInfo)
 			{
 				flight.insert(flight.begin() + i, std::move(Flight(pFlightInfo)));
 				flag = true;
+				break;
 			}
 		}
 
@@ -165,12 +182,49 @@ bool FlightBunch::eraseFlight(const std::deque<Flight>::iterator it)
 	return true;
 }
 
+Time FlightBunch::addedDelayIfAddFlight(const std::shared_ptr<FlightInfo> pFlightInfo)
+{
+	Time addedDelay(0, 0);
+
+	if (flight.empty() || pFlightInfo->canBeFollowedBy(flight.front().info()))
+	{
+		// nothing to do
+	}
+	else if (flight.back().canBeFollowedBy(pFlightInfo))
+	{
+		addedDelay = flight.back().getPropagatedDelayIfFollowedBy(pFlightInfo);
+	}
+	else 
+	{
+		bool flag(false);
+		for (std::deque<Flight>::size_type i(0), j(flight.size() - 1); i != j; ++i)
+		{
+			bool prep(flight[i].canBeFollowedBy(pFlightInfo));
+			bool sufix(pFlightInfo->canBeFollowedBy(flight[i + 1].info()));
+
+			if (prep && sufix)
+			{
+				addedDelay = flight[i].getPropagatedDelayIfFollowedBy(pFlightInfo);
+				Time nextAddedDelay(flight[i + 1].getPropagatedDelayIfFollow(pFlightInfo, addedDelay));
+				addedDelay += nextAddedDelay * (j - i);
+				flag = true;
+				break;
+			}
+		}
+
+		if (!flag)
+			addedDelay = SpecialTime::MaxTime;
+	}
+
+	return std::move(addedDelay);
+}
+
 const Time & FlightBunch::delay(void) const
 {
 	return totalDelay;
 }
 
-Flight & FlightBunch::operator[](const int i)
+Flight & FlightBunch::operator[](const int i) 
 {
 	return flight[i];
 }
@@ -216,7 +270,7 @@ void FlightBunch::calDelayTime(void)
 
 	for (unsigned int i(1), j(flight.size()); i != j; ++i)
 	{
-		flight[i].setPropagatedDelayFollowed(flight[i - 1]);
+		flight[i].setPropagatedDelayFollow(flight[i - 1]);
 		totalDelay += flight[i].delay();
 	}
 }
