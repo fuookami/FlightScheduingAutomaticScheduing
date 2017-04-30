@@ -6,5 +6,5 @@ using UIntegerCodeSolution = std::vector<unsigned int>;
 
 namespace UIntegerCodeGeneticAlgorithm
 {
-
+	static 
 };

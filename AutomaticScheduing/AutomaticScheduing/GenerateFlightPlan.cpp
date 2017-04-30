@@ -5,27 +5,40 @@
 
 void GenerateFlightPlan::run()
 {
-	FlightInfoSet flightInfoSet(SubFun::loadDatas());
-	std::vector<PlanTable> initialSolution(SubFun::generateInitialSolution(flightInfoSet));
+	SubFun::loadDatas();
+	std::vector<PlanTable> initialSolution(SubFun::generateInitialSolution());
 
 	// use genetic algorithm to get solution
 }
 
-FlightInfoSet GenerateFlightPlan::SubFun::loadDatas(void)
+void GenerateFlightPlan::SubFun::loadDatas(void)
 {
-	FlightInfoSet flightInfoSet;
-
 	std::ifstream fin(dataInputFileName);
 	fin >> GenerateFlightPlan::FlighterNum;
 	std::string lineData;
+	getline(fin, lineData);
 	while (std::getline(fin, lineData))
-		flightInfoSet.insert(std::shared_ptr<FlightInfo>(
-			new FlightInfo(flightInfoSet.size(), lineData)));
+	{
+		std::shared_ptr<FlightInfo> newFlightInfo(new FlightInfo(flightInfoSet.size(), lineData));
+		flightInfoSet.insert(newFlightInfo);
+		flightInfoMap.insert(std::make_pair(newFlightInfo->id, newFlightInfo));
+	}
 
-	return std::move(flightInfoSet);
+	FlightPlan::setFlighterNum(GenerateFlightPlan::FlighterNum);
+	FlightPlan::setFlightInfoNum(flightInfoSet.size());
 }
 
-std::vector<PlanTable> GenerateFlightPlan::SubFun::generateInitialSolution(const FlightInfoSet & flightInfoSet)
+std::vector<PlanTable> GenerateFlightPlan::SubFun::generateInitialSolution(void)
 {
-	// multi-threading use FlightPlan::generatePlanTableWithRandomGreedyAlgorithm to generate initial solution
+	std::vector<PlanTable> initialSolution(GenerateFlightPlan::FlighterNum, PlanTable());
+	std::vector<std::thread> threads;
+
+	for (unsigned int i(0), j(initialSolution.size()); i != j; ++i)
+		threads.push_back(std::thread(
+			FlightPlan::generatePlanTableWithRandomGreedyAlgorithm, &(initialSolution[i]), flightInfoMap));
+
+	for (auto &thread : threads)
+		thread.join();
+
+	return std::move(initialSolution);
 }

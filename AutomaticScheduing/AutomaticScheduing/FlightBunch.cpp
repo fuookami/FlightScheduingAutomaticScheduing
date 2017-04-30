@@ -116,6 +116,7 @@ bool FlightBunch::addFlight(const std::shared_ptr<FlightInfo> pFlightInfo)
 	if (flight.empty())
 	{
 		flight.emplace_back(Flight(pFlightInfo));
+		flightId.insert(pFlightInfo->id);
 		return true;
 	}
 	else if (pFlightInfo->canBeFollowedBy(flight.front().info()))
@@ -123,12 +124,14 @@ bool FlightBunch::addFlight(const std::shared_ptr<FlightInfo> pFlightInfo)
 		flight.emplace_front(Flight(pFlightInfo));
 		flightId.insert(pFlightInfo->id);
 		calDelayTime();
+		return true;
 	}
 	else if (flight.back().canBeFollowedBy(pFlightInfo))
 	{
 		flight.emplace_back(Flight(pFlightInfo));
 		flightId.insert(pFlightInfo->id);
 		calDelayTime();
+		return true;
 	}
 	else
 	{
@@ -184,11 +187,13 @@ bool FlightBunch::eraseFlight(const std::deque<Flight>::iterator it)
 
 Time FlightBunch::addedDelayIfAddFlight(const std::shared_ptr<FlightInfo> pFlightInfo) const
 {
-	Time addedDelay(0, 0);
+	Time addedDelay(SpecialTime::MaxTime);
 
 	if (flight.empty() || pFlightInfo->canBeFollowedBy(flight.front().info()))
 	{
-		// nothing to do
+		Time nextAddedDelay((flight.front().getPropagatedDelayIfFollow(pFlightInfo, addedDelay)
+			- flight.front().delay()));
+		return nextAddedDelay * flight.size();
 	}
 	else if (flight.back().canBeFollowedBy(pFlightInfo))
 	{
@@ -199,21 +204,16 @@ Time FlightBunch::addedDelayIfAddFlight(const std::shared_ptr<FlightInfo> pFligh
 		bool flag(false);
 		for (std::deque<Flight>::size_type i(0), j(flight.size() - 1); i != j; ++i)
 		{
-			bool prep(flight[i].canBeFollowedBy(pFlightInfo));
-			bool sufix(pFlightInfo->canBeFollowedBy(flight[i + 1].info()));
+			flag = flight[i].canBeFollowedBy(pFlightInfo) && pFlightInfo->canBeFollowedBy(flight[i + 1].info());
 
-			if (prep && sufix)
+			if (flag)
 			{
 				addedDelay = flight[i].getPropagatedDelayIfFollowedBy(pFlightInfo);
-				Time nextAddedDelay(flight[i + 1].getPropagatedDelayIfFollow(pFlightInfo, addedDelay));
+				Time nextAddedDelay(flight[i + 1].getPropagatedDelayIfFollow(pFlightInfo, addedDelay) - flight[i + 1].delay());
 				addedDelay += nextAddedDelay * (j - i);
-				flag = true;
 				break;
 			}
 		}
-
-		if (!flag)
-			addedDelay = SpecialTime::MaxTime;
 	}
 
 	return std::move(addedDelay);
@@ -225,6 +225,11 @@ const Time & FlightBunch::delay(void) const
 }
 
 Flight & FlightBunch::operator[](const int i) 
+{
+	return flight[i];
+}
+
+const Flight & FlightBunch::operator[](const int i) const
 {
 	return flight[i];
 }

@@ -1,15 +1,80 @@
 #include "FlightPlan.h"
 
 #include <algorithm>
+#include <random>
 
-void FlightPlan::setFlighterNums(const unsigned int i)
+std::vector<FlightBunch> FlightPlan::orgBunches = std::vector<FlightBunch>();
+PlanTable FlightPlan::orgPlanTable = PlanTable();
+
+void FlightPlan::setFlighterNum(const unsigned int i)
 {
 	orgBunches.insert(orgBunches.begin(), i, FlightBunch());
 }
 
-void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable & ret, const FlightInfoMap & infoMap)
+void FlightPlan::setFlightInfoNum(const unsigned int i)
 {
-	// to do
+	orgPlanTable.insert(orgPlanTable.begin(), i, 0);
+}
+
+void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, const FlightInfoMap & infoMap)
+{
+	static auto randomRank([]()->unsigned int {
+		static unsigned int maxRank = 3;;
+		static std::random_device rd;
+		static std::mt19937 gen(rd());
+		static std::poisson_distribution<> d(maxRank - 1);
+
+		unsigned int currNum(d(gen) / maxRank);
+		return currNum < maxRank ? currNum : maxRank - 1;
+	});
+
+	std::shared_ptr<FlightPlan> pNewPlan(nullptr);
+	bool flag(true);
+	while (flag)
+	{
+		pNewPlan.reset(new FlightPlan());
+		flag = false;
+
+		for (const std::pair<unsigned int, std::shared_ptr<FlightInfo>> &infoPair : infoMap)
+		{
+			std::vector<std::pair<unsigned int, Time>> addedDelays;
+
+			for (unsigned int i(0), j(pNewPlan->bunches.size()); i != j
+				&& pNewPlan->bunches[i].size() != 0; ++i)
+			{
+				Time thisDelay(pNewPlan->bunches[i].addedDelayIfAddFlight(infoPair.second));
+				if (thisDelay != SpecialTime::MaxTime)
+					addedDelays.push_back(std::make_pair(i, std::move(thisDelay)));
+			}
+
+			if (addedDelays.empty() && pNewPlan->bunches.back().size() != 0)
+			{
+				flag = true;
+				break;
+			}
+			else if (!addedDelays.empty())
+			{
+				std::sort(addedDelays.begin(), addedDelays.end(),
+					[](std::pair<unsigned int, Time> &lop, std::pair<unsigned int, Time> &rop)->bool
+				{
+					return lop.second < rop.second;
+				});
+
+				unsigned int currRank(randomRank());
+				currRank = currRank >= addedDelays.size() ? addedDelays.size() - 1 : currRank;
+
+				pNewPlan->bunches[addedDelays[currRank].first].addFlight(infoPair.second);
+			}
+			else 
+			{
+				unsigned int i(0);
+				for (unsigned int j(pNewPlan->bunches.size()); i != j && pNewPlan->bunches[i].size() != 0; ++i);
+				pNewPlan->bunches[i].addFlight(infoPair.second);
+			}
+		}
+	}
+
+	*pRet = std::move(pNewPlan->getPlanTable());
 }
 
 std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTable(PlanTable & t, const FlightInfoMap & infoMap)
@@ -79,6 +144,21 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 	}
 
 	return pNewPlan;
+}
+
+PlanTable FlightPlan::getPlanTable(void) const
+{
+	PlanTable ret(orgPlanTable);
+
+	for (unsigned int i(0), j(bunches.size()); i != j; ++i)
+	{
+		for (unsigned int m(0), n(bunches[i].size()); m != n; ++m)
+		{
+			ret[bunches[i][m].info().id] = i;
+		}
+	}
+
+	return std::move(ret);
 }
 
 const Time &FlightPlan::delay(void) const

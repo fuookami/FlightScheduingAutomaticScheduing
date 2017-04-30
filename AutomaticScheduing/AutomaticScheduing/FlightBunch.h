@@ -76,6 +76,7 @@ public:
 	const Time &delay(void) const;
 
 	Flight &operator[](const int i);
+	const Flight &operator[](const int i) const;
 	std::deque<Flight>::size_type size() const;
 	std::deque<Flight> &flights(void);
 	std::set<unsigned int> &ids(void);

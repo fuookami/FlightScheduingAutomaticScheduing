@@ -6,7 +6,7 @@ std::istream & operator >> (std::istream & is, Time &time)
 {
 	static int hour(0), min(0);
 	is >> hour >> min;
-	time.totalMin = hour * min;
+	time.totalMin = hour * 60 + min;
 	return is;
 }
 
@@ -64,11 +64,13 @@ std::string Time::toString() const
 Time & Time::operator=(const Time & ano)
 {
 	totalMin = ano.totalMin;
+	return *this;
 }
 
 Time & Time::operator=(const Time && ano)
 {
 	totalMin = std::move(ano.totalMin);
+	return *this;
 }
 
 Time Time::operator+(const Time & ano) const

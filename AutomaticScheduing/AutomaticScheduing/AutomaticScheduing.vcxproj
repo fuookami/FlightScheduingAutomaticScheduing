@@ -110,6 +110,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AutomaticScheduing.cpp" />
     <ClCompile Include="FlightBunch.cpp" />
     <ClCompile Include="FlightPlan.cpp" />
     <ClCompile Include="GenerateFlightPlan.cpp" />
