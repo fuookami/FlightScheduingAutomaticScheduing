@@ -11,7 +11,7 @@ namespace GenerateFlightPlan
 	static FlightInfoSet flightInfoSet;
 	static FlightInfoMap flightInfoMap;
 
-	void run();
+	void run(UIntegerCodeGeneticAlgorithm::SettingHelper setting);
 
 	namespace SubFun
 	{
@@ -19,5 +19,8 @@ namespace GenerateFlightPlan
 		static const std::string dataOuputFilter = "result\\";
 		void loadDatas(void);
 		std::vector<PlanTable> generateInitialSolution(void);
+
+		std::vector<std::pair<PlanTable, unsigned int>> planTable2Score(const std::vector<PlanTable> &planTables);
+		std::vector<std::pair<PlanTable, unsigned int>> planTable2ScoreWithFaultTolerant(const std::vector<PlanTable> &planTables);
 	}
 }

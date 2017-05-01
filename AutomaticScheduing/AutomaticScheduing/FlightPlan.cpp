@@ -77,7 +77,7 @@ void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, co
 	*pRet = std::move(pNewPlan->getPlanTable());
 }
 
-std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTable(PlanTable & t, const FlightInfoMap & infoMap)
+std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTable(const PlanTable & t, const FlightInfoMap & infoMap)
 {
 	std::shared_ptr<FlightPlan> pNewPlan(new FlightPlan());
 	for (unsigned int i(0), j(t.size()); i != j; ++i)

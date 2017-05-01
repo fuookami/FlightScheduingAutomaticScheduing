@@ -114,6 +114,7 @@
     <ClCompile Include="FlightBunch.cpp" />
     <ClCompile Include="FlightPlan.cpp" />
     <ClCompile Include="GenerateFlightPlan.cpp" />
+    <ClCompile Include="GeneticAlgorithm.cpp" />
     <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <ItemGroup>

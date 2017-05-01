@@ -11,7 +11,7 @@ public:
 	static void setFlighterNum(const unsigned int i);
 	static void setFlightInfoNum(const unsigned int i);
 	static void generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, const FlightInfoMap &infoMap);
-	static std::shared_ptr<FlightPlan> generateFromPlanTable(PlanTable &t, const FlightInfoMap &infoMap);
+	static std::shared_ptr<FlightPlan> generateFromPlanTable(const PlanTable &t, const FlightInfoMap &infoMap);
 	static std::shared_ptr<FlightPlan> generateFromPlanTableWithFaultTolerant(PlanTable &t, const FlightInfoMap &infoMap);
 	
 	PlanTable getPlanTable(void) const;
