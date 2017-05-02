@@ -4,12 +4,12 @@
 #include <thread>
 #include <algorithm>
 
-void GenerateFlightPlan::run(UIntegerCodeGeneticAlgorithm::SettingHelper setting)
+void GenerateFlightPlan::run(UICodeGeneticAlgorithm::SettingHelper setting)
 {
 	SubFun::loadDatas();
 	std::vector<PlanTable> initialSolution(SubFun::generateInitialSolution());
 
-	UIntegerCodeGeneticAlgorithm::run(initialSolution, setting, &SubFun::planTable2Score);
+	UICodeGeneticAlgorithm::run(initialSolution, setting, &SubFun::planTable2Score);
 }
 
 void GenerateFlightPlan::SubFun::loadDatas(void)
@@ -54,15 +54,12 @@ std::vector<std::pair<PlanTable, unsigned int>> GenerateFlightPlan::SubFun::plan
 		if (flightPlan != nullptr)
 			ret.emplace_back(std::make_pair(planTables[i], flightPlan->delay().totalMins()));
 	}
-	
+
 	std::sort(ret.begin(), ret.end(), [](const std::pair<PlanTable, unsigned int> &lop,
 		const std::pair<PlanTable, unsigned int> &rop) -> bool
 	{
 		return lop.second < rop.second;
 	});
-
-	for (std::pair<PlanTable, unsigned int> &p : ret)
-		p.second = ret.back().second - p.second;
 
 	return std::move(ret);
 }

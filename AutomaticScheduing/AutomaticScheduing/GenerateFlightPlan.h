@@ -11,7 +11,7 @@ namespace GenerateFlightPlan
 	static FlightInfoSet flightInfoSet;
 	static FlightInfoMap flightInfoMap;
 
-	void run(UIntegerCodeGeneticAlgorithm::SettingHelper setting);
+	void run(UICodeGeneticAlgorithm::SettingHelper setting);
 
 	namespace SubFun
 	{

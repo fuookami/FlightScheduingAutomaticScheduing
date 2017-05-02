@@ -4,19 +4,21 @@
 #include <map>
 #include <utility>
 
-namespace UIntegerCodeGeneticAlgorithm
+namespace UICodeGeneticAlgorithm
 {
-	using UIntegerCodeSolution = std::vector<unsigned int>;
-	using UIntegerCodeSolutionFitnessPair = std::pair<UIntegerCodeSolution, unsigned int>;
-	using UIntSolt2SoltFitenessPair = std::vector<UIntegerCodeSolutionFitnessPair> (const std::vector<UIntegerCodeSolution> &);
+	using UICodeSolt = std::vector<unsigned int>;
+	using UICodeSoltFitnessPair = std::pair<UICodeSolt, unsigned int>;
+	using UIntSolt2SoltFitenessPair = std::vector<UICodeSoltFitnessPair> (const std::vector<UICodeSolt> &);
 
-	class SettingSubArgument
+	static const unsigned int MaxGeneration = 10;
+
+	class SettingArg
 	{
 	public:
 		const std::string &code() const { return _map.find(_code)->second; }
 
 	protected:
-		SettingSubArgument(std::map<unsigned int, std::string> map, unsigned int c)
+		SettingArg(std::map<unsigned int, std::string> map, unsigned int c)
 			: _map(map), _code(c) {}
 
 	private:
@@ -24,7 +26,7 @@ namespace UIntegerCodeGeneticAlgorithm
 		unsigned int _code;
 	};
 
-	class SelectMode : public SettingSubArgument
+	class SelectMode : public SettingArg
 	{
 	public:
 		static enum
@@ -36,7 +38,7 @@ namespace UIntegerCodeGeneticAlgorithm
 		static const std::map<unsigned int, std::string> names;
 
 		SelectMode(unsigned int c) :
-			SettingSubArgument(names, c) {};
+			SettingArg(names, c) {};
 	};
 
 	const std::map<unsigned int, std::string> SelectMode::names = {
@@ -44,7 +46,7 @@ namespace UIntegerCodeGeneticAlgorithm
 		std::make_pair(SelectMode::AdapativeDynamic,"自适应动态种群个数"),
 	};
 
-	class SelectOperator : public SettingSubArgument
+	class SelectOperator : public SettingArg
 	{
 	public:
 		static enum
@@ -58,7 +60,7 @@ namespace UIntegerCodeGeneticAlgorithm
 		static const std::map<unsigned int, std::string> names;
 
 		SelectOperator(unsigned int c) :
-			SettingSubArgument(names, c) {};
+			SettingArg(names, c) {};
 	};
 
 	const std::map<unsigned int, std::string> SelectOperator::names = {
@@ -68,7 +70,7 @@ namespace UIntegerCodeGeneticAlgorithm
 		std::make_pair(SelectOperator::Tournament,		"竞标赛选择法")
 	};
 
-	class CrossMode : public SettingSubArgument
+	class CrossMode : public SettingArg
 	{
 	public:
 		static enum 
@@ -87,7 +89,7 @@ namespace UIntegerCodeGeneticAlgorithm
 		std::make_pair(CrossMode::AdapativeMultiParent,	"自适应多父辈交叉"),
 	};
 
-	class CrossOperator : public SettingSubArgument
+	class CrossOperator : public SettingArg
 	{
 	public:
 		static enum
@@ -102,7 +104,7 @@ namespace UIntegerCodeGeneticAlgorithm
 		static const std::map<unsigned int, std::string> names;
 
 		CrossOperator(unsigned int c) :
-			SettingSubArgument(names, c) {};
+			SettingArg(names, c) {};
 	};
 
 	const std::map<unsigned int, std::string> SelectOperator::names = {
@@ -113,7 +115,7 @@ namespace UIntegerCodeGeneticAlgorithm
 		std::make_pair(CrossOperator::Shuffle,		"洗牌交叉算子")
 	};
 
-	class MutationOperator : public SettingSubArgument
+	class MutationOperator : public SettingArg
 	{
 	public:
 		static enum
@@ -127,7 +129,7 @@ namespace UIntegerCodeGeneticAlgorithm
 		static const std::map<unsigned int, std::string> names;
 
 		MutationOperator(unsigned int c) :
-			SettingSubArgument(names, c) {};
+			SettingArg(names, c) {};
 	};
 
 	const std::map<unsigned int, std::string> SelectOperator::names = {
@@ -140,8 +142,32 @@ namespace UIntegerCodeGeneticAlgorithm
 	struct SettingHelper
 	{
 		unsigned int range;
+		unsigned int length;
+
+		SelectMode selectMode;
+		SelectOperator selectOperator;
+
+		CrossMode crossMode;
+		CrossOperator crossOperator;
+
+		MutationOperator mutationOperator;
 	};
 
-	UIntegerCodeSolution run(std::vector<UIntegerCodeSolution> initialSolution,
+	UICodeSolt run(std::vector<UICodeSolt> initialSolution,
 		SettingHelper setting, UIntSolt2SoltFitenessPair *solt2ScoreTransFun);
+
+	namespace Select
+	{
+		std::vector<UICodeSolt> run(const std::vector<UICodeSoltFitnessPair> &pairs, const SettingHelper &setting);
+	};
+
+	namespace Cross
+	{
+		std::vector<UICodeSolt> run(const std::vector<UICodeSolt> &solts, const SettingHelper &setting);
+	};
+
+	namespace Mutation
+	{
+		std::vector<UICodeSolt> run(const std::vector<UICodeSoltFitnessPair> &pairs, const SettingHelper &setting);
+	};
 };
