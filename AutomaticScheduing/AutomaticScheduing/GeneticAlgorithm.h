@@ -43,10 +43,9 @@ namespace UICodeGeneticAlgorithm
 
 		static const std::map<unsigned int, std::string> names;
 
-		PopulationNum(unsigned int c) :
+		explicit PopulationNum(unsigned int c) :
 			SettingArg(names, c) {};
 	};
-
 	const std::map<unsigned int, std::string> PopulationNum::names = {
 		std::make_pair(One,		"单种群"),
 		std::make_pair(Two,		"双种群"),
@@ -70,10 +69,9 @@ namespace UICodeGeneticAlgorithm
 
 		static const std::map<unsigned int, std::string> names;
 
-		PopulationComunicationMode(unsigned int c) :
+		explicit PopulationComunicationMode(unsigned int c) :
 			SettingArg(names, c) {};
 	};
-
 	const std::map<unsigned int, std::string> PopulationComunicationMode::names = {
 		std::make_pair(Random,			"种群个体随机交流"),
 		std::make_pair(BetterToWrose,	"优秀种群的个体向较差种群流动"),
@@ -91,10 +89,9 @@ namespace UICodeGeneticAlgorithm
 
 		static const std::map<unsigned int, std::string> names;
 
-		SelectMode(unsigned int c) :
+		explicit SelectMode(unsigned int c) :
 			SettingArg(names, c) {};
 	};
-
 	const std::map<unsigned int, std::string> SelectMode::names = {
 		std::make_pair(SelectMode::Static,			"静态种群个数"),
 		std::make_pair(SelectMode::AdapativeDynamic,"自适应动态种群密度"),
@@ -113,15 +110,14 @@ namespace UICodeGeneticAlgorithm
 
 		static const std::map<unsigned int, std::string> names;
 
-		SelectOperator(unsigned int c) :
+		explicit SelectOperator(unsigned int c) :
 			SettingArg(names, c) {};
 	};
-
 	const std::map<unsigned int, std::string> SelectOperator::names = {
 		std::make_pair(SelectOperator::Roulette,		"轮盘赌选择法"),
 		std::make_pair(SelectOperator::BestIndividual,	"最佳个体选择法"),
 		std::make_pair(SelectOperator::RankSelect,		"排序选择法"),
-		std::make_pair(SelectOperator::Tournament,		"竞标赛选择法")
+		std::make_pair(SelectOperator::Tournament,		"锦标赛选择法")
 	};
 
 	class CrossMode : public SettingArg
@@ -135,8 +131,10 @@ namespace UICodeGeneticAlgorithm
 		};
 
 		static const std::map<unsigned int, std::string> names;
-	};
 
+		explicit CrossMode(const unsigned int i) :
+			SettingArg(names, i) {}
+	};
 	const std::map<unsigned int, std::string> CrossMode::names = {
 		std::make_pair(CrossMode::TwoParent,			"双父辈交叉"),
 		std::make_pair(CrossMode::MultiParent,			"多父辈交叉"),
@@ -157,10 +155,9 @@ namespace UICodeGeneticAlgorithm
 
 		static const std::map<unsigned int, std::string> names;
 
-		CrossOperator(unsigned int c) :
+		explicit CrossOperator(unsigned int c) :
 			SettingArg(names, c) {};
 	};
-
 	const std::map<unsigned int, std::string> CrossOperator::names = {
 		std::make_pair(CrossOperator::OnePoint,		"单点交叉算子"),
 		std::make_pair(CrossOperator::TwoPoint,		"两点交叉算子"),
@@ -180,10 +177,9 @@ namespace UICodeGeneticAlgorithm
 
 		static const std::map<unsigned int, std::string> names;
 
-		MutationRateMode(unsigned int c) :
+		explicit MutationRateMode(unsigned int c) :
 			SettingArg(names, c) {};
 	};
-
 	const std::map<unsigned int, std::string> MutationRateMode::names = {
 		std::make_pair(Static,			"静态变异概率"),
 		std::make_pair(AdapativeDynamic,"自适应动态变异概率")
@@ -202,19 +198,27 @@ namespace UICodeGeneticAlgorithm
 
 		static const std::map<unsigned int, std::string> names;
 
-		MutationOperator(unsigned int c) :
+		explicit MutationOperator(unsigned int c) :
 			SettingArg(names, c) {};
 	};
-
 	const std::map<unsigned int, std::string> SelectOperator::names = {
-		std::make_pair(CrossOperator::OnePoint,		"均匀变异算子"),
-		std::make_pair(CrossOperator::TwoPoint,		"非均匀变异算子"),
-		std::make_pair(CrossOperator::MultiPoint,	"边界变异算子"),
-		std::make_pair(CrossOperator::Uniform,		"高斯变异算子")
+		std::make_pair(MutationOperator::Uniform,		"均匀变异算子"),
+		std::make_pair(MutationOperator::NonUniform,	"非均匀变异算子"),
+		std::make_pair(MutationOperator::Boundary,		"边界变异算子"),
+		std::make_pair(MutationOperator::Gaussian,		"高斯变异算子")
 	};
 
 	struct SettingHelper
 	{
+		SettingHelper(unsigned int _range, unsigned int _length, PopulationNum _populationNum,
+			PopulationComunicationMode _populationComunicationMode, SelectMode _selectMode,
+			SelectOperator _selectOperation, CrossMode _crossMode, CrossOperator _crossOperator,
+			MutationRateMode _mutationRateMode, MutationOperator _mutationOperator) :
+			range(_range), length(_length), populationNum(_populationNum),
+			populationComunicationMode(_populationComunicationMode), selectMode(_selectMode),
+			selectOperator(_selectOperation), crossMode(_crossMode), crossOperator(_crossOperator),
+			mutationRateMode(_mutationRateMode), mutationOperator(_mutationOperator) {}
+
 		unsigned int range;
 		unsigned int length;
 
@@ -252,7 +256,7 @@ namespace UICodeGeneticAlgorithm
 
 	namespace Cross
 	{
-		std::vector<UICodeSolt> run(const std::vector<UICodeSolt> &solts, const SettingHelper &setting);
+		std::vector<UICodeSolt> run(const std::vector<UICodeSoltFitnessPair> &pairs, const SettingHelper &setting);
 	};
 
 	namespace Mutation
