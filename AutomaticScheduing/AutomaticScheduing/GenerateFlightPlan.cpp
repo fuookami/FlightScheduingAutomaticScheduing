@@ -47,44 +47,67 @@ std::vector<PlanTable> GenerateFlightPlan::SubFun::generateInitialSolution(void)
 std::vector<std::pair<PlanTable, unsigned int>> GenerateFlightPlan::SubFun::planTable2Score(const std::vector<PlanTable> &planTables)
 {
 	std::vector<std::pair<PlanTable, unsigned int>> ret;
+	std::vector<std::thread> threads;
+	static auto calScore = [](std::pair<PlanTable, unsigned int> *pPair) {
+		std::shared_ptr<FlightPlan> flightPlan(FlightPlan::generateFromPlanTable(pPair->first, flightInfoMap));
+		if (flightPlan != nullptr)
+			pPair->second = flightPlan->delay().totalMins();
+		else
+			pPair->second = UINT_MAX;
+	};
 
 	for (unsigned int i(0), j(planTables.size()); i != j; ++i)
 	{
-		std::shared_ptr<FlightPlan> flightPlan(FlightPlan::generateFromPlanTable(planTables[i], flightInfoMap));
-		if (flightPlan != nullptr)
-			ret.emplace_back(std::make_pair(planTables[i], flightPlan->delay().totalMins()));
+		ret.emplace_back(std::make_pair(planTables[i], 0));
+		threads.push_back(std::thread(calScore, ret.back()));
 	}
+
+	for (std::thread &thread : threads)
+		thread.join();
 
 	std::sort(ret.begin(), ret.end(), [](const std::pair<PlanTable, unsigned int> &lop,
 		const std::pair<PlanTable, unsigned int> &rop) -> bool
 	{
 		return lop.second < rop.second;
 	});
-
+	std::vector<std::pair<PlanTable, unsigned int>>::iterator lastIt(std::find_if(
+		ret.begin(), ret.end(), [](const std::pair<PlanTable, unsigned int> &pair) -> bool{
+		return pair.second == UINT_MAX;
+	}));
+	ret.erase(lastIt, ret.end());
 	return std::move(ret);
 }
 
-std::vector<std::pair<PlanTable, unsigned int>> GenerateFlightPlan::SubFun::planTable2Score(const std::vector<PlanTable> &planTables)
+std::vector<std::pair<PlanTable, unsigned int>> GenerateFlightPlan::SubFun::planTable2ScoreWithFaultTolerant(const std::vector<PlanTable> &planTables)
 {
 	std::vector<std::pair<PlanTable, unsigned int>> ret;
+	std::vector<std::thread> threads;
+	static auto calScore = [](std::pair<PlanTable, unsigned int> *pPair) {
+		std::shared_ptr<FlightPlan> flightPlan(FlightPlan::generateFromPlanTableWithFaultTolerant(pPair->first, flightInfoMap));
+		if (flightPlan != nullptr)
+			pPair->second = flightPlan->delay().totalMins();
+		else
+			pPair->second = UINT_MAX;
+	};
 
 	for (unsigned int i(0), j(planTables.size()); i != j; ++i)
 	{
-		PlanTable thisPlanTable(planTables[i]);
-		std::shared_ptr<FlightPlan> flightPlan(
-			FlightPlan::generateFromPlanTableWithFaultTolerant(thisPlanTable, flightInfoMap));
-		if (flightPlan != nullptr)
-			ret.emplace_back(std::make_pair(thisPlanTable, flightPlan->delay().totalMins()));
+		ret.emplace_back(std::make_pair(planTables[i], 0));
+		threads.push_back(std::thread(calScore, ret.back()));
 	}
+
+	for (std::thread &thread : threads)
+		thread.join();
 
 	std::sort(ret.begin(), ret.end(), [](const std::pair<PlanTable, unsigned int> &lop,
 		const std::pair<PlanTable, unsigned int> &rop) -> bool
 	{
 		return lop.second < rop.second;
 	});
-
-	for (std::pair<PlanTable, unsigned int> &p : ret)
-		p.second = ret.back().second - p.second;
-
+	std::vector<std::pair<PlanTable, unsigned int>>::iterator lastIt(std::find_if(
+		ret.begin(), ret.end(), [](const std::pair<PlanTable, unsigned int> &pair) -> bool {
+		return pair.second == UINT_MAX;
+	}));
+	ret.erase(lastIt, ret.end());
 	return std::move(ret);
 }

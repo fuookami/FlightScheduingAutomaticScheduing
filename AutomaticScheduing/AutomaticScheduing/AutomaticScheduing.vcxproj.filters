@@ -43,7 +43,13 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="GeneticAlgorithm.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\GeneticAlogorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneticAlgorithmPoputationOperation.cpp">
+      <Filter>源文件\GeneticAlogorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneticAlgorithmPublic.cpp">
+      <Filter>源文件\GeneticAlogorithm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +67,12 @@
     </ClInclude>
     <ClInclude Include="GenerateFlightPlan.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneticAlgorithmPoputationOperation.h">
+      <Filter>头文件\GeneticAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneticAlgorithmPublic.h">
+      <Filter>头文件\GeneticAlgorithm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
