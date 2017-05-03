@@ -6,7 +6,7 @@
 
 namespace UICodeGeneticAlgorithm::Population
 {
-	std::vector<UICodeSoltPopulation> generateInitialPopulations(const std::vector<UICodeSolt> initialSolution, 
+	std::vector<UICodeSoltPopulation> generateInitialPopulations(std::vector<UICodeSolt> initialSolution, 
 		UIntSolt2SoltFitenessPair * solt2ScoreTransFun, unsigned int populationNum)
 	{
 		std::vector<UICodeSoltFitnessPair> pairs(solt2ScoreTransFun(initialSolution));
@@ -31,7 +31,8 @@ namespace UICodeGeneticAlgorithm::Population
 	void populationOperation(UICodeSoltPopulation * population, CompareFun * compareFun, 
 		UIntSolt2SoltFitenessPair * solt2ScoreTransFun, const SettingHelper & setting)
 	{
-		std::vector<UICodeSoltFitnessPair> thisGenerationPairs(Select::run(population->pairs, setting));
+		Select::run(population->pairs, setting);
+		const std::vector<UICodeSoltFitnessPair> &thisGenerationPairs(population->pairs);
 
 		std::vector<UICodeSoltFitnessPair> newGenerationPairs(solt2ScoreTransFun(
 			Cross::run(thisGenerationPairs, setting)));
@@ -45,7 +46,6 @@ namespace UICodeGeneticAlgorithm::Population
 		if (compareFun(newMutationGenerationPairs[0], population->best))
 			population->best = newMutationGenerationPairs[0];
 
-		population->pairs = thisGenerationPairs;
 		population->pairs.emplace_back(newGenerationPairs);
 		population->pairs.emplace_back(newMutationGenerationPairs);
 

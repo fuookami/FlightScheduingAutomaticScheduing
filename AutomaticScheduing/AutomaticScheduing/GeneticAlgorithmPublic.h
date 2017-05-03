@@ -47,9 +47,16 @@ namespace UICodeGeneticAlgorithm
 			SmallerBetter
 		};
 
+		static const std::map<unsigned int, std::string> names;
+
 		explicit FitnessType(unsigned int c) :
-			SettingArg(std::map<unsigned int, std::string>(), c) {};
+			SettingArg(names, c) {};
 	};
+	const std::map<unsigned int, std::string> FitnessType::names = {
+		std::make_pair(BiggerBetter,	"较大为优"),
+		std::make_pair(SmallerBetter,	"较小为优")
+	};
+
 
 	class PopulationNum : public SettingArg
 	{
@@ -235,10 +242,10 @@ namespace UICodeGeneticAlgorithm
 
 	struct SettingHelper
 	{
-		SettingHelper(unsigned int _range, unsigned int _length, PopulationNum _populationNum,
-			PopulationComunicationMode _populationComunicationMode, SelectMode _selectMode,
-			SelectOperator _selectOperation, CrossMode _crossMode, CrossOperator _crossOperator,
-			MutationRateMode _mutationRateMode, MutationOperator _mutationOperator) :
+		SettingHelper(unsigned int _range, unsigned int _length, FitnessType _fitnessType,
+			PopulationNum _populationNum, PopulationComunicationMode _populationComunicationMode, 
+			SelectMode _selectMode, SelectOperator _selectOperation, CrossMode _crossMode, 
+			CrossOperator _crossOperator, MutationRateMode _mutationRateMode, MutationOperator _mutationOperator) :
 			range(_range), length(_length), populationNum(_populationNum),
 			populationComunicationMode(_populationComunicationMode), selectMode(_selectMode),
 			selectOperator(_selectOperation), crossMode(_crossMode), crossOperator(_crossOperator),

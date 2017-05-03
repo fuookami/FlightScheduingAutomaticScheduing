@@ -6,6 +6,6 @@ namespace UICodeGeneticAlgorithm
 {
 	namespace Select
 	{
-		std::vector<UICodeSoltFitnessPair> run(std::vector<UICodeSoltFitnessPair> &pairs, const SettingHelper &setting);
+		void run(std::vector<UICodeSoltFitnessPair> &pairs, const SettingHelper &setting);
 	};
 }

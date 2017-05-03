@@ -3,7 +3,7 @@
 #include <functional>
 
 UICodeGeneticAlgorithm::UICodeSolt UICodeGeneticAlgorithm::run(
-	std::vector<UICodeSolt> initialSolution, SettingHelper setting, UIntSolt2SoltFitenessPair * solt2ScoreTransFun)
+	const std::vector<UICodeSolt> &initialSolution, SettingHelper setting, UIntSolt2SoltFitenessPair * solt2ScoreTransFun)
 {
 	unsigned int generationCounter = 0;
 	std::vector<Population::UICodeSoltPopulation> thisGenerationPopulations(

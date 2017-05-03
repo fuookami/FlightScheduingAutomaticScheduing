@@ -11,13 +11,13 @@ namespace GenerateFlightPlan
 	static FlightInfoSet flightInfoSet;
 	static FlightInfoMap flightInfoMap;
 
+	void loadDatas(void);
 	void run(UICodeGeneticAlgorithm::SettingHelper setting);
 
 	namespace SubFun
 	{
 		static const std::string dataInputFileName = "data.txt";
 		static const std::string dataOuputFilter = "result\\";
-		void loadDatas(void);
 		std::vector<PlanTable> generateInitialSolution(void);
 
 		std::vector<std::pair<PlanTable, unsigned int>> planTable2Score(const std::vector<PlanTable> &planTables);

@@ -17,7 +17,7 @@ namespace UICodeGeneticAlgorithm
 			UICodeSoltFitnessPair best;
 		};
 
-		std::vector<UICodeSoltPopulation> generateInitialPopulations(const std::vector<UICodeSolt> initialSolution, UIntSolt2SoltFitenessPair * solt2ScoreTransFun, unsigned int populationNum);
+		std::vector<UICodeSoltPopulation> generateInitialPopulations(std::vector<UICodeSolt> initialSolution, UIntSolt2SoltFitenessPair * solt2ScoreTransFun, unsigned int populationNum);
 		void run(std::vector<UICodeSoltPopulation> &populations, CompareFun *compareFun, UIntSolt2SoltFitenessPair * solt2ScoreTransFun, const SettingHelper &setting);
 		void populationOperation(UICodeSoltPopulation *populations, CompareFun *compareFun, UIntSolt2SoltFitenessPair * solt2ScoreTransFun, const SettingHelper &setting);
 		void populationComunication(std::vector<UICodeSoltPopulation> &populations, CompareFun *compareFun, const SettingHelper &setting);

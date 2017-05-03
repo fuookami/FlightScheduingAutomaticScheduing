@@ -4,17 +4,9 @@
 #include <thread>
 #include <algorithm>
 
-void GenerateFlightPlan::run(UICodeGeneticAlgorithm::SettingHelper setting)
+void GenerateFlightPlan::loadDatas(void)
 {
-	SubFun::loadDatas();
-	std::vector<PlanTable> initialSolution(SubFun::generateInitialSolution());
-
-	UICodeGeneticAlgorithm::run(initialSolution, setting, &SubFun::planTable2Score);
-}
-
-void GenerateFlightPlan::SubFun::loadDatas(void)
-{
-	std::ifstream fin(dataInputFileName);
+	std::ifstream fin(SubFun::dataInputFileName);
 	fin >> GenerateFlightPlan::FlighterNum;
 	std::string lineData;
 	getline(fin, lineData);
@@ -27,6 +19,13 @@ void GenerateFlightPlan::SubFun::loadDatas(void)
 
 	FlightPlan::setFlighterNum(GenerateFlightPlan::FlighterNum);
 	FlightPlan::setFlightInfoNum(flightInfoSet.size());
+}
+
+void GenerateFlightPlan::run(UICodeGeneticAlgorithm::SettingHelper setting)
+{
+	std::vector<PlanTable> initialSolution(SubFun::generateInitialSolution());
+
+	UICodeGeneticAlgorithm::run(initialSolution, setting, &SubFun::planTable2Score);
 }
 
 std::vector<PlanTable> GenerateFlightPlan::SubFun::generateInitialSolution(void)
@@ -71,10 +70,10 @@ std::vector<std::pair<PlanTable, unsigned int>> GenerateFlightPlan::SubFun::plan
 		return lop.second < rop.second;
 	});
 	std::vector<std::pair<PlanTable, unsigned int>>::iterator lastIt(std::find_if(
-		ret.begin(), ret.end(), [](const std::pair<PlanTable, unsigned int> &pair) -> bool{
+		ret.begin(), ret.end(), [](const std::pair<PlanTable, unsigned int> &pair) -> bool {
 		return pair.second == UINT_MAX;
 	}));
-	
+
 	if (lastIt != ret.end())
 		ret.erase(lastIt, ret.end());
 	return std::move(ret);
