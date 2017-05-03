@@ -51,6 +51,15 @@
     <ClCompile Include="GeneticAlgorithmPublic.cpp">
       <Filter>源文件\GeneticAlogorithm</Filter>
     </ClCompile>
+    <ClCompile Include="GeneticAlgorithmSelectOperation.cpp">
+      <Filter>源文件\GeneticAlogorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneticAlgorithmMutationOperation.cpp">
+      <Filter>源文件\GeneticAlogorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneticAlgorithmCrossOperation.cpp">
+      <Filter>源文件\GeneticAlogorithm</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Time.h">
@@ -72,6 +81,15 @@
       <Filter>头文件\GeneticAlgorithm</Filter>
     </ClInclude>
     <ClInclude Include="GeneticAlgorithmPublic.h">
+      <Filter>头文件\GeneticAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneticAlgorithmSelectOperation.h">
+      <Filter>头文件\GeneticAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneticAlgorithmCrossOperation.h">
+      <Filter>头文件\GeneticAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneticAlgorithmMutationOperation.h">
       <Filter>头文件\GeneticAlgorithm</Filter>
     </ClInclude>
   </ItemGroup>

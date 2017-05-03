@@ -1,6 +1,9 @@
 #pragma once
 
 #include "GeneticAlgorithmPublic.h"
+#include "GeneticAlgorithmSelectOperation.h"
+#include "GeneticAlgorithmCrossOperation.h"
+#include "GeneticAlgorithmMutationOperation.h"
 
 namespace UICodeGeneticAlgorithm
 {
@@ -13,18 +16,26 @@ namespace UICodeGeneticAlgorithm
 		};
 
 		std::vector<UICodeSoltPopulation> generateInitialPopulations(const std::vector<UICodeSolt> initialSolution, UIntSolt2SoltFitenessPair * solt2ScoreTransFun, unsigned int populationNum);
-		std::vector<UICodeSoltPopulation> run(const std::vector<UICodeSoltPopulation> &populations, CompareFun *compareFun, const SettingHelper &setting);
+		void run(std::vector<UICodeSoltPopulation> &populations, CompareFun *compareFun, const SettingHelper &setting);
 		void populationOperation(UICodeSoltPopulation *populations, CompareFun *compareFun, const SettingHelper &setting);
 		void populationComunication(std::vector<UICodeSoltPopulation> &populations, CompareFun *compareFun, const SettingHelper &setting);
 
 		namespace Comunication
 		{
 			using Fun = void(*)(std::vector<UICodeSoltPopulation> &populations, CompareFun *compareFun);
-			std::map<>
-
-				namespace Funs
+			static const Fun defaultFun = Funs::BetterToWorseFun;
+			static const std::map<unsigned int, Fun> funs = 
 			{
+				std::make_pair(PopulationComunicationMode::Random, Funs::RandomFun),
+				std::make_pair(PopulationComunicationMode::BetterToWrose, Funs::BetterToWorseFun),
+				std::make_pair(PopulationComunicationMode::MoreToLess, Funs::MoreToLessFun)
+			};
 
+			namespace Funs
+			{
+				void RandomFun(std::vector<UICodeSoltPopulation> &populations, CompareFun *compareFun);
+				void BetterToWorseFun(std::vector<UICodeSoltPopulation> &populations, CompareFun *compareFun);
+				void MoreToLessFun(std::vector<UICodeSoltPopulation> &populations, CompareFun *compareFun);
 			};
 		}
 	}

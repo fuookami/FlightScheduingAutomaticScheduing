@@ -16,7 +16,7 @@ UICodeGeneticAlgorithm::UICodeSolt UICodeGeneticAlgorithm::run(
 
 	while (generationCounter != MaxGeneration)
 	{
-		thisGenerationPopulations = Population::run(thisGenerationPopulations, &compareFun, setting);
+		Population::run(thisGenerationPopulations, &compareFun, setting);
 		for (const Population::UICodeSoltPopulation &population : thisGenerationPopulations)
 		{
 			if (betterThanBest(population.best))

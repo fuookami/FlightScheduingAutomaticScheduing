@@ -115,8 +115,11 @@
     <ClCompile Include="FlightPlan.cpp" />
     <ClCompile Include="GenerateFlightPlan.cpp" />
     <ClCompile Include="GeneticAlgorithm.cpp" />
+    <ClCompile Include="GeneticAlgorithmCrossOperation.cpp" />
+    <ClCompile Include="GeneticAlgorithmMutationOperation.cpp" />
     <ClCompile Include="GeneticAlgorithmPoputationOperation.cpp" />
     <ClCompile Include="GeneticAlgorithmPublic.cpp" />
+    <ClCompile Include="GeneticAlgorithmSelectOperation.cpp" />
     <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -124,8 +127,11 @@
     <ClInclude Include="FlightPlan.h" />
     <ClInclude Include="GenerateFlightPlan.h" />
     <ClInclude Include="GeneticAlgorithm.h" />
+    <ClInclude Include="GeneticAlgorithmCrossOperation.h" />
+    <ClInclude Include="GeneticAlgorithmMutationOperation.h" />
     <ClInclude Include="GeneticAlgorithmPoputationOperation.h" />
     <ClInclude Include="GeneticAlgorithmPublic.h" />
+    <ClInclude Include="GeneticAlgorithmSelectOperation.h" />
     <ClInclude Include="Time.h" />
   </ItemGroup>
   <ItemGroup>
