@@ -44,5 +44,7 @@ namespace UICodeGeneticAlgorithm::Select
 			void RankSelectFun(std::vector<UICodeSoltFitnessPair> &pairs, const SettingHelper &setting);
 			void TournamentFun(std::vector<UICodeSoltFitnessPair> &pairs, const SettingHelper &setting);
 		};
+
+		void toDiscreasingOrder(std::vector<unsigned int> &fitenss);
 	};
 }

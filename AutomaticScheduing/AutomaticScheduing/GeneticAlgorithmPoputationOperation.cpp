@@ -32,24 +32,28 @@ namespace UICodeGeneticAlgorithm::Population
 		UIntSolt2SoltFitenessPair * solt2ScoreTransFun, const SettingHelper & setting)
 	{
 		Select::run(population->pairs, setting);
-		const std::vector<UICodeSoltFitnessPair> &thisGenerationPairs(population->pairs);
+		std::vector<UICodeSoltFitnessPair> &thisGenerationPairs(population->pairs);
 
-		std::vector<UICodeSoltFitnessPair> newGenerationPairs(solt2ScoreTransFun(
-			Cross::run(thisGenerationPairs, setting)));
+		do 
+		{
+			std::vector<UICodeSoltFitnessPair> newGenerationPairs(solt2ScoreTransFun(
+				Cross::run(thisGenerationPairs, setting)));
 
-		if (compareFun(newGenerationPairs[0], population->best))
-			population->best = newGenerationPairs[0];
+			if (compareFun(newGenerationPairs[0], population->best))
+				population->best = newGenerationPairs[0];
 
-		std::vector<UICodeSoltFitnessPair> newMutationGenerationPairs(solt2ScoreTransFun(
-			Mutation::run(thisGenerationPairs, setting)));
+			std::vector<UICodeSoltFitnessPair> newMutationGenerationPairs(solt2ScoreTransFun(
+				Mutation::run(thisGenerationPairs, setting)));
 
-		if (compareFun(newMutationGenerationPairs[0], population->best))
-			population->best = newMutationGenerationPairs[0];
+			if (compareFun(newMutationGenerationPairs[0], population->best))
+				population->best = newMutationGenerationPairs[0];
 
-		population->pairs.emplace_back(newGenerationPairs);
-		population->pairs.emplace_back(newMutationGenerationPairs);
+			thisGenerationPairs.emplace_back(newGenerationPairs);
+			thisGenerationPairs.emplace_back(newMutationGenerationPairs);
 
-		std::sort(population->pairs.begin(), population->pairs.end(), compareFun);
+			std::sort(thisGenerationPairs.begin(), thisGenerationPairs.end(), compareFun);
+
+		} while (thisGenerationPairs.size() <= setting.individualNumber.first);
 	}
 
 	void populationComunication(std::vector<UICodeSoltPopulation>& populations, CompareFun * compareFun, const SettingHelper & setting)
