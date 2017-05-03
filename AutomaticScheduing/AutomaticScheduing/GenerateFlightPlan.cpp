@@ -58,7 +58,7 @@ std::vector<std::pair<PlanTable, unsigned int>> GenerateFlightPlan::SubFun::plan
 	for (unsigned int i(0), j(planTables.size()); i != j; ++i)
 	{
 		ret.emplace_back(std::make_pair(planTables[i], 0));
-		threads.push_back(std::thread(calScore, ret.back()));
+		threads.push_back(std::thread(calScore, &ret.back()));
 	}
 
 	for (std::thread &thread : threads)
@@ -94,7 +94,7 @@ std::vector<std::pair<PlanTable, unsigned int>> GenerateFlightPlan::SubFun::plan
 	for (unsigned int i(0), j(planTables.size()); i != j; ++i)
 	{
 		ret.emplace_back(std::make_pair(planTables[i], 0));
-		threads.push_back(std::thread(calScore, ret.back()));
+		threads.push_back(std::thread(calScore, &ret.back()));
 	}
 
 	for (std::thread &thread : threads)

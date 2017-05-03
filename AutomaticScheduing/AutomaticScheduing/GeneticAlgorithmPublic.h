@@ -135,7 +135,7 @@ namespace UICodeGeneticAlgorithm
 		static enum
 		{
 			Roulette,
-			BestIndividual,
+			//BestIndividual,
 			RankSelect,
 			Tournament
 		};
@@ -147,7 +147,7 @@ namespace UICodeGeneticAlgorithm
 	};
 	const std::map<unsigned int, std::string> SelectOperator::names = {
 		std::make_pair(SelectOperator::Roulette,		"轮盘赌选择法"),
-		std::make_pair(SelectOperator::BestIndividual,	"最佳个体选择法"),
+		//std::make_pair(SelectOperator::BestIndividual,	"最佳个体选择法"),
 		std::make_pair(SelectOperator::RankSelect,		"排序选择法"),
 		std::make_pair(SelectOperator::Tournament,		"锦标赛选择法")
 	};
