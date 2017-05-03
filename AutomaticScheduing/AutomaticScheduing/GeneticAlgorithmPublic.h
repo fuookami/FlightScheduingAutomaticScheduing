@@ -11,15 +11,15 @@ namespace UICodeGeneticAlgorithm
 	using UICodeSoltFitnessPair = std::pair<UICodeSolt, unsigned int>;
 	using UIntSolt2SoltFitenessPair = std::vector<UICodeSoltFitnessPair>(const std::vector<UICodeSolt> &);
 
-	bool BiggerIsBetter(const UICodeSoltFitnessPair &best, const UICodeSoltFitnessPair &thisPair)
+	bool BiggerIsBetter(const UICodeSoltFitnessPair &thisPair, const UICodeSoltFitnessPair &best)
 	{
 		return thisPair.second > best.second;
 	}
-	bool SmallerIsBetter(const UICodeSoltFitnessPair &best, const UICodeSoltFitnessPair &thisPair)
+	bool SmallerIsBetter(const UICodeSoltFitnessPair &thisPair, const UICodeSoltFitnessPair &best)
 	{
 		return thisPair.second < best.second;
 	}
-	using CompareFun = bool(*)(const UICodeSoltFitnessPair &best, const UICodeSoltFitnessPair &thisPair);
+	using CompareFun = bool(const UICodeSoltFitnessPair &thisPair, const UICodeSoltFitnessPair &best);
 
 	class SettingArg
 	{

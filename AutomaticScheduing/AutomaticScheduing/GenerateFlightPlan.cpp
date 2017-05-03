@@ -74,7 +74,9 @@ std::vector<std::pair<PlanTable, unsigned int>> GenerateFlightPlan::SubFun::plan
 		ret.begin(), ret.end(), [](const std::pair<PlanTable, unsigned int> &pair) -> bool{
 		return pair.second == UINT_MAX;
 	}));
-	ret.erase(lastIt, ret.end());
+	
+	if (lastIt != ret.end())
+		ret.erase(lastIt, ret.end());
 	return std::move(ret);
 }
 
@@ -108,6 +110,8 @@ std::vector<std::pair<PlanTable, unsigned int>> GenerateFlightPlan::SubFun::plan
 		ret.begin(), ret.end(), [](const std::pair<PlanTable, unsigned int> &pair) -> bool {
 		return pair.second == UINT_MAX;
 	}));
-	ret.erase(lastIt, ret.end());
+
+	if (lastIt != ret.end())
+		ret.erase(lastIt, ret.end());
 	return std::move(ret);
 }
