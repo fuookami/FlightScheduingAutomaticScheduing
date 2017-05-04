@@ -157,6 +157,7 @@ namespace UICodeGeneticAlgorithm
 	public:
 		static enum
 		{
+			OneParent,
 			TwoParent,
 			MultiParent,
 			AdapativeMultiParent,
@@ -168,6 +169,7 @@ namespace UICodeGeneticAlgorithm
 			SettingArg(names, i) {}
 	};
 	const std::map<unsigned int, std::string> CrossMode::names = {
+		std::make_pair(CrossMode::OneParent,			"单父辈交叉"),
 		std::make_pair(CrossMode::TwoParent,			"双父辈交叉"),
 		std::make_pair(CrossMode::MultiParent,			"多父辈交叉"),
 		std::make_pair(CrossMode::AdapativeMultiParent,	"自适应多父辈交叉"),
@@ -182,7 +184,8 @@ namespace UICodeGeneticAlgorithm
 			TwoPoint,
 			MultiPoint,
 			Uniform,
-			Shuffle,
+			Cycle,
+			//Shuffle,
 		};
 
 		static const std::map<unsigned int, std::string> names;
@@ -195,7 +198,8 @@ namespace UICodeGeneticAlgorithm
 		std::make_pair(CrossOperator::TwoPoint,		"两点交叉算子"),
 		std::make_pair(CrossOperator::MultiPoint,	"多点交叉算子"),
 		std::make_pair(CrossOperator::Uniform,		"均匀交叉算子"),
-		std::make_pair(CrossOperator::Shuffle,		"洗牌交叉算子")
+		std::make_pair(CrossOperator::Cycle,		"环交叉算子"),
+		//std::make_pair(CrossOperator::Shuffle,		"洗牌交叉算子")
 	};
 
 	class MutationRateMode : public SettingArg

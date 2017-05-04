@@ -61,9 +61,9 @@ namespace UICodeGeneticAlgorithm::Select
 					static const double j((double)a / b);
 					double x = 0.0;
 					if (setting.fitnessType == FitnessType::BiggerBetter)
-						x = (pairs.front().second - pairs.back().second) / pairs.front().second;
+						x = (pairs.front().second - pairs.back().second) / (double)pairs.front().second;
 					else
-						x = (pairs.back().second - pairs.front().second) / pairs.back().second;
+						x = (pairs.back().second - pairs.front().second) / (double)pairs.back().second;
 					if (x < ((b + 3 * a) / 4))
 						return (3 * b + a) / (4 * b);
 					else if (x > ((3 * b + a) / 4))
@@ -112,7 +112,8 @@ namespace UICodeGeneticAlgorithm::Select
 				static auto randomGetPair([](UICodeSoltFitnessPair *pRet, const std::vector<unsigned int> fitnesses, 
 					const std::vector<UICodeSoltFitnessPair> &pairs, const unsigned int sum)
 				{
-					unsigned int thisValue(rd() % sum);
+					std::uniform_int_distribution<> dis(0, sum);
+					unsigned int thisValue(dis(gen));
 					unsigned int i = 0;
 					for (; thisValue > 0; ++i)
 						thisValue -= fitnesses[i];
@@ -192,7 +193,8 @@ namespace UICodeGeneticAlgorithm::Select
 			std::vector<UICodeSoltFitnessPair> pairsCopy(pairs);
 			for (unsigned int i(0), j(individualNumber / pairs.size()); i != j; ++i)
 				pairs.insert(pairs.end(), pairsCopy.cbegin(), pairsCopy.cend());
-			pairs.emplace_back(pairsCopy);
+			for (UICodeSoltFitnessPair &pair : pairsCopy)
+				pairs.emplace_back(pair);
 			std::sort(pairs.begin(), pairs.end(), compareFun);
 		}
 

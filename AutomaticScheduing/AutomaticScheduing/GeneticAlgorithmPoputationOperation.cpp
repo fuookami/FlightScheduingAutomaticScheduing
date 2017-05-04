@@ -48,8 +48,10 @@ namespace UICodeGeneticAlgorithm::Population
 			if (compareFun(newMutationGenerationPairs[0], population->best))
 				population->best = newMutationGenerationPairs[0];
 
-			thisGenerationPairs.emplace_back(newGenerationPairs);
-			thisGenerationPairs.emplace_back(newMutationGenerationPairs);
+			for (UICodeSoltFitnessPair &pair : newGenerationPairs)
+				thisGenerationPairs.emplace_back(pair);
+			for (UICodeSoltFitnessPair &pair : newMutationGenerationPairs)
+				thisGenerationPairs.emplace_back(pair);
 
 			std::sort(thisGenerationPairs.begin(), thisGenerationPairs.end(), compareFun);
 
