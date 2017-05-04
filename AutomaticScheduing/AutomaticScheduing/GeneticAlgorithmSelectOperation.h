@@ -5,10 +5,11 @@
 namespace UICodeGeneticAlgorithm::Select
 {
 	static const unsigned int EliteNum = 4;
+	static const unsigned int GroupMinNum = 8;
 
-	void run(std::vector<UICodeSoltFitnessPair> &pairs, const SettingHelper &setting);
+	void run(std::vector<UICodeSoltFitnessPair> &pairs, CompareFun *compareFun, const SettingHelper &setting);
 	unsigned int getIndividualNum(const std::vector<UICodeSoltFitnessPair> &pairs, const SettingHelper &setting);
-	void select(std::vector<UICodeSoltFitnessPair> &pairs, const SettingHelper &setting);
+	void select(std::vector<UICodeSoltFitnessPair> &pairs, CompareFun *compareFun, const unsigned int individualNumber, const SettingHelper &setting);
 
 	namespace Mode
 	{
@@ -29,7 +30,7 @@ namespace UICodeGeneticAlgorithm::Select
 
 	namespace Operator
 	{
-		using Fun = void(std::vector<UICodeSoltFitnessPair> &pairs, const SettingHelper &setting);
+		using Fun = void(std::vector<UICodeSoltFitnessPair> &pairs, CompareFun *compareFun, const unsigned int individualNumber, const SettingHelper &setting);
 		static const Fun *defaultFun = Funs::TournamentFun;
 		static const std::map<unsigned int, Fun *> funs = 
 		{
@@ -40,11 +41,12 @@ namespace UICodeGeneticAlgorithm::Select
 
 		namespace Funs
 		{
-			void RouletteFun(std::vector<UICodeSoltFitnessPair> &pairs, const SettingHelper &setting);
-			void RankSelectFun(std::vector<UICodeSoltFitnessPair> &pairs, const SettingHelper &setting);
-			void TournamentFun(std::vector<UICodeSoltFitnessPair> &pairs, const SettingHelper &setting);
+			void RouletteFun(std::vector<UICodeSoltFitnessPair> &pairs, CompareFun *compareFun, const unsigned int individualNumber, const SettingHelper &setting);
+			void RankSelectFun(std::vector<UICodeSoltFitnessPair> &pairs, CompareFun *compareFun, const unsigned int individualNumber, const SettingHelper &setting);
+			void TournamentFun(std::vector<UICodeSoltFitnessPair> &pairs, CompareFun *compareFun, const unsigned int individualNumber, const SettingHelper &setting);
 		};
 
-		void toDiscreasingOrder(std::vector<unsigned int> &fitenss);
+		void copyPairsToSize(std::vector<UICodeSoltFitnessPair> &pairs, CompareFun *compareFun, unsigned int individualNumber);
+		void toDiscreasingOrder(std::vector<unsigned int> &fitensses, const SettingHelper &setting);
 	};
 }

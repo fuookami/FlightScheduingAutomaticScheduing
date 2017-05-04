@@ -31,7 +31,7 @@ namespace UICodeGeneticAlgorithm::Population
 	void populationOperation(UICodeSoltPopulation * population, CompareFun * compareFun, 
 		UIntSolt2SoltFitenessPair * solt2ScoreTransFun, const SettingHelper & setting)
 	{
-		Select::run(population->pairs, setting);
+		Select::run(population->pairs, compareFun, setting);
 		std::vector<UICodeSoltFitnessPair> &thisGenerationPairs(population->pairs);
 
 		do 
