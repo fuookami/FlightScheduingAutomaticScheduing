@@ -112,7 +112,7 @@ namespace UICodeGeneticAlgorithm::Select
 				static auto randomGetPair([](UICodeSoltFitnessPair *pRet, const std::vector<unsigned int> fitnesses, 
 					const std::vector<UICodeSoltFitnessPair> &pairs, const unsigned int sum)
 				{
-					std::uniform_int_distribution<> dis(0, sum);
+					std::uniform_int_distribution<> dis(0, sum - 1);
 					unsigned int thisValue(dis(gen));
 					unsigned int i = 0;
 					for (; thisValue > 0; ++i)

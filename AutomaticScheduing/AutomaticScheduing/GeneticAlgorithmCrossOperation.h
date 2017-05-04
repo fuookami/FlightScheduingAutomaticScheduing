@@ -37,6 +37,6 @@ namespace UICodeGeneticAlgorithm::Cross
 			void CycleFun(std::vector<UICodeSolt> &solt);
 		};
 
-		void CrossTwoArea(std::vector<UICodeSolt> &solt, const std::vector<bool> &mark);
+		void CrossAreas(std::vector<UICodeSolt> &solt, const std::vector<bool> &mark);
 	};
 };

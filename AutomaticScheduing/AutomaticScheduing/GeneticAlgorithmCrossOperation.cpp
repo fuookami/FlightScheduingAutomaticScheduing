@@ -1,5 +1,6 @@
 #include "GeneticAlgorithmCrossOperation.h"
 
+#include <set>
 #include <array>
 #include <algorithm>
 #include <thread>
@@ -20,7 +21,7 @@ namespace UICodeGeneticAlgorithm::Cross
 
 			static std::random_device rd;
 			static std::mt19937_64 gen(rd());
-			std::uniform_int_distribution<> dis(0, setting.length / 2);
+			std::uniform_int_distribution<> dis(0, setting.length / 2 - 1);
 
 			std::vector<std::array<unsigned int, 4>> points(pairs.size(), std::array<unsigned int, 4>());
 			std::vector<UICodeSolt> newGeneration(pairs.size(), UICodeSolt());
@@ -140,33 +141,105 @@ namespace UICodeGeneticAlgorithm::Cross
 		{
 			void OnePointFun(std::vector<UICodeSolt> &solt)
 			{
+				static std::random_device rd;
+				static std::mt19937_64 gen(rd());
+				std::uniform_int_distribution<> dis(0, solt.size() - 1);
 
+				std::vector<bool> mark(solt.front().size(), false);
+				for (unsigned int i(dis(gen)), j(mark.size()); i != j; ++i)
+					mark[i] = true;
+
+				CrossAreas(solt, mark);
 			}
 
 			void TwoPointFun(std::vector<UICodeSolt> &solt)
 			{
+				static std::random_device rd;
+				static std::mt19937_64 gen(rd());
+				std::uniform_int_distribution<> dis(0, solt.size() - 1);
 
+				std::vector<bool> mark(solt.front().size(), false);
+				unsigned int i(dis(gen)), j(dis(gen));
+				if (i > j)
+					std::swap(i, j);
+				for (unsigned int k(i); k != j; ++k)
+					mark[k] = true;
+
+				CrossAreas(solt, mark);
 			}
 
 			void MultiPointFun(std::vector<UICodeSolt> &solt)
 			{
+				static std::random_device rd;
+				static std::mt19937_64 gen(rd());
+				std::poisson_distribution<> dis(1);
+				std::uniform_int_distribution<> udis(0, solt.front().size() - 1);
+				std::uniform_int_distribution<> bdis(0, 1);
 
+				unsigned int pointNum(dis(gen) + 3);
+				std::vector<bool> mark(solt.front().size(), false);
+				std::set<unsigned int> pointSet;
+				while (pointSet.size() != pointNum)
+					pointSet.insert(udis(gen));
+				std::vector<unsigned int> points(pointSet.cbegin(), pointSet.cend());
+				std::sort(points.begin(), points.end());
+
+				for (unsigned int i(0), j(points.size() - 1); i != j; ++i)
+					if (bdis(gen) == 1)
+						for (unsigned int k(points[i]), l(points[i + 1]); i != j; ++i)
+							mark[k] = true;
+
+				CrossAreas(solt, mark);
 			}
 
 			void UniformFun(std::vector<UICodeSolt> &solt)
 			{
+				static std::random_device rd;
+				static std::mt19937_64 gen(rd());
+				std::uniform_int_distribution<> bdis(0, 1);
 
+				std::vector<bool> mark(solt.front().size(), false);
+				for (unsigned int i(0), j(mark.size()); i != j; ++i)
+					if (bdis(gen) == 1)
+						mark[i] = true;
+
+				CrossAreas(solt, mark);
 			}
 
 			void CycleFun(std::vector<UICodeSolt> &solt)
 			{
+				static std::random_device rd;
+				static std::mt19937_64 gen(rd());
+				std::uniform_int_distribution<> udis(0, solt.front().size() - 1);
+				UICodeSolt firstCopy(solt.front());
 
+				unsigned int point(udis(gen));
+				for (unsigned int i(0), j(solt.size() - 1); i != j; ++i)
+				{
+					solt[i].erase(solt[i].begin(), solt[i].begin() + point);
+					solt[i].insert(solt[i].end(), solt[i + 1].cbegin(), solt[i + 1].cbegin() + point);
+				}
+				solt.back().erase(solt.back().begin(), solt.back().begin() + point);
+				solt.back().insert(solt.back().end(), firstCopy.cbegin(), firstCopy.cbegin() + point);
 			}
 		}
 
-		void CrossTwoArea(std::vector<UICodeSolt> &solt, const std::vector<bool> &mark)
+		void CrossAreas(std::vector<UICodeSolt> &solt, const std::vector<bool> &mark)
 		{
-
+			UICodeSolt firstCopy(solt.front());
+			for (unsigned int i(0), j(solt.size() - 1); i != j; ++i)
+			{
+				for (unsigned int k(0), l(firstCopy.size()); k != l; ++k)
+				{
+					if (mark[k])
+						solt[i][k] = solt[i + 1][k];
+				}
+			}
+			for (unsigned int k(0), l(firstCopy.size()); k != l; ++k)
+			{
+				if (mark[k])
+					solt.back()[k] = firstCopy[k];
+			}
 		}
 	}
 }
