@@ -2,37 +2,40 @@
 
 #include "GeneticAlgorithmPublic.h"
 
-namespace UICodeGeneticAlgorithm::Mutation
+namespace UICodeGeneticAlgorithm
 {
-	static const double minMutationRate = 0.001;
-	static const double maxMutationRate = 0.01;
-
-	std::vector<UICodeSolt> run(const std::vector<UICodeSoltFitnessPair> &pairs, const SettingHelper &setting);
-	void mutate(UICodeSolt **solts, const UICodeSoltFitnessPair &pair, const double rate, const SettingHelper &setting);
-
-	namespace Mode
+	namespace Mutation
 	{
-		double getMutationRate(const std::vector<UICodeSoltFitnessPair>& pairs, const SettingHelper &setting);
-	};
+		static const double minMutationRate = 0.001;
+		static const double maxMutationRate = 0.01;
 
-	namespace Operator
-	{
-		using Fun = void(UICodeSolt **solt, const double rate, const unsigned int range, const UICodeSoltFitnessPair &pair);
-		static const Fun *defaultFun = nullptr;
-		static const std::map<unsigned int, Fun *> funs = 
+		std::vector<UICodeSolt> run(const std::vector<UICodeSoltFitnessPair> &pairs, const SettingHelper &setting);
+		void mutate(UICodeSolt **solts, const UICodeSoltFitnessPair &pair, const double rate, const SettingHelper &setting);
+
+		namespace Mode
 		{
-			std::make_pair(MutationOperator::Uniform,		Funs::UniformFun),
-			std::make_pair(MutationOperator::NonUniform,	Funs::NonUniformFun),
-			std::make_pair(MutationOperator::Gaussian,		Funs::GaussianFun)
+			double getMutationRate(const std::vector<UICodeSoltFitnessPair>& pairs, const SettingHelper &setting);
 		};
 
-		namespace Funs
+		namespace Operator
 		{
-			void UniformFun(UICodeSolt **solt, const double rate, const unsigned int range, const UICodeSoltFitnessPair &pair);
-			void NonUniformFun(UICodeSolt **solt, const double rate, const unsigned int range, const UICodeSoltFitnessPair &pair);
-			void GaussianFun(UICodeSolt **solt, const double rate, const unsigned int range, const UICodeSoltFitnessPair &pair);
-		};
+			namespace Funs
+			{
+				void UniformFun(UICodeSolt **solt, const double rate, const unsigned int range, const UICodeSoltFitnessPair &pair);
+				void NonUniformFun(UICodeSolt **solt, const double rate, const unsigned int range, const UICodeSoltFitnessPair &pair);
+				void GaussianFun(UICodeSolt **solt, const double rate, const unsigned int range, const UICodeSoltFitnessPair &pair);
+			};
 
-		void MutateArea(UICodeSolt **solt, const std::vector<bool> &mark, const unsigned int range, const UICodeSoltFitnessPair &pair);
+			using Fun = void(UICodeSolt **solt, const double rate, const unsigned int range, const UICodeSoltFitnessPair &pair);
+			static Fun *defaultFun = nullptr;
+			static const std::map<unsigned int, Fun *> funs =
+			{
+				std::make_pair(MutationOperator::Uniform,		Funs::UniformFun),
+				std::make_pair(MutationOperator::NonUniform,	Funs::NonUniformFun),
+				std::make_pair(MutationOperator::Gaussian,		Funs::GaussianFun)
+			};
+
+			void MutateArea(UICodeSolt **solt, const std::vector<bool> &mark, const unsigned int range, const UICodeSoltFitnessPair &pair);
+		};
 	};
 };

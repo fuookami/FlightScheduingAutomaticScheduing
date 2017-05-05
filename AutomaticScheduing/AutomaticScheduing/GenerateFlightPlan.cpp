@@ -21,11 +21,14 @@ void GenerateFlightPlan::loadDatas(void)
 	FlightPlan::setFlightInfoNum(flightInfoSet.size());
 }
 
-void GenerateFlightPlan::run(UICodeGeneticAlgorithm::SettingHelper setting)
+void GenerateFlightPlan::run(bool FaultTolerant, UICodeGeneticAlgorithm::SettingHelper setting)
 {
 	std::vector<PlanTable> initialSolution(SubFun::generateInitialSolution());
 
-	UICodeGeneticAlgorithm::run(initialSolution, setting, &SubFun::planTable2Score);
+	if (FaultTolerant)
+		UICodeGeneticAlgorithm::run(initialSolution, setting, SubFun::planTable2ScoreWithFaultTolerant);
+	else
+		UICodeGeneticAlgorithm::run(initialSolution, setting, SubFun::planTable2Score);
 }
 
 std::vector<PlanTable> GenerateFlightPlan::SubFun::generateInitialSolution(void)
