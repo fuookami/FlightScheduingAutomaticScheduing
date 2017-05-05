@@ -240,7 +240,7 @@ namespace UICodeGeneticAlgorithm
 	const std::map<unsigned int, std::string> SelectOperator::names = {
 		std::make_pair(MutationOperator::Uniform,		"均匀变异算子"),
 		std::make_pair(MutationOperator::NonUniform,	"非均匀变异算子"),
-		std::make_pair(MutationOperator::Boundary,		"边界变异算子"),
+		//std::make_pair(MutationOperator::Boundary,		"边界变异算子"),
 		std::make_pair(MutationOperator::Gaussian,		"高斯变异算子")
 	};
 
