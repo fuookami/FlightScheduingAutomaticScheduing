@@ -12,7 +12,7 @@ namespace GenerateFlightPlan
 	static FlightInfoMap flightInfoMap;
 
 	void loadDatas(void);
-	void run(bool FaultTolerant, UICodeGeneticAlgorithm::SettingHelper setting);
+	void run(bool FaultTolerant, const UICodeGeneticAlgorithm::SettingHelper &setting);
 
 	namespace SubFun
 	{

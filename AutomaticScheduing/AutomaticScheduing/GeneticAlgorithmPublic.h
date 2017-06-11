@@ -185,7 +185,7 @@ namespace UICodeGeneticAlgorithm
 
 	struct SettingHelper
 	{
-		SettingHelper(unsigned int _range, unsigned int _length, std::pair<unsigned int, unsigned int> _individualNumber,
+		SettingHelper(unsigned int _range, unsigned int _length, const std::pair<unsigned int, unsigned int> &_individualNumber,
 			FitnessType _fitnessType, PopulationNum _populationNum, PopulationComunicationMode _populationComunicationMode, 
 			SelectMode _selectMode, SelectOperator _selectOperation, CrossMode _crossMode, CrossOperator _crossOperator, 
 			MutationRateMode _mutationRateMode, MutationOperator _mutationOperator) :

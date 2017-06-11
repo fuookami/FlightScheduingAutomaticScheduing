@@ -7,5 +7,5 @@ namespace UICodeGeneticAlgorithm
 	static const unsigned int MaxGeneration = 10;
 
 	UICodeSolt run(const std::vector<UICodeSolt> &initialSolution,
-		SettingHelper setting, UIntSolt2SoltFitenessPair *solt2ScoreTransFun);
+		const SettingHelper &setting, UIntSolt2SoltFitenessPair *solt2ScoreTransFun);
 };

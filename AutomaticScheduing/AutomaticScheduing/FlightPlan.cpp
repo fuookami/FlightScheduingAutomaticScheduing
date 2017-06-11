@@ -143,6 +143,9 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 			return nullptr;
 	}
 
+	for (const FlightBunch &bunch : pNewPlan->bunches)
+		pNewPlan->totalDelay += bunch.delay();
+
 	return pNewPlan;
 }
 

@@ -21,7 +21,7 @@ void GenerateFlightPlan::loadDatas(void)
 	FlightPlan::setFlightInfoNum(flightInfoSet.size());
 }
 
-void GenerateFlightPlan::run(bool FaultTolerant, UICodeGeneticAlgorithm::SettingHelper setting)
+void GenerateFlightPlan::run(bool FaultTolerant, const UICodeGeneticAlgorithm::SettingHelper &setting)
 {
 	std::vector<PlanTable> initialSolution(SubFun::generateInitialSolution());
 
