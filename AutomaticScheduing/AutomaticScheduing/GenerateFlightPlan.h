@@ -5,11 +5,11 @@
 
 namespace GenerateFlightPlan
 {
-	static unsigned int FlighterNum = 0;
-	static unsigned int FlightInfoNum = 0;
+	extern unsigned int FlighterNum;
+	extern unsigned int FlightInfoNum;
 
-	static FlightInfoSet flightInfoSet;
-	static FlightInfoMap flightInfoMap;
+	extern FlightInfoSet flightInfoSet;
+	extern FlightInfoMap flightInfoMap;
 
 	void loadDatas(void);
 	void run(bool FaultTolerant, const UICodeGeneticAlgorithm::SettingHelper &setting);

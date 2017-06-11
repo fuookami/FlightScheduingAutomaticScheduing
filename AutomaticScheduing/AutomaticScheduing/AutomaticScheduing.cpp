@@ -14,8 +14,5 @@ int main(void)
 		UICodeGeneticAlgorithm::CrossOperator(UICodeGeneticAlgorithm::CrossOperator::MultiPoint),
 		UICodeGeneticAlgorithm::MutationRateMode(UICodeGeneticAlgorithm::MutationRateMode::AdapativeDynamic),
 		UICodeGeneticAlgorithm::MutationOperator(UICodeGeneticAlgorithm::MutationOperator::Gaussian));
-	setting.range = GenerateFlightPlan::FlighterNum;
-	setting.length = GenerateFlightPlan::flightInfoSet.size();
-	setting.individualNumber = std::make_pair(GenerateFlightPlan::FlighterNum, GenerateFlightPlan::flightInfoSet.size());
 	GenerateFlightPlan::run(true, setting);
 }
