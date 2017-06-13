@@ -189,7 +189,11 @@ Time FlightBunch::addedDelayIfAddFlight(const std::shared_ptr<FlightInfo> pFligh
 {
 	Time addedDelay(SpecialTime::MaxTime);
 
-	if (flight.empty() || pFlightInfo->canBeFollowedBy(flight.front().info()))
+	if (flight.empty())
+	{
+		return SpecialTime::MaxTime;
+	}
+	else if (pFlightInfo->canBeFollowedBy(flight.front().info()))
 	{
 		Time nextAddedDelay((flight.front().getPropagatedDelayIfFollow(pFlightInfo, addedDelay)
 			- flight.front().delay()));

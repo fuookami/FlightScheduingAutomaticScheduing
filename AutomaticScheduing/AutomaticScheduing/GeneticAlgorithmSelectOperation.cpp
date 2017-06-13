@@ -71,7 +71,7 @@ namespace UICodeGeneticAlgorithm
 						else if (x > ((3 * b + a) / 4))
 							return 1.0;
 						else
-							return i * pow(x, 3) + j * x + 0.5 + (b + 3 * a) / (8 * b);
+							return i * pow(x, 3) + j * x + 0.5 + (b + 3.0 * a) / (8.0 * b);
 					});
 
 					static auto IndividualNumberArgument(
@@ -80,24 +80,28 @@ namespace UICodeGeneticAlgorithm
 						unsigned int a(setting.individualNumber.first);
 						unsigned int b(setting.individualNumber.second);
 						if (pairs.size() < ((b + 3 * a) / 4))
-							return 1;
+							return 1.0;
 						else if (pairs.size() > ((3 * b + a) / 4))
-							return (b + 3 * a) / (4 * b);
+							return (b + 3.0 * a) / (4.0 * b);
 						else
 						{
 							double i((16.0 * a * (a + b) + 24.0 * a - 24.0 * b) / (b * pow(a + b, 3)));
 							double j(-(double)a / b);
 							double x(pairs.size() + (a + b) / 4.0);
-							return i * pow(x, 3) + j * x + 0.5 + (b + 3 * a) / (8 * b);
+							return (i * pow(x, 3) + j * x + 0.5 + (b + 3.0 * a) / (8.0 * b)) / pairs.size() / 4;
 						}
 					});
 
-					unsigned int orgRet(pairs.size() * FitnessArgument(pairs, setting) * IndividualNumberArgument(pairs, setting));
+					double fitnessArgument(FitnessArgument(pairs, setting));
+					double individualNumberArgument(IndividualNumberArgument(pairs, setting));
+					unsigned int orgRet(pairs.size() * fitnessArgument * individualNumberArgument);
 
 					if (orgRet > setting.individualNumber.first)
 						return orgRet;
-					else
+					else if (orgRet < setting.individualNumber.second)
 						return orgRet * (setting.individualNumber.first / orgRet + 1);
+					else
+						return orgRet / (orgRet / setting.individualNumber.second + 1);
 				}
 			};
 		};

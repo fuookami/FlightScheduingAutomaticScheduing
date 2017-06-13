@@ -1,5 +1,6 @@
 #include "GeneticAlgorithmPoputationOperation.h"
 
+#include <iostream>
 #include <thread>
 #include <algorithm>
 #include <random>
@@ -47,7 +48,7 @@ namespace UICodeGeneticAlgorithm
 				std::vector<UICodeSoltFitnessPair> newMutationGenerationPairs(solt2ScoreTransFun(
 					Mutation::run(thisGenerationPairs, setting)));
 
-				if (compareFun(newMutationGenerationPairs[0], population->best))
+				if (!newMutationGenerationPairs.empty() && compareFun(newMutationGenerationPairs[0], population->best))
 					population->best = newMutationGenerationPairs[0];
 
 				for (UICodeSoltFitnessPair &pair : newGenerationPairs)
@@ -56,8 +57,12 @@ namespace UICodeGeneticAlgorithm
 					thisGenerationPairs.emplace_back(pair);
 
 				std::sort(thisGenerationPairs.begin(), thisGenerationPairs.end(), compareFun);
+				thisGenerationPairs.erase(std::unique(thisGenerationPairs.begin(), thisGenerationPairs.end()),
+					thisGenerationPairs.end());
 
 			} while (thisGenerationPairs.size() <= setting.individualNumber.first);
+
+			population->pairs = thisGenerationPairs;
 		}
 
 		void populationComunication(std::vector<UICodeSoltPopulation>& populations, CompareFun * compareFun, const SettingHelper & setting)
@@ -73,6 +78,8 @@ namespace UICodeGeneticAlgorithm
 				for (UICodeSoltPopulation & population : populations)
 				{
 					std::sort(population.pairs.begin(), population.pairs.end(), compareFun);
+					population.pairs.erase(std::unique(population.pairs.begin(), population.pairs.end()),
+						population.pairs.end());
 
 					if (compareFun(population.pairs[0], population.best))
 						population.best = population.pairs[0];

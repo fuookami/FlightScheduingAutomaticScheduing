@@ -42,8 +42,11 @@ namespace UICodeGeneticAlgorithm
 				{
 					groups[i][0] = UICodeSolt(newGeneration[i].cbegin() + points[i][0], newGeneration[i].cbegin() + points[i][1]);
 					groups[i][1] = UICodeSolt(newGeneration[i].cbegin() + points[i][2], newGeneration[i].cbegin() + points[i][3]);
-					threads.push_back(std::thread(cross, &groups[i], setting));
+					
 				}
+
+				for (unsigned int i(0), j(pairs.size()); i != j; ++i)
+					threads.push_back(std::thread(cross, &groups[i], setting));
 
 				for (std::thread &thread : threads)
 					thread.join();
@@ -75,13 +78,15 @@ namespace UICodeGeneticAlgorithm
 
 				std::vector<std::vector<UICodeSolt>> groups((pPairs.size() - saveNum) / parentNumber,
 					std::vector<UICodeSolt>(parentNumber, UICodeSolt()));
-				std::vector<std::thread> threads;
 				for (unsigned int i(0), j(groups.size()); i != j; ++i)
 				{
 					for (unsigned int k(0); k != parentNumber; ++k)
 						groups[i][k] = pPairs[i * parentNumber + k]->first;
-					threads.push_back(std::thread(cross, &groups[i], setting));
 				}
+				
+				std::vector<std::thread> threads;
+				for (unsigned int i(0), j(groups.size()); i != j; ++i)
+					threads.push_back(std::thread(cross, &groups[i], setting));
 
 				for (std::thread &thread : threads)
 					thread.join();
@@ -188,7 +193,7 @@ namespace UICodeGeneticAlgorithm
 
 					for (unsigned int i(0), j(points.size() - 1); i != j; ++i)
 						if (bdis(gen) == 1)
-							for (unsigned int k(points[i]), l(points[i + 1]); i != j; ++i)
+							for (unsigned int k(points[i]), l(points[i + 1]); k != l; ++k)
 								mark[k] = true;
 
 					CrossAreas(solt, mark);
