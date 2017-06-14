@@ -12,7 +12,7 @@ void print_flight_bunches(FlightBunches &flight_bunches);
 void generate_and_print_all_solution(const FlightSet &flight_set, const FlightSet::const_iterator &curr_it, FlightBunches curr_bunches);
 
 std::ofstream fout("out.txt");
-int best = UINT_MAX;
+int best = INT_MAX;
 
 int main(void)
 {
@@ -29,6 +29,7 @@ int main(void)
 	fout << std::endl << "------------------Greedy------------------"
 		<< std::endl << std::endl;
 	print_flight_bunches(flight_bunches);
+	best = flight_bunches.total_delay.to_int();
 
 	fout << std::endl << "---------------All Solution---------------"
 		<< std::endl << std::endl;
@@ -109,13 +110,22 @@ FlightBunches generate_initial_solution_with_greedy(const FlightSet &flight_set)
 void generate_and_print_all_solution(const FlightSet &flight_set, const FlightSet::const_iterator &curr_it, FlightBunches curr_bunches)
 {
 	static int solution_num = 0;
-	if (curr_it == flight_set.cend() && curr_bunches.total_delay.to_int() < best)
+	if (curr_it == flight_set.cend())
 	{
-		best = curr_bunches.total_delay.to_int();
-		++solution_num;
-		fout << "------Solution" << solution_num << "------" << std::endl << std::endl;
-		print_flight_bunches(curr_bunches);
-		fout << std::endl;
+		int i = 1;
+		Time total_delay(0, 0);
+		for (const FlightBunch &flight_bunch : curr_bunches.flight_bunches)
+		{
+			total_delay += flight_bunch.total_delay;
+			++i;
+		}
+		if (total_delay.to_int() < best)
+		{
+			++solution_num;
+			fout << "------Solution" << solution_num << "------" << std::endl << std::endl;
+			print_flight_bunches(curr_bunches);
+			fout << std::endl;
+		}
 	}
 	else if (curr_it != flight_set.cend())
 	{
