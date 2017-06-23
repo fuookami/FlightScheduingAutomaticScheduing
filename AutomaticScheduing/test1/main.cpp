@@ -11,14 +11,14 @@ void print_flight_bunches(FlightBunches &flight_bunches);
 
 void generate_and_print_all_solution(const FlightSet &flight_set, const FlightSet::const_iterator &curr_it, FlightBunches curr_bunches);
 
-std::ofstream fout("out.txt");
+std::ofstream fout("out2.txt");
 int best = INT_MAX;
 
 int main(void)
 {
 	FlightSet flight_set;
 
-	std::ifstream fin("data.txt");
+	std::ifstream fin("data2.txt");
 	std::string line_data;
 	while (getline(fin, line_data))
 		flight_set.insert(Flight(flight_set.size(), line_data));
