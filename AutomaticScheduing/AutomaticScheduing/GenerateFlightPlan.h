@@ -16,7 +16,7 @@ namespace GenerateFlightPlan
 
 	namespace SubFun
 	{
-		static const std::string dataInputFileName = "data.txt";
+		static const std::string dataInputFileName = "data2.txt";
 		static const std::string dataOuputFilter = "result\\";
 		std::vector<PlanTable> generateInitialSolution(void);
 
