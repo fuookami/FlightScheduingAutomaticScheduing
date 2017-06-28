@@ -18,12 +18,12 @@ void FlightPlan::setFlightInfoNum(const unsigned int i)
 
 void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, const FlightInfoMap & infoMap)
 {
-	static auto randomRank([]()->unsigned int {
-		static unsigned int maxRank = 3;;
-		static std::random_device rd;
-		static std::mt19937 gen(rd());
-		static std::poisson_distribution<> d(maxRank - 1);
+	static unsigned int maxRank = 4;
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	static std::poisson_distribution<> d(maxRank - 1);
 
+	static auto randomRank([]()->unsigned int {
 		unsigned int currNum(d(gen) / maxRank);
 		return currNum < maxRank ? currNum : maxRank - 1;
 	});
@@ -52,7 +52,7 @@ void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, co
 				flag = true;
 				break;
 			}
-			else if (!addedDelays.empty())
+			else if (!addedDelays.empty() && d(gen) < maxRank)
 			{
 				std::sort(addedDelays.begin(), addedDelays.end(),
 					[](std::pair<unsigned int, Time> &lop, std::pair<unsigned int, Time> &rop)->bool
@@ -94,57 +94,74 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTable(const PlanTable & 
 
 std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(PlanTable & t, const FlightInfoMap & infoMap)
 {
-	std::shared_ptr<FlightPlan> pNewPlan(new FlightPlan());
-	std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int, Time>>>> addedDelayTable;
-	for (unsigned int i(0), j(t.size()); i != j; ++i)
-	{
-		if (!pNewPlan->bunches[t[i]].addFlight(infoMap.find(i)->second))
-			addedDelayTable.push_back(std::make_pair(i, std::vector<std::pair<unsigned int, Time>>()));
-	}
+	static unsigned int maxRank = 4;
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	static std::poisson_distribution<> d(maxRank - 1);
 
-	for (std::pair<unsigned int, std::vector<std::pair<unsigned int, Time>>> &line : addedDelayTable)
+	std::shared_ptr<FlightPlan> pNewPlan(nullptr);
+	bool flag(true);
+	while (flag)
 	{
-		for (unsigned int i(0), j(pNewPlan->bunches.size()); i != j; ++i)
-		{
-			const FlightBunch &bunch(pNewPlan->bunches[i]);
-			Time thisAddedDelay(bunch.addedDelayIfAddFlight(infoMap.find(line.first)->second));
-			if (thisAddedDelay != SpecialTime::MaxTime)
-				line.second.emplace_back(std::make_pair(i, std::move(thisAddedDelay)));
-		}
-		std::sort(line.second.begin(), line.second.end(), [](const std::pair<unsigned int, Time> &lop, 
-			const std::pair<unsigned int, Time> &rop)->bool
-		{
-			return lop.second < rop.second;
-		});
-	}
+		pNewPlan.reset(new FlightPlan());
 
-	if (std::find_if(addedDelayTable.cbegin(), addedDelayTable.cend(), 
-		[](const std::pair<unsigned int, std::vector<std::pair<unsigned int, Time>>> &line)->bool
-	{
-		return line.second.empty();
-	}) != addedDelayTable.cend())
-	{
-		return nullptr;
-	}
-
-	for (const std::pair<unsigned int, std::vector<std::pair<unsigned int, Time>>> &line : addedDelayTable)
-	{
-		bool flag(true);
-		for (unsigned int i(0), j(line.second.size()); i != j && flag; ++i)
+		std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int, unsigned int>>>> addedDealyTable;
+		for (unsigned int i(0), j(t.size()); i != j; ++i)
 		{
-			if (!pNewPlan->bunches[line.second[i].first].addFlight(infoMap.find(line.first)->second))
+			if (!pNewPlan->bunches[t[i]].addFlight(infoMap.find(i)->second))
 			{
-				flag = false;
-				t[line.first] = line.second[i].first;
+				if (d(gen) < maxRank)
+					addedDealyTable.push_back(std::make_pair(i, std::vector<std::pair<unsigned int, unsigned int>>()));
+				else
+				{
+					/*
+					寻找一条空航班串
+					if 找到了
+						加入到这条航班串里
+					else
+						加入addedDealyTable表里
+					*/
+				}
 			}
 		}
 
-		if (flag)
-			return nullptr;
-	}
+		/*
+		for <flight_id, vector<bunch_id, cost>> in addedDealyTable
+			for bunch in pNewPlan
+				if bunch.cost(flight)不是无穷大
+					将<bunch_id, cost>放入addedDealyTable[flight_id]
+			根据cost对vector<bunch_id, cost>进行排序，从小到大
+		*/
+		
 
-	for (const FlightBunch &bunch : pNewPlan->bunches)
-		pNewPlan->totalDelay += bunch.delay();
+		while (!addedDealyTable.empty())
+		{
+			/*
+			存在于这个向量的航班id表示未加入航班串集中
+			*/
+
+			/*
+			根据 vector<bunch_id, cost>[0].cost 对 addedDealyTable(<flight_id, vector<bunch_id, cost>>) 进行排序，从小到大
+			柏松分布选择一个，将这个弹出addedDealyTable
+			柏松分布选择bunch_id或者加入到新的航班串里
+			记放入的航班串为new_bunch_id
+
+			for <flight_id, vector<bunch_id, cost>> in addedDealyTable
+				bool flag
+				if new_bunch_id 存在于 vector<bunch_id, cost> 中
+					if bunch.cost(flight) 不是无穷大
+						更新cost
+					else
+						删除
+					flag = true
+				if flag
+					根据cost对vector<bunch_id, cost>进行排序，从小到大
+			*/
+		}
+
+		for (const FlightBunch &bunch : pNewPlan->bunches)
+			pNewPlan->totalDelay += bunch.delay();
+	}
 
 	return pNewPlan;
 }
