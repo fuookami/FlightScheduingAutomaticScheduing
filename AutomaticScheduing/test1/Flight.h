@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include <deque>
 #include <set>
 #include <memory>
@@ -37,7 +38,7 @@ struct Flight
 bool operator<(const Flight &left, const Flight &right);
 std::ostream &operator<<(std::ostream &os, const Flight &flight);
 
-using FlightSet = std::set<Flight>;
+using FlightSet = std::vector<Flight>;
 
 struct FlightBunch
 {

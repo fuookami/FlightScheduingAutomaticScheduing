@@ -6,34 +6,36 @@
 #include "Flight.h"
 
 void print_flight_set(const FlightSet &flight_set);
-FlightBunches generate_initial_solution_with_greedy(const FlightSet &flight_set);
+FlightBunches generate_initial_solution_with_greedy();
 void print_flight_bunches(FlightBunches &flight_bunches);
 
-void generate_and_print_all_solution(const FlightSet &flight_set, const FlightSet::const_iterator &curr_it, FlightBunches curr_bunches);
+void generate_and_print_all_solution(unsigned long index, FlightBunches curr_bunches);
 
 std::ofstream fout("out2.txt");
 int best = INT_MAX;
+FlightSet flight_set;
+FlightBunches bestFlightBunches;
+static const unsigned int threadNumArg = 16;
 
 int main(void)
 {
-	FlightSet flight_set;
-
 	std::ifstream fin("data2.txt");
 	std::string line_data;
 	while (getline(fin, line_data))
-		flight_set.insert(Flight(flight_set.size(), line_data));
+		flight_set.push_back(Flight(flight_set.size(), line_data));
 
 	print_flight_set(flight_set);
 
-	FlightBunches flight_bunches(generate_initial_solution_with_greedy(flight_set));
+	FlightBunches flight_bunches(generate_initial_solution_with_greedy());
 	fout << std::endl << "------------------Greedy------------------"
 		<< std::endl << std::endl;
 	print_flight_bunches(flight_bunches);
+	bestFlightBunches = flight_bunches;
 	best = flight_bunches.total_delay.to_int();
 
 	fout << std::endl << "---------------All Solution---------------"
 		<< std::endl << std::endl;
-	generate_and_print_all_solution(flight_set, flight_set.cbegin(), FlightBunches());
+	generate_and_print_all_solution(0, FlightBunches());
 
 	system("pause");
 	return 0;
@@ -63,9 +65,10 @@ void print_flight_bunches(FlightBunches &flight_bunches)
 	}
 	flight_bunches.total_delay = total_delay;
 	fout << "Total delay: " << flight_bunches.total_delay.to_int() << std::endl;
+	std::cout << "Total delay: " << flight_bunches.total_delay.to_int() << std::endl;
 }
 
-FlightBunches generate_initial_solution_with_greedy(const FlightSet &flight_set)
+FlightBunches generate_initial_solution_with_greedy()
 {
 	FlightBunches flight_bunches;
 	for (const Flight &flight : flight_set)
@@ -107,10 +110,10 @@ FlightBunches generate_initial_solution_with_greedy(const FlightSet &flight_set)
 	return std::move(flight_bunches);
 }
 
-void generate_and_print_all_solution(const FlightSet &flight_set, const FlightSet::const_iterator &curr_it, FlightBunches curr_bunches)
+void generate_and_print_all_solution(unsigned long index, FlightBunches curr_bunches)
 {
 	static int solution_num = 0;
-	if (curr_it == flight_set.cend())
+	if (index == flight_set.size())
 	{
 		int i = 1;
 		Time total_delay(0, 0);
@@ -119,20 +122,26 @@ void generate_and_print_all_solution(const FlightSet &flight_set, const FlightSe
 			total_delay += flight_bunch.total_delay;
 			++i;
 		}
+		curr_bunches.total_delay = total_delay;
+		if (bestFlightBunches.total_delay.to_int() < best)
+			best = bestFlightBunches.total_delay.to_int();;
+
 		if (total_delay.to_int() < best)
 		{
+			best = total_delay.to_int();
+			bestFlightBunches = curr_bunches;
 			++solution_num;
 			fout << "------Solution" << solution_num << "------" << std::endl << std::endl;
 			print_flight_bunches(curr_bunches);
 			fout << std::endl;
 		}
 	}
-	else if (curr_it != flight_set.cend())
+	else if (index != flight_set.size())
 	{
-		const Flight &flight = *curr_it;
+		const Flight &flight = flight_set[index];;
 		std::deque<FlightBunch> &flight_bunches(curr_bunches.flight_bunches);
 		
-		//std::vector<std::thread> threads;
+		std::vector<std::thread> threads;
 		for (int i(0), j(flight_bunches.size()); i != j; ++i)
 		{
 			const FlightBunch &curr_bunch(flight_bunches[i]);
@@ -141,11 +150,16 @@ void generate_and_print_all_solution(const FlightSet &flight_set, const FlightSe
 				FlightBunches curr_bunches_copy(curr_bunches);
 				curr_bunches_copy.flight_bunches[i].add_flight(flight);
 
-				FlightSet::const_iterator next_it(curr_it);
-				++next_it;
-				generate_and_print_all_solution(flight_set, next_it, std::move(curr_bunches_copy));
-				//threads.push_back(std::thread(generate_and_print_all_solution, 
-				//	flight_set, next_it, std::move(curr_bunches_copy)));
+				if (index < threadNumArg)
+				{
+					threads.push_back(std::thread(generate_and_print_all_solution,
+						index + 1, std::move(curr_bunches_copy)));
+				}
+				else
+				{
+					generate_and_print_all_solution(index + 1, curr_bunches_copy);
+				}
+				
 			}
 		}
 
@@ -158,10 +172,19 @@ void generate_and_print_all_solution(const FlightSet &flight_set, const FlightSe
 			FlightBunch new_flight_bunch;
 			new_flight_bunch.add_flight(flight);
 			flight_bunches.push_back(std::move(new_flight_bunch));
-			
-			FlightSet::const_iterator next_it(curr_it);
-			++next_it;
-			generate_and_print_all_solution(flight_set, next_it, std::move(curr_bunches));
+
+			if (index < threadNumArg)
+			{
+				threads.push_back(std::thread(generate_and_print_all_solution,
+					index + 1, curr_bunches));
+			}
+			else
+			{
+				generate_and_print_all_solution(index + 1, curr_bunches);
+			}
 		}
+
+		for (unsigned long i(0), j(threads.size()); i != j; ++i)
+			threads[i].join();
 	}
 }
