@@ -108,19 +108,30 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 		std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int, unsigned int>>>> addedDealyTable;
 		for (unsigned int i(0), j(t.size()); i != j; ++i)
 		{
-			if (!pNewPlan->bunches[t[i]].addFlight(infoMap.find(i)->second))
+			std::shared_ptr<FlightInfo> pThisFlight(infoMap.find(i)->second);
+
+			if (!pNewPlan->bunches[t[i]].addFlight(pThisFlight))
 			{
 				if (d(gen) < maxRank)
-					addedDealyTable.push_back(std::make_pair(i, std::vector<std::pair<unsigned int, unsigned int>>()));
+					addedDealyTable.push_back(std::make_pair(i, 
+						std::vector<std::pair<unsigned int, unsigned int>>()));
 				else
 				{
-					/*
-					寻找一条空航班串
-					if 找到了
-						加入到这条航班串里
+					// 寻找一条空航班串
+					unsigned int p(0), q(pNewPlan->bunches.size());
+					for (; p != q && pNewPlan->bunches[i].size() != 0; ++p);
+					if (p != q)
+					{
+						// 加入到这条航班串里
+						pNewPlan->bunches[p].addFlight(pThisFlight);
+						t[i] = p;
+					}
 					else
-						加入addedDealyTable表里
-					*/
+					{
+						// 加入addedDealyTable表里
+						addedDealyTable.push_back(std::make_pair(i, 
+							std::vector<std::pair<unsigned int, unsigned int>>()));
+					}
 				}
 			}
 		}
