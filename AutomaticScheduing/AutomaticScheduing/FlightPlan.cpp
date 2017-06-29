@@ -136,14 +136,25 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 			}
 		}
 
-		/*
-		for <flight_id, vector<bunch_id, cost>> in addedDealyTable
-			for bunch in pNewPlan
-				if bunch.cost(flight)不是无穷大
-					将<bunch_id, cost>放入addedDealyTable[flight_id]
-			根据cost对vector<bunch_id, cost>进行排序，从小到大
-		*/
-		
+		for (std::pair<unsigned int, std::vector<std::pair<unsigned int, unsigned int>>> 
+			&ele : addedDealyTable)
+		{
+			std::shared_ptr<FlightInfo> pThisFlight(infoMap.find(ele.first)->second);
+
+			for (unsigned int i(0), j(pNewPlan->bunches.size()); i != j; ++i)
+			{
+				if (!pNewPlan->bunches[ele.first].addFlight(pThisFlight))
+					ele.second.emplace_back(std::make_pair(i,
+						pNewPlan->bunches[ele.first].addedDelayIfAddFlight(pThisFlight)));
+			}
+
+			std::sort(ele.second.begin(), ele.second.end(), 
+				[](std::pair<unsigned int, unsigned int> &lop, 
+					std::pair<unsigned int, unsigned int> &rop) -> bool
+			{
+				return lop.second < rop.second;
+			});
+		}
 
 		while (!addedDealyTable.empty())
 		{
