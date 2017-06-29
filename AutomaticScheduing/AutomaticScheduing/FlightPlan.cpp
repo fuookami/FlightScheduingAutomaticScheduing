@@ -101,16 +101,18 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 
 	std::shared_ptr<FlightPlan> pNewPlan(nullptr);
 	bool flag(true);
+	PlanTable tCopy;
 	while (flag)
 	{
 		pNewPlan.reset(new FlightPlan());
+		tCopy = t;
 
 		std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int, unsigned int>>>> addedDealyTable;
-		for (unsigned int i(0), j(t.size()); i != j; ++i)
+		for (unsigned int i(0), j(tCopy.size()); i != j; ++i)
 		{
 			std::shared_ptr<FlightInfo> pThisFlight(infoMap.find(i)->second);
 
-			if (!pNewPlan->bunches[t[i]].addFlight(pThisFlight))
+			if (!pNewPlan->bunches[tCopy[i]].addFlight(pThisFlight))
 			{
 				if (d(gen) < maxRank)
 					addedDealyTable.push_back(std::make_pair(i, 
@@ -124,7 +126,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 					{
 						// 加入到这条航班串里
 						pNewPlan->bunches[p].addFlight(pThisFlight);
-						t[i] = p;
+						tCopy[i] = p;
 					}
 					else
 					{
@@ -136,6 +138,20 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 			}
 		}
 
+		/*
+		for <flight_id, vector<bunch_id, cost>> in addedDealyTable
+			for bunch in pNewPlan
+				if bunch.cost(flight)不是无穷大
+					将<bunch_id, cost>放入addedDealyTable[flight_id]
+			if 这个航班有航班串能塞进去
+				根据cost对vector<bunch_id, cost>进行排序，从小到大
+			else
+				寻找一条空航班串
+				if 存在新航班
+					加入到这条航班里
+				else
+					重新生成
+		*/
 		for (std::pair<unsigned int, std::vector<std::pair<unsigned int, unsigned int>>> 
 			&ele : addedDealyTable)
 		{
@@ -145,16 +161,37 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 			{
 				if (!pNewPlan->bunches[ele.first].addFlight(pThisFlight))
 					ele.second.emplace_back(std::make_pair(i,
-						pNewPlan->bunches[ele.first].addedDelayIfAddFlight(pThisFlight)));
+						pNewPlan->bunches[ele.first].addedDelayIfAddFlight(pThisFlight).totalMins()));
 			}
 
-			std::sort(ele.second.begin(), ele.second.end(), 
-				[](std::pair<unsigned int, unsigned int> &lop, 
-					std::pair<unsigned int, unsigned int> &rop) -> bool
+			if (!ele.second.empty())
 			{
-				return lop.second < rop.second;
-			});
+				std::sort(ele.second.begin(), ele.second.end(),
+					[](std::pair<unsigned int, unsigned int> &lop,
+						std::pair<unsigned int, unsigned int> &rop) -> bool
+				{
+					return lop.second < rop.second;
+				});
+			}
+			else
+			{
+				unsigned int p(0), q(pNewPlan->bunches.size());
+				for (; p != q && pNewPlan->bunches[ele.first].size() != 0; ++p);
+				if (p != q)
+				{
+					pNewPlan->bunches[p].addFlight(pThisFlight);
+					tCopy[ele.first] = p;
+				}
+				else
+				{
+					flag = true;
+					break;
+				}
+			}
 		}
+
+		if (flag)
+			continue;
 
 		while (!addedDealyTable.empty())
 		{
@@ -167,24 +204,101 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 			柏松分布选择一个，将这个弹出addedDealyTable
 			柏松分布选择bunch_id或者加入到新的航班串里
 			记放入的航班串为new_bunch_id
+			*/
+			std::sort(addedDealyTable.begin(), addedDealyTable.end(), []
+			(std::pair<unsigned int, std::vector<std::pair<unsigned int, unsigned int>>> &lps,
+				std::pair<unsigned int, std::vector<std::pair<unsigned int, unsigned int>>> &rps) -> bool
+			{
+				return lps.second.front().second < rps.second.front().second;
+			});
 
+			unsigned int selectRank(d(gen));
+			selectRank = selectRank >= addedDealyTable.size() ? addedDealyTable.size() - 1 : selectRank;
+			std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int, 
+				unsigned int>>>>::iterator pSelect(addedDealyTable.begin() + selectRank);
+
+			unsigned int selectBunch(d(gen));
+			selectBunch = selectBunch >= pSelect->second.size() ? pSelect->second.size() - 1 : selectBunch;
+			unsigned int bunchId(pSelect->second[selectBunch].first);
+			pNewPlan->bunches[bunchId].addFlight(infoMap.find(pSelect->first)->second);
+			addedDealyTable.erase(pSelect);
+
+			/*
+			更新addedDealyTable表
 			for <flight_id, vector<bunch_id, cost>> in addedDealyTable
-				bool flag
+				bool flag2
 				if new_bunch_id 存在于 vector<bunch_id, cost> 中
 					if bunch.cost(flight) 不是无穷大
 						更新cost
 					else
 						删除
-					flag = true
-				if flag
+					flag2 = true
+				if flag2
 					根据cost对vector<bunch_id, cost>进行排序，从小到大
 			*/
+			for (std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int, unsigned int>>>>::iterator
+				currIt(addedDealyTable.begin()); currIt != addedDealyTable.end(); ++currIt)
+			{
+				bool flag2 = false;
+				std::shared_ptr<FlightInfo> pThisInfo(infoMap.find(currIt->first)->second);
+
+				std::vector<std::pair<unsigned int, unsigned int>>::iterator pSelectBunch(
+					std::find(currIt->second.begin(), currIt->second.end(), [bunchId]
+					(std::pair<unsigned int, unsigned int> &lop) -> bool
+					{
+						return lop.first == bunchId;
+					})
+				);
+				if (pSelectBunch != currIt->second.end())
+				{
+					if (!pNewPlan->bunches[bunchId].addFlight(pThisInfo))
+					{
+						unsigned int newCost(pNewPlan->bunches[bunchId].addedDelayIfAddFlight(pThisInfo).totalMins());
+						if (newCost != SpecialTime::MaxTime)
+							pSelectBunch->second = newCost;
+						else
+							currIt->second.erase(pSelectBunch);
+					}
+					
+				}
+				
+				if (currIt->second.empty())
+				{
+					unsigned int p(0), q(pNewPlan->bunches.size());
+					for (; p != q && pNewPlan->bunches[currIt->first].size() != 0; ++p);
+					if (p != q)
+					{
+						pNewPlan->bunches[p].addFlight(infoMap.find(currIt->first)->second);
+						tCopy[currIt->first] = p;
+						currIt = addedDealyTable.erase(currIt);
+					}
+					else
+					{
+						flag = true;
+						break;
+					}
+				}
+
+				if (flag)
+					break;
+
+				if (flag2)
+				{
+					std::sort(currIt->second.begin(), currIt->second.end(),
+						[](std::pair<unsigned int, unsigned int> &lop,
+							std::pair<unsigned int, unsigned int> &rop) -> bool
+					{
+						return lop.second < rop.second;
+					});
+				}
+			}
 		}
 
 		for (const FlightBunch &bunch : pNewPlan->bunches)
 			pNewPlan->totalDelay += bunch.delay();
 	}
 
+	
 	return pNewPlan;
 }
 
