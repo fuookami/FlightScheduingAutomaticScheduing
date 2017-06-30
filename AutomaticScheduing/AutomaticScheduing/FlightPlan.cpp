@@ -44,7 +44,7 @@ void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, co
 			{
 				Time thisDelay(pNewPlan->bunches[i].addedDelayIfAddFlight(infoPair.second));
 				if (thisDelay != SpecialTime::MaxTime)
-					addedDelays.push_back(std::make_pair(i, std::move(thisDelay)));
+					addedDelays.push_back(std::make_pair(i, thisDelay.totalMins()));
 			}
 
 			if (addedDelays.empty() && pNewPlan->bunches.back().size() != 0)
@@ -67,8 +67,13 @@ void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, co
 			}
 			else 
 			{
-				unsigned int i(0);
-				for (unsigned int j(pNewPlan->bunches.size()); i != j && pNewPlan->bunches[i].size() != 0; ++i);
+				unsigned int i(0), j(pNewPlan->bunches.size());
+				for (; i != j && pNewPlan->bunches[i].size() != 0; ++i);
+				if (i == j)
+				{
+					flag = true;
+					break;
+				}
 				pNewPlan->bunches[i].addFlight(infoPair.second);
 			}
 		}
@@ -106,17 +111,18 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 	{
 		pNewPlan.reset(new FlightPlan());
 		tCopy = t;
+		flag = false;
 
-		std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int, unsigned int>>>> addedDealyTable;
+		std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>>> addedDealyTable;
 		for (unsigned int i(0), j(tCopy.size()); i != j; ++i)
 		{
-			std::shared_ptr<FlightInfo> pThisFlight(infoMap.find(i)->second);
+			std::shared_ptr<FlightInfo> pThisFlight(infoMap.find(tCopy[i])->second);
 
 			if (!pNewPlan->bunches[tCopy[i]].addFlight(pThisFlight))
 			{
 				if (d(gen) < maxRank)
 					addedDealyTable.push_back(std::make_pair(i, 
-						std::vector<std::pair<unsigned int, unsigned int>>()));
+						std::vector<std::pair<unsigned int, int>>()));
 				else
 				{
 					// 寻找一条空航班串
@@ -132,7 +138,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 					{
 						// 加入addedDealyTable表里
 						addedDealyTable.push_back(std::make_pair(i, 
-							std::vector<std::pair<unsigned int, unsigned int>>()));
+							std::vector<std::pair<unsigned int, int>>()));
 					}
 				}
 			}
@@ -152,7 +158,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 				else
 					重新生成
 		*/
-		for (std::pair<unsigned int, std::vector<std::pair<unsigned int, unsigned int>>> 
+		for (std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>> 
 			&ele : addedDealyTable)
 		{
 			std::shared_ptr<FlightInfo> pThisFlight(infoMap.find(ele.first)->second);
@@ -160,15 +166,15 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 			for (unsigned int i(0), j(pNewPlan->bunches.size()); i != j; ++i)
 			{
 				if (!pNewPlan->bunches[ele.first].addFlight(pThisFlight))
-					ele.second.emplace_back(std::make_pair(i,
+					ele.second.push_back(std::make_pair(i,
 						pNewPlan->bunches[ele.first].addedDelayIfAddFlight(pThisFlight).totalMins()));
 			}
 
 			if (!ele.second.empty())
 			{
 				std::sort(ele.second.begin(), ele.second.end(),
-					[](std::pair<unsigned int, unsigned int> &lop,
-						std::pair<unsigned int, unsigned int> &rop) -> bool
+					[](std::pair<unsigned int, int> &lop,
+						std::pair<unsigned int, int> &rop) -> bool
 				{
 					return lop.second < rop.second;
 				});
@@ -206,8 +212,8 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 			记放入的航班串为new_bunch_id
 			*/
 			std::sort(addedDealyTable.begin(), addedDealyTable.end(), []
-			(std::pair<unsigned int, std::vector<std::pair<unsigned int, unsigned int>>> &lps,
-				std::pair<unsigned int, std::vector<std::pair<unsigned int, unsigned int>>> &rps) -> bool
+			(std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>> &lps,
+				std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>> &rps) -> bool
 			{
 				return lps.second.front().second < rps.second.front().second;
 			});
@@ -215,7 +221,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 			unsigned int selectRank(d(gen));
 			selectRank = selectRank >= addedDealyTable.size() ? addedDealyTable.size() - 1 : selectRank;
 			std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int, 
-				unsigned int>>>>::iterator pSelect(addedDealyTable.begin() + selectRank);
+				int>>>>::iterator pSelect(addedDealyTable.begin() + selectRank);
 
 			unsigned int selectBunch(d(gen));
 			selectBunch = selectBunch >= pSelect->second.size() ? pSelect->second.size() - 1 : selectBunch;
@@ -236,15 +242,15 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 				if flag2
 					根据cost对vector<bunch_id, cost>进行排序，从小到大
 			*/
-			for (std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int, unsigned int>>>>::iterator
+			for (std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>>>::iterator
 				currIt(addedDealyTable.begin()); currIt != addedDealyTable.end(); ++currIt)
 			{
 				bool flag2 = false;
 				std::shared_ptr<FlightInfo> pThisInfo(infoMap.find(currIt->first)->second);
-
-				std::vector<std::pair<unsigned int, unsigned int>>::iterator pSelectBunch(
-					std::find(currIt->second.begin(), currIt->second.end(), [bunchId]
-					(std::pair<unsigned int, unsigned int> &lop) -> bool
+				
+				std::vector<std::pair<unsigned int, int>>::iterator pSelectBunch(
+					std::find_if(currIt->second.begin(), currIt->second.end(), [bunchId]
+					(std::pair<unsigned int, int> &lop) -> bool
 					{
 						return lop.first == bunchId;
 					})
@@ -253,7 +259,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 				{
 					if (!pNewPlan->bunches[bunchId].addFlight(pThisInfo))
 					{
-						unsigned int newCost(pNewPlan->bunches[bunchId].addedDelayIfAddFlight(pThisInfo).totalMins());
+						int newCost(pNewPlan->bunches[bunchId].addedDelayIfAddFlight(pThisInfo).totalMins());
 						if (newCost != SpecialTime::MaxTime)
 							pSelectBunch->second = newCost;
 						else
@@ -285,8 +291,8 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 				if (flag2)
 				{
 					std::sort(currIt->second.begin(), currIt->second.end(),
-						[](std::pair<unsigned int, unsigned int> &lop,
-							std::pair<unsigned int, unsigned int> &rop) -> bool
+						[](std::pair<unsigned int, int> &lop,
+							std::pair<unsigned int, int> &rop) -> bool
 					{
 						return lop.second < rop.second;
 					});

@@ -14,11 +14,11 @@ namespace UICodeGeneticAlgorithm
 		{
 			if (setting.crossMode == CrossMode::OneParent)
 			{
-				static auto setSoltPart([](UICodeSolt *solt, unsigned int pointA, unsigned int pointB,
+				static auto setSoltPart([](UICodeSolt &solt, unsigned int pointA, unsigned int pointB,
 					const UICodeSolt &parts)
 				{
 					for (unsigned int i(pointA), j(0), k(parts.size()); i != pointB && j != k; ++i, ++j)
-						(*solt)[i] = parts[j];
+						solt[i] = parts[j];
 				});
 
 				static std::random_device rd;
@@ -42,7 +42,6 @@ namespace UICodeGeneticAlgorithm
 				{
 					groups[i][0] = UICodeSolt(newGeneration[i].cbegin() + points[i][0], newGeneration[i].cbegin() + points[i][1]);
 					groups[i][1] = UICodeSolt(newGeneration[i].cbegin() + points[i][2], newGeneration[i].cbegin() + points[i][3]);
-					
 				}
 
 				for (unsigned int i(0), j(pairs.size()); i != j; ++i)
@@ -54,12 +53,9 @@ namespace UICodeGeneticAlgorithm
 
 				for (unsigned int i(0), j(newGeneration.size()); i != j; ++i)
 				{
-					threads.push_back(std::thread(setSoltPart, &newGeneration[i], points[i][0], points[i][1], groups[i][0]));
-					threads.push_back(std::thread(setSoltPart, &newGeneration[i], points[i][2], points[i][3], groups[i][1]));
+					setSoltPart(newGeneration[i], points[i][0], points[i][1], groups[i][0]);
+					setSoltPart(newGeneration[i], points[i][2], points[i][3], groups[i][1]);
 				}
-
-				for (std::thread &thread : threads)
-					thread.join();
 
 				return std::move(newGeneration);
 			}
@@ -187,7 +183,7 @@ namespace UICodeGeneticAlgorithm
 					std::vector<bool> mark(solt.front().size(), false);
 					std::set<unsigned int> pointSet;
 					while (pointSet.size() != pointNum)
-						pointSet.insert(udis(gen));
+						pointSet.insert((unsigned int)udis(gen) % solt.front().size());
 					std::vector<unsigned int> points(pointSet.cbegin(), pointSet.cend());
 					std::sort(points.begin(), points.end());
 

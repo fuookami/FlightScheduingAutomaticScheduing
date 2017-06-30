@@ -14,5 +14,5 @@ int main(void)
 		UICodeGeneticAlgorithm::CrossOperator(UICodeGeneticAlgorithm::CrossOperator::MultiPoint),
 		UICodeGeneticAlgorithm::MutationRateMode(UICodeGeneticAlgorithm::MutationRateMode::AdapativeDynamic),
 		UICodeGeneticAlgorithm::MutationOperator(UICodeGeneticAlgorithm::MutationOperator::Gaussian));
-	GenerateFlightPlan::run(false, setting);
+	GenerateFlightPlan::run(true, setting);
 }

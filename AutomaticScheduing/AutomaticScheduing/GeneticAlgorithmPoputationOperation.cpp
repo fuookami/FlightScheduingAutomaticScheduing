@@ -52,9 +52,9 @@ namespace UICodeGeneticAlgorithm
 					population->best = newMutationGenerationPairs[0];
 
 				for (UICodeSoltFitnessPair &pair : newGenerationPairs)
-					thisGenerationPairs.emplace_back(pair);
+					thisGenerationPairs.push_back(pair);
 				for (UICodeSoltFitnessPair &pair : newMutationGenerationPairs)
-					thisGenerationPairs.emplace_back(pair);
+					thisGenerationPairs.push_back(pair);
 
 				std::sort(thisGenerationPairs.begin(), thisGenerationPairs.end(), compareFun);
 				thisGenerationPairs.erase(std::unique(thisGenerationPairs.begin(), thisGenerationPairs.end()),
