@@ -115,20 +115,20 @@ bool FlightBunch::addFlight(const std::shared_ptr<FlightInfo> pFlightInfo)
 {
 	if (flight.empty())
 	{
-		flight.emplace_back(Flight(pFlightInfo));
+		flight.push_back(Flight(pFlightInfo));
 		flightId.insert(pFlightInfo->id);
 		return true;
 	}
 	else if (pFlightInfo->canBeFollowedBy(flight.front().info()))
 	{
-		flight.emplace_front(Flight(pFlightInfo));
+		flight.push_front(Flight(pFlightInfo));
 		flightId.insert(pFlightInfo->id);
 		calDelayTime();
 		return true;
 	}
 	else if (flight.back().canBeFollowedBy(pFlightInfo))
 	{
-		flight.emplace_back(Flight(pFlightInfo));
+		flight.push_back(Flight(pFlightInfo));
 		flightId.insert(pFlightInfo->id);
 		calDelayTime();
 		return true;
@@ -248,7 +248,7 @@ std::deque<Flight>& FlightBunch::flights(void)
 	return flight;
 }
 
-std::set<unsigned int>& FlightBunch::ids(void)
+std::unordered_set<unsigned int>& FlightBunch::ids(void)
 {
 	return flightId;
 }

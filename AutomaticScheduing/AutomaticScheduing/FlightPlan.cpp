@@ -37,7 +37,7 @@ void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, co
 
 		for (const std::pair<unsigned int, std::shared_ptr<FlightInfo>> &infoPair : infoMap)
 		{
-			std::vector<std::pair<unsigned int, Time>> addedDelays;
+			std::vector<std::pair<unsigned int, int>> addedDelays;
 
 			for (unsigned int i(0), j(pNewPlan->bunches.size()); i != j
 				&& pNewPlan->bunches[i].size() != 0; ++i)
@@ -55,7 +55,7 @@ void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, co
 			else if (!addedDelays.empty() && d(gen) < maxRank)
 			{
 				std::sort(addedDelays.begin(), addedDelays.end(),
-					[](std::pair<unsigned int, Time> &lop, std::pair<unsigned int, Time> &rop)->bool
+					[](std::pair<unsigned int, int> &lop, std::pair<unsigned int, int> &rop)->bool
 				{
 					return lop.second < rop.second;
 				});
@@ -69,12 +69,15 @@ void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, co
 			{
 				unsigned int i(0), j(pNewPlan->bunches.size());
 				for (; i != j && pNewPlan->bunches[i].size() != 0; ++i);
-				if (i == j)
+				if (i != j)
+				{
+					pNewPlan->bunches[i].addFlight(infoPair.second);
+				}
+				else
 				{
 					flag = true;
 					break;
 				}
-				pNewPlan->bunches[i].addFlight(infoPair.second);
 			}
 		}
 	}
@@ -116,7 +119,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 		std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>>> addedDealyTable;
 		for (unsigned int i(0), j(tCopy.size()); i != j; ++i)
 		{
-			std::shared_ptr<FlightInfo> pThisFlight(infoMap.find(tCopy[i])->second);
+			std::shared_ptr<FlightInfo> pThisFlight(infoMap.find(i)->second);
 
 			if (!pNewPlan->bunches[tCopy[i]].addFlight(pThisFlight))
 			{
