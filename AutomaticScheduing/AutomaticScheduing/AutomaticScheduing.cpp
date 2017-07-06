@@ -37,7 +37,7 @@ void testInitialSolution(void)
 {
 	unsigned int count(0);
 	std::unordered_map<unsigned int, unsigned int> hint;
-	for (unsigned int i(0), j(1000000 / GenerateFlightPlan::FlighterNum); i != j; ++i)
+	for (unsigned int i(0), j(100000 / GenerateFlightPlan::FlighterNum); i != j; ++i)
 	{
 		std::vector<PlanTable> initialSolution(GenerateFlightPlan::FlighterNum, PlanTable());
 		std::vector<std::thread> threads;
