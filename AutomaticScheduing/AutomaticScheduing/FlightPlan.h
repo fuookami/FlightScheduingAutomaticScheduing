@@ -10,9 +10,9 @@ class FlightPlan
 public:
 	static void setFlighterNum(const unsigned int i);
 	static void setFlightInfoNum(const unsigned int i);
-	static void generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, const FlightInfoMap &infoMap);
-	static std::shared_ptr<FlightPlan> generateFromPlanTable(const PlanTable &t, const FlightInfoMap &infoMap);
-	static std::shared_ptr<FlightPlan> generateFromPlanTableWithFaultTolerant(PlanTable &t, const FlightInfoMap &infoMap);
+	static void generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, FlightInfoMap &infoMap);
+	static std::shared_ptr<FlightPlan> generateFromPlanTable(const PlanTable &t, FlightInfoMap &infoMap);
+	static std::shared_ptr<FlightPlan> generateFromPlanTableWithFaultTolerant(PlanTable &t, FlightInfoMap &infoMap);
 	
 	PlanTable getPlanTable(void) const;
 	const Time &delay(void) const;

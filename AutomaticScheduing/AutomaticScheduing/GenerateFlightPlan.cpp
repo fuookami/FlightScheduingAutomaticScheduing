@@ -22,7 +22,8 @@ namespace GenerateFlightPlan
 		{
 			std::shared_ptr<FlightInfo> newFlightInfo(new FlightInfo(flightInfoSet.size(), lineData));
 			flightInfoSet.insert(newFlightInfo);
-			flightInfoMap.insert(std::make_pair(newFlightInfo->id, newFlightInfo));
+			flightInfoMap.mutexs.insert(std::make_pair(newFlightInfo->id, new std::mutex()));
+			flightInfoMap.infos.insert(std::make_pair(newFlightInfo->id, newFlightInfo));
 		}
 
 		FlightPlan::setFlighterNum(GenerateFlightPlan::FlighterNum);

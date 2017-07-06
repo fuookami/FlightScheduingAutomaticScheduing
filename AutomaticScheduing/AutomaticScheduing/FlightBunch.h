@@ -5,6 +5,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <memory>
+#include <mutex>
 
 struct FlightInfo
 {
@@ -33,7 +34,20 @@ bool operator<(const FlightInfo &lop, const FlightInfo &rop);
 std::ostream &operator<<(std::ostream &os, const FlightInfo &flightInfo);
 
 using FlightInfoSet = std::unordered_set<std::shared_ptr<FlightInfo>>;
-using FlightInfoMap = std::unordered_map<unsigned int, std::shared_ptr<FlightInfo>>;
+using FlightInfoMap = struct FlightInfoMapStr
+{
+	~FlightInfoMapStr()
+	{
+		for (std::pair<unsigned int, std::mutex *> mutexPair : mutexs)
+		{
+			mutexPair.second->unlock();
+			delete mutexPair.second;
+		}
+	}
+
+	std::unordered_map<unsigned int, std::mutex *> mutexs;
+	std::unordered_map<unsigned int, std::shared_ptr<FlightInfo>> infos;
+};
 
 class Flight
 {
