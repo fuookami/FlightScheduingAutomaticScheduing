@@ -72,10 +72,12 @@ void process(void)
 {
 	std::ofstream fout(output);
 	fout << "{" << std::endl;
-	fout << "	\"xAsis\": [";
 
 	bool notFirstFlag(false);
+	
 	// output xAxis
+	notFirstFlag = false;
+	fout << "	\"xAsis\": [";
 	for (const std::pair<unsigned int, unsigned int> &pair : pairs)
 	{
 		if (notFirstFlag)
@@ -88,6 +90,19 @@ void process(void)
 	fout << "]," << std::endl;
 
 	// output value
+	notFirstFlag = false;
+	fout << "	\"value\": [";
+	for (const std::pair<unsigned int, unsigned int> &pair : pairs)
+	{
+		if (notFirstFlag)
+			fout << ", ";
+
+		fout << pair.second;
+
+		notFirstFlag = true;
+	}
+	fout << "]," << std::endl;
+
 	// output Percentage
 	// output accumulate value
 	// output accumulate percentage
