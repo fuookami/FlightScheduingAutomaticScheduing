@@ -111,11 +111,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="ResultTestInitialSolution.txt" />
+    <Text Include="Result\SortedResultTestInitialSolution.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Result\ProcessResultTestInitialSolution.json" />
     <None Include="Result\ResultReview.html" />
     <None Include="Result\ResultReview.js" />
   </ItemGroup>

@@ -65,15 +65,3 @@ function showValue() {
         }]
     });
 };
-
-function showPercentage() {
-
-}
-
-function showAccumulateValue() {
-
-};
-
-function showAccumulatePercentage() {
-
-}

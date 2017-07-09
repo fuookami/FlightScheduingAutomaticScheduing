@@ -18,6 +18,9 @@
     <Text Include="ResultTestInitialSolution.txt">
       <Filter>资源文件</Filter>
     </Text>
+    <Text Include="Result\SortedResultTestInitialSolution.txt">
+      <Filter>资源文件</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -29,6 +32,9 @@
       <Filter>资源文件</Filter>
     </None>
     <None Include="Result\ResultReview.js">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="Result\ProcessResultTestInitialSolution.json">
       <Filter>资源文件</Filter>
     </None>
   </ItemGroup>
