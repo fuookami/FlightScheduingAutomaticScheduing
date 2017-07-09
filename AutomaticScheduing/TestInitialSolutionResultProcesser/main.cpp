@@ -12,8 +12,8 @@ std::vector<std::pair<unsigned int, unsigned int>> pairs;
 std::vector<unsigned int> counter;
 unsigned int totalTimes(0);
 std::string input("ResultTestInitialSolution.txt");
-std::string sortOutput("SortedResultTestInitialSolution.txt");
-std::string ouput("");
+std::string sortOutput("Result\SortedResultTestInitialSolution.txt");
+std::string output("Result\ProcessResultTestInitialSolution.json");
 
 void load(void)
 {
@@ -70,5 +70,27 @@ int main(void)
 
 void process(void)
 {
+	std::ofstream fout(output);
+	fout << "{" << std::endl;
+	fout << "	\"xAsis\": [" << std::endl;
 
+	bool notFirstFlag(false);
+	// output xAxis
+	for (const std::pair<unsigned int, unsigned int> &pair : pairs)
+	{
+		if (notFirstFlag)
+			fout << ", ";
+
+		fout << '\'' << pair.first << '\'';
+
+		notFirstFlag = true;
+	}
+	fout << "];" << std::endl;
+
+	// output value
+	// output Percentage
+	// output accumulate value
+	// output accumulate percentage
+
+	fout.close();
 }
