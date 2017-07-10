@@ -243,3 +243,5 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/AutomaticScheduing/TestInitialSolutionResultProcesser/Result/HighCharts/js
+/AutomaticScheduing/TestInitialSolutionResultProcesser/Result/HighCharts

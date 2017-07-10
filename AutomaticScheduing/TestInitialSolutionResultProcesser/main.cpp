@@ -91,7 +91,7 @@ void process(void)
 
 	// output value
 	notFirstFlag = false;
-	fout << "	\"value\": [";
+	fout << "	\"Value\": [";
 	for (const std::pair<unsigned int, unsigned int> &pair : pairs)
 	{
 		if (notFirstFlag)
@@ -104,8 +104,46 @@ void process(void)
 	fout << "]," << std::endl;
 
 	// output Percentage
+	notFirstFlag = false;
+	fout << "	\"Percentage\": [";
+	for (const std::pair<unsigned int, unsigned int> &pair : pairs)
+	{
+		if (notFirstFlag)
+			fout << ", ";
+
+		fout << 100.0 * pair.second / 100000.0;
+
+		notFirstFlag = true;
+	}
+	fout << "]," << std::endl;
+
 	// output accumulate value
+	notFirstFlag = false;
+	fout << "	\"Accumulate_Value\": [";
+	for (const unsigned int &count : counter)
+	{
+		if (notFirstFlag)
+			fout << ", ";
+
+		fout << count;
+
+		notFirstFlag = true;
+	}
+	fout << "]," << std::endl;
+
 	// output accumulate percentage
+	notFirstFlag = false;
+	fout << "	\"Accumulate_Percentage\": [";
+	for (const unsigned int &count : counter)
+	{
+		if (notFirstFlag)
+			fout << ", ";
+
+		fout << 100.0 * count / 100000.0;
+
+		notFirstFlag = true;
+	}
+	fout << "]" << std::endl;
 
 	fout << "}" << std::endl;
 	fout.close();
