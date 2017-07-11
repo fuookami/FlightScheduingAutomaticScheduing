@@ -13,13 +13,29 @@ function showValue(data) {
             type: 'area'
         },
         title: {
-            text: '初始解值分布（10k次）'
+            text: '初始解值分布（100k次）'
         },
-        xAxis: {
-            categories: data.xAxis,
-            tickmarkPlacement: 'on',
+        credits: {
+            enabled:false // 禁用版权信息
+        },
+        xAsis: {
+            labels: {
+                style: {
+                    fontSize: '32px'
+                }
+            },
             title: {
-                enabled: false
+                text: '波及延误（分钟）'
+            }
+        },
+        yAsis: {
+            labels: {
+                style: {
+                    fontSize: '32px'
+                }
+            },
+            title: {
+                text: '初始解值频数（次）'
             }
         },
         tooltip: {
@@ -39,7 +55,7 @@ function showValue(data) {
         },
         series: [{
             name: '初始解值分布',
-            data: data.Value
+            data: data.Values
         }]
     });
 };
@@ -50,13 +66,29 @@ function showPercentage(data) {
             type: 'area'
         },
         title: {
-            text: '初始解值分布百分比（10k次）'
+            text: '初始解值分布（100k次）'
         },
-        xAxis: {
-            categories: data.xAxis,
-            tickmarkPlacement: 'on',
+        credits: {
+            enabled:false // 禁用版权信息
+        },
+        xAsis: {
+            labels: {
+                style: {
+                    fontSize: '32px'
+                }
+            },
             title: {
-                enabled: false
+                text: '波及延误（分钟）'
+            }
+        },
+        yAsis: {
+            labels: {
+                style: {
+                    fontSize: '32px'
+                }
+            },
+            title: {
+                text: '初始解值频率（%）'
             }
         },
         tooltip: {
@@ -87,18 +119,34 @@ function showAccumulateValue(data) {
             type: 'area'
         },
         title: {
-            text: '初始解值分布累积值（10k次）'
+            text: '初始解值分布累积值（100k次）'
         },
-        xAxis: {
-            categories: data.xAxis,
-            tickmarkPlacement: 'on',
+        credits: {
+            enabled:false // 禁用版权信息
+        },
+        xAsis: {
+            labels: {
+                style: {
+                    fontSize: '32px'
+                }
+            },
             title: {
-                enabled: false
+                text: '波及延误（分钟）'
+            }
+        },
+        yAsis: {
+            labels: {
+                style: {
+                    fontSize: '32px'
+                }
+            },
+            title: {
+                text: "初始解值累积频数（次）"
             }
         },
         tooltip: {
             split: true,
-            valueSuffix: '%'
+            valueSuffix: '次'
         },
         plotOptions: {
             area: {
@@ -113,7 +161,7 @@ function showAccumulateValue(data) {
         },
         series: [{
             name: '初始解值分布累积值',
-            data: data.Accumulate_Value
+            data: data.AccumulateValue
         }]
     });
 };
@@ -124,13 +172,29 @@ function showAccumulatePercentage(data) {
             type: 'area'
         },
         title: {
-            text: '初始解值分布累积百分比（10k次）'
+            text: '初始解值分布累积百分比（100k次）'
         },
-        xAxis: {
-            categories: data.xAxis,
-            tickmarkPlacement: 'on',
+        credits: {
+            enabled:false // 禁用版权信息
+        },
+        xAsis: {
+            labels: {
+                style: {
+                    fontSize: '32px'
+                }
+            },
             title: {
-                enabled: false
+                text: '波及延误（分钟）'
+            }
+        },
+        yAsis: {
+            labels: {
+                style: {
+                    fontSize: '32px'
+                }
+            },
+            title: {
+                text: "初始解值累积频率（%）"
             }
         },
         tooltip: {
@@ -150,7 +214,7 @@ function showAccumulatePercentage(data) {
         },
         series: [{
             name: '初始解值分布累积百分比',
-            data: data.Accumulate_Percentage
+            data: data.AccumulatePercentage
         }]
     });
 }

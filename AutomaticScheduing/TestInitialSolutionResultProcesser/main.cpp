@@ -58,11 +58,13 @@ void load(void)
 }
 
 void process(void);
+void process2(void);
 
 int main(void)
 {
 	load();
-	process();
+	//process();
+	process2();
 
 	system("pause");
 	return 0;
@@ -144,6 +146,71 @@ void process(void)
 		notFirstFlag = true;
 	}
 	fout << "]" << std::endl;
+
+	fout << "}" << std::endl;
+	fout.close();
+}
+
+void process2(void)
+{
+	std::ofstream fout(output);
+	fout << "{" << std::endl;
+
+	// output value
+	bool notFirstFlag = false;
+	fout << "	\"Values\": [" << std::endl;
+	for (const std::pair<unsigned int, unsigned int> &pair : pairs)
+	{
+		if (notFirstFlag)
+			fout << ',' << std::endl;
+
+		fout << "		[" << pair.first << ", " << pair.second << ']';
+
+		notFirstFlag = true;
+	}
+	fout << std::endl << "	]," << std::endl;
+
+	// output Percentage
+	notFirstFlag = false;
+	fout << "	\"Percentage\": [";
+	for (const std::pair<unsigned int, unsigned int> &pair : pairs)
+	{
+		if (notFirstFlag)
+			fout << ',' << std::endl;
+
+		fout << "		[" << pair.first << ", " << 100.0 * pair.second / 100000.0 << ']';
+
+		notFirstFlag = true;
+	}
+	fout << std::endl << "	]," << std::endl;
+
+	// output accumulate value
+	notFirstFlag = false;
+	fout << "	\"AccumulateValue\": [";
+	for (unsigned int i(0), j(counter.size()); i != j; ++i)
+	{
+		if (notFirstFlag)
+			fout << ',' << std::endl;
+
+		fout << "		[" << pairs[i].first << ", " << counter[i] << ']';
+
+		notFirstFlag = true;
+	}
+	fout << std::endl << "	]," << std::endl;
+
+	// output accumulate percentage
+	notFirstFlag = false;
+	fout << "	\"AccumulatePercentage\": [";
+	for (unsigned int i(0), j(counter.size()); i != j; ++i)
+	{
+		if (notFirstFlag)
+			fout << ',' << std::endl;
+
+		fout << "		[" << pairs[i].first << ", " << 100.0 * counter[i] / 100000.0 << ']';
+
+		notFirstFlag = true;
+	}
+	fout << std::endl << "	]" << std::endl;
 
 	fout << "}" << std::endl;
 	fout.close();
