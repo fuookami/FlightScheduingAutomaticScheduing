@@ -201,8 +201,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 		if (flag)
 			continue;
 
-		for (std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>>>::iterator bgIt(addedDealyTable.begin());
-			bgIt != addedDealyTable.end();)
+		for (auto bgIt(addedDealyTable.begin()); bgIt != addedDealyTable.end();)
 		{
 			if (bgIt->second.empty())
 				bgIt = addedDealyTable.erase(bgIt);
@@ -254,9 +253,8 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 					根据cost对vector<bunch_id, cost>进行排序，从小到大
 			*/
 			for (std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>>>::iterator
-				currIt(addedDealyTable.begin()); currIt != addedDealyTable.end(); ++currIt)
+				currIt(addedDealyTable.begin()); currIt != addedDealyTable.end();)
 			{
-				bool flag2 = false;
 				std::shared_ptr<FlightInfo> pThisInfo(infoMap.find(currIt->first)->second);
 				
 				std::vector<std::pair<unsigned int, int>>::iterator pSelectBunch(
@@ -270,40 +268,42 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 				{
 					Time newCost(pNewPlan->bunches[bunchId].addedDelayIfAddFlight(pThisInfo));
 					if (newCost != SpecialTime::MaxTime)
-						pSelectBunch->second = newCost.totalMins();
-					else
-						currIt->second.erase(pSelectBunch);
-				}
-				
-				if (currIt->second.empty())
-				{
-					unsigned int p(0), q(pNewPlan->bunches.size());
-					for (; p != q && pNewPlan->bunches[p].size() != 0; ++p);
-					if (p != q)
 					{
-						pNewPlan->bunches[p].addFlight(infoMap.find(currIt->first)->second);
-						tCopy[currIt->first] = p;
-						currIt = addedDealyTable.erase(currIt);
+						pSelectBunch->second = newCost.totalMins();
+						++currIt;
+
+						std::sort(currIt->second.begin(), currIt->second.end(),
+							[](std::pair<unsigned int, int> &lop,
+								std::pair<unsigned int, int> &rop) -> bool
+						{
+							return lop.second < rop.second;
+						});
 					}
 					else
 					{
-						flag = true;
-						break;
+						currIt->second.erase(pSelectBunch);
+
+						if (currIt->second.empty())
+						{
+							unsigned int p(0), q(pNewPlan->bunches.size());
+							for (; p != q && pNewPlan->bunches[p].size() != 0; ++p);
+							if (p != q)
+							{
+								pNewPlan->bunches[p].addFlight(infoMap.find(currIt->first)->second);
+								tCopy[currIt->first] = p;
+								currIt = addedDealyTable.erase(currIt);
+							}
+							else
+							{
+								flag = true;
+								break;
+							}
+						}
 					}
 				}
 
 				if (flag)
 					break;
-
-				if (flag2)
-				{
-					std::sort(currIt->second.begin(), currIt->second.end(),
-						[](std::pair<unsigned int, int> &lop,
-							std::pair<unsigned int, int> &rop) -> bool
-					{
-						return lop.second < rop.second;
-					});
-				}
 			}
 		}
 
