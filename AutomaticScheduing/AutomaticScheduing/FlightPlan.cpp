@@ -299,17 +299,22 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 								break;
 							}
 						}
+						else
+							++currIt;
 					}
 				}
 
 				if (flag)
 					break;
 			}
-		}
 
-		for (const FlightBunch &bunch : pNewPlan->bunches)
-			pNewPlan->totalDelay += bunch.delay();
+			if (flag)
+				break;
+		}
 	}
+
+	for (const FlightBunch &bunch : pNewPlan->bunches)
+		pNewPlan->totalDelay += bunch.delay();
 
 	
 	return pNewPlan;
