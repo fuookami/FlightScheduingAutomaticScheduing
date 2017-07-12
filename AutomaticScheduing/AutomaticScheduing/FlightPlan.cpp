@@ -127,7 +127,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 				{
 					// 寻找一条空航班串
 					unsigned int p(0), q(pNewPlan->bunches.size());
-					for (; p != q && pNewPlan->bunches[i].size() != 0; ++p);
+					for (; p != q && pNewPlan->bunches[p].size() != 0; ++p);
 					if (p != q)
 					{
 						// 加入到这条航班串里
@@ -165,9 +165,11 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 
 			for (unsigned int i(0), j(pNewPlan->bunches.size()); i != j; ++i)
 			{
-				if (!pNewPlan->bunches[ele.first].addFlight(pThisFlight))
-					ele.second.push_back(std::make_pair(i,
-						pNewPlan->bunches[ele.first].addedDelayIfAddFlight(pThisFlight).totalMins()));
+				Time cost(pNewPlan->bunches[i].addedDelayIfAddFlight(pThisFlight));
+				if (cost != SpecialTime::MaxTime)
+				{
+					ele.second.push_back(std::make_pair(i, cost.totalMins()));
+				}
 			}
 
 			if (!ele.second.empty())
