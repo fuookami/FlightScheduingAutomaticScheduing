@@ -269,7 +269,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 				if (currIt->second.empty())
 				{
 					unsigned int p(0), q(pNewPlan->bunches.size());
-					for (; p != q && pNewPlan->bunches[currIt->first].size() != 0; ++p);
+					for (; p != q && pNewPlan->bunches[p].size() != 0; ++p);
 					if (p != q)
 					{
 						pNewPlan->bunches[p].addFlight(infoMap.find(currIt->first)->second);

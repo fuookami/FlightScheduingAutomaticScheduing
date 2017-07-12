@@ -17,7 +17,7 @@ UICodeGeneticAlgorithm::UICodeSolt UICodeGeneticAlgorithm::run(
 
 	while (generationCounter != MaxGeneration)
 	{
-		std::cout << bestSoltFitnessPair.second << ' ' << generationCounter << std::endl;
+		//std::cout << bestSoltFitnessPair.second << ' ' << generationCounter << std::endl;
 		Population::run(thisGenerationPopulations, compareFun, solt2ScoreTransFun, setting);
 		for (const Population::UICodeSoltPopulation &population : thisGenerationPopulations)
 		{
