@@ -184,7 +184,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 			else
 			{
 				unsigned int p(0), q(pNewPlan->bunches.size());
-				for (; p != q && pNewPlan->bunches[ele.first].size() != 0; ++p);
+				for (; p != q && pNewPlan->bunches[p].size() != 0; ++p);
 				if (p != q)
 				{
 					pNewPlan->bunches[p].addFlight(pThisFlight);
@@ -259,15 +259,11 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 				);
 				if (pSelectBunch != currIt->second.end())
 				{
-					if (!pNewPlan->bunches[bunchId].addFlight(pThisInfo))
-					{
-						int newCost(pNewPlan->bunches[bunchId].addedDelayIfAddFlight(pThisInfo).totalMins());
-						if (newCost != SpecialTime::MaxTime)
-							pSelectBunch->second = newCost;
-						else
-							currIt->second.erase(pSelectBunch);
-					}
-					
+					Time newCost(pNewPlan->bunches[bunchId].addedDelayIfAddFlight(pThisInfo));
+					if (newCost != SpecialTime::MaxTime)
+						pSelectBunch->second = newCost.totalMins();
+					else
+						currIt->second.erase(pSelectBunch);
 				}
 				
 				if (currIt->second.empty())
