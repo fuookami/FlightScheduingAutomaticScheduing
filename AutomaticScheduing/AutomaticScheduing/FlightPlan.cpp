@@ -201,6 +201,15 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 		if (flag)
 			continue;
 
+		for (std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>>>::iterator bgIt(addedDealyTable.begin());
+			bgIt != addedDealyTable.end();)
+		{
+			if (bgIt->second.empty())
+				bgIt = addedDealyTable.erase(bgIt);
+			else
+				++bgIt;
+		}
+
 		while (!addedDealyTable.empty())
 		{
 			/*
