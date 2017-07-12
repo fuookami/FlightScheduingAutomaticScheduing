@@ -28,6 +28,16 @@ namespace UICodeGeneticAlgorithm
 
 			populationComunication(populations, compareFun, setting);
 
+			for (UICodeSoltPopulation & population : populations)
+			{
+				std::sort(population.pairs.begin(), population.pairs.end(), compareFun);
+				population.pairs.erase(std::unique(population.pairs.begin(), population.pairs.end()),
+					population.pairs.end());
+
+				if (compareFun(population.pairs[0], population.best))
+					population.best = population.pairs[0];
+			}
+
 			return;
 		}
 
@@ -74,16 +84,6 @@ namespace UICodeGeneticAlgorithm
 					currIt->second(populations, compareFun);
 				else
 					Comunication::defaultFun(populations, compareFun);
-
-				for (UICodeSoltPopulation & population : populations)
-				{
-					std::sort(population.pairs.begin(), population.pairs.end(), compareFun);
-					population.pairs.erase(std::unique(population.pairs.begin(), population.pairs.end()),
-						population.pairs.end());
-
-					if (compareFun(population.pairs[0], population.best))
-						population.best = population.pairs[0];
-				}
 			}
 		}
 

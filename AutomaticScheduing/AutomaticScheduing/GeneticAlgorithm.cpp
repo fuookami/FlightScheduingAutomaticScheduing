@@ -1,6 +1,7 @@
 #include "GeneticAlgorithm.h"
 #include <algorithm>
 #include <functional>
+#include <iostream>
 
 UICodeGeneticAlgorithm::UICodeSolt UICodeGeneticAlgorithm::run(
 	const std::vector<UICodeSolt> &initialSolution, const SettingHelper &setting, UIntSolt2SoltFitenessPair * solt2ScoreTransFun)
@@ -16,6 +17,7 @@ UICodeGeneticAlgorithm::UICodeSolt UICodeGeneticAlgorithm::run(
 
 	while (generationCounter != MaxGeneration)
 	{
+		std::cout << bestSoltFitnessPair.second << ' ' << generationCounter << std::endl;
 		Population::run(thisGenerationPopulations, compareFun, solt2ScoreTransFun, setting);
 		for (const Population::UICodeSoltPopulation &population : thisGenerationPopulations)
 		{

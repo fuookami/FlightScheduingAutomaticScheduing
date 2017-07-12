@@ -116,7 +116,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 		std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>>> addedDealyTable;
 		for (unsigned int i(0), j(tCopy.size()); i != j; ++i)
 		{
-			std::shared_ptr<FlightInfo> pThisFlight(infoMap.find(tCopy[i])->second);
+			std::shared_ptr<FlightInfo> pThisFlight(infoMap.find(i)->second);
 
 			if (!pNewPlan->bunches[tCopy[i]].addFlight(pThisFlight))
 			{
