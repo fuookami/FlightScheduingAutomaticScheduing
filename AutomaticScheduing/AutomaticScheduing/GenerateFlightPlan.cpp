@@ -22,8 +22,7 @@ namespace GenerateFlightPlan
 		{
 			std::shared_ptr<FlightInfo> newFlightInfo(new FlightInfo(flightInfoSet.size(), lineData));
 			flightInfoSet.insert(newFlightInfo);
-			flightInfoMap.mutexs.insert(std::make_pair(newFlightInfo->id, new std::mutex()));
-			flightInfoMap.infos.insert(std::make_pair(newFlightInfo->id, newFlightInfo));
+			flightInfoMap.insert(std::make_pair(newFlightInfo->id, newFlightInfo));
 		}
 
 		FlightPlan::setFlighterNum(GenerateFlightPlan::FlighterNum);
@@ -34,7 +33,6 @@ namespace GenerateFlightPlan
 	{
 		std::vector<PlanTable> initialSolution(SubFun::generateInitialSolution());
 
-		std::cout << 1;
 		if (FaultTolerant)
 			UICodeGeneticAlgorithm::run(initialSolution, setting, SubFun::planTable2ScoreWithFaultTolerant);
 		else
@@ -48,21 +46,12 @@ namespace GenerateFlightPlan
 			std::vector<PlanTable> initialSolution(GenerateFlightPlan::FlighterNum, PlanTable());
 			std::vector<std::thread> threads;
 
-#ifdef DEBUG
-			for (unsigned int i(0), j(initialSolution.size() / 4); i != j; ++i)
-				threads.push_back(std::thread(
-					FlightPlan::generatePlanTableWithRandomGreedyAlgorithm, &(initialSolution[i]), flightInfoMap));
-
-			for (auto &thread : threads)
-				thread.join();
-#else
 			for (unsigned int i(0), j(initialSolution.size()); i != j; ++i)
 				threads.push_back(std::thread(
 					FlightPlan::generatePlanTableWithRandomGreedyAlgorithm, &(initialSolution[i]), flightInfoMap));
 
 			for (auto &thread : threads)
 				thread.join();
-#endif
 
 			return std::move(initialSolution);
 		}

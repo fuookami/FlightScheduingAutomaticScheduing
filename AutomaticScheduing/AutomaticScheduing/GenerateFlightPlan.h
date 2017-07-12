@@ -3,10 +3,6 @@
 #include "FlightPlan.h"
 #include "GeneticAlgorithm.h"
 
-#ifndef DEBUG
-//#define DEBUG
-#endif
-
 namespace GenerateFlightPlan
 {
 	extern unsigned int FlighterNum;

@@ -16,7 +16,7 @@ void FlightPlan::setFlightInfoNum(const unsigned int i)
 	orgPlanTable.insert(orgPlanTable.begin(), i, 0);
 }
 
-void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, FlightInfoMap & infoMap)
+void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, const FlightInfoMap & infoMap)
 {
 	static unsigned int maxRank = 4;
 	static std::random_device rd;
@@ -35,11 +35,9 @@ void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, Fl
 		pNewPlan.reset(new FlightPlan());
 		flag = false;
 
-		for (const std::pair<unsigned int, std::shared_ptr<FlightInfo>> &infoPair : infoMap.infos)
+		for (const std::pair<unsigned int, std::shared_ptr<FlightInfo>> &infoPair : infoMap)
 		{
-			std::mutex &thisMutex(*infoMap.mutexs.find(infoPair.first)->second);
-			thisMutex.lock();
-			std::vector<std::pair<unsigned int, int>> addedDelays;
+			std::vector<std::pair<unsigned int, Time>> addedDelays;
 
 			for (unsigned int i(0), j(pNewPlan->bunches.size()); i != j
 				&& pNewPlan->bunches[i].size() != 0; ++i)
@@ -52,13 +50,12 @@ void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, Fl
 			if (addedDelays.empty() && pNewPlan->bunches.back().size() != 0)
 			{
 				flag = true;
-				thisMutex.unlock();
 				break;
 			}
 			else if (!addedDelays.empty() && d(gen) < maxRank)
 			{
 				std::sort(addedDelays.begin(), addedDelays.end(),
-					[](std::pair<unsigned int, int> &lop, std::pair<unsigned int, int> &rop)->bool
+					[](std::pair<unsigned int, Time> &lop, std::pair<unsigned int, Time> &rop)->bool
 				{
 					return lop.second < rop.second;
 				});
@@ -72,37 +69,26 @@ void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, Fl
 			{
 				unsigned int i(0), j(pNewPlan->bunches.size());
 				for (; i != j && pNewPlan->bunches[i].size() != 0; ++i);
-				if (i != j)
+				if (i == j)
 				{
-					pNewPlan->bunches[i].addFlight(infoPair.second);
-				}
-				else
-				{
-					thisMutex.unlock();
 					flag = true;
 					break;
 				}
+				pNewPlan->bunches[i].addFlight(infoPair.second);
 			}
-			thisMutex.unlock();
 		}
 	}
 
 	*pRet = std::move(pNewPlan->getPlanTable());
 }
 
-std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTable(const PlanTable & t, FlightInfoMap & infoMap)
+std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTable(const PlanTable & t, const FlightInfoMap & infoMap)
 {
 	std::shared_ptr<FlightPlan> pNewPlan(new FlightPlan());
 	for (unsigned int i(0), j(t.size()); i != j; ++i)
 	{
-		std::mutex &thisMutex(*infoMap.mutexs.find(i)->second);
-		thisMutex.lock();
-		if (!pNewPlan->bunches[t[i]].addFlight(infoMap.infos.find(i)->second))
-		{
-			thisMutex.unlock();
+		if (!pNewPlan->bunches[t[i]].addFlight(infoMap.find(i)->second))
 			return nullptr;
-		}
-		thisMutex.unlock();
 	}
 
 	for (const FlightBunch &bunch : pNewPlan->bunches)
@@ -111,7 +97,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTable(const PlanTable & 
 	return pNewPlan;
 }
 
-std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(PlanTable & t, FlightInfoMap & infoMap)
+std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(PlanTable & t, const FlightInfoMap & infoMap)
 {
 	static unsigned int maxRank = 4;
 	static std::random_device rd;
@@ -130,9 +116,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 		std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>>> addedDealyTable;
 		for (unsigned int i(0), j(tCopy.size()); i != j; ++i)
 		{
-			std::mutex &thisMutex(*infoMap.mutexs.find(i)->second);
-			thisMutex.lock();
-			std::shared_ptr<FlightInfo> pThisFlight(infoMap.infos.find(i)->second);
+			std::shared_ptr<FlightInfo> pThisFlight(infoMap.find(tCopy[i])->second);
 
 			if (!pNewPlan->bunches[tCopy[i]].addFlight(pThisFlight))
 			{
@@ -158,8 +142,6 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 					}
 				}
 			}
-
-			thisMutex.unlock();
 		}
 
 		/*
@@ -179,9 +161,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 		for (std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>> 
 			&ele : addedDealyTable)
 		{
-			std::mutex &thisMutex(*infoMap.mutexs.find(ele.first)->second);
-			thisMutex.lock();
-			std::shared_ptr<FlightInfo> pThisFlight(infoMap.infos.find(ele.first)->second);
+			std::shared_ptr<FlightInfo> pThisFlight(infoMap.find(ele.first)->second);
 
 			for (unsigned int i(0), j(pNewPlan->bunches.size()); i != j; ++i)
 			{
@@ -210,13 +190,10 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 				}
 				else
 				{
-					thisMutex.unlock();
 					flag = true;
 					break;
 				}
 			}
-
-			thisMutex.unlock();
 		}
 
 		if (flag)
@@ -249,12 +226,8 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 			unsigned int selectBunch(d(gen));
 			selectBunch = selectBunch >= pSelect->second.size() ? pSelect->second.size() - 1 : selectBunch;
 			unsigned int bunchId(pSelect->second[selectBunch].first);
-
-			std::mutex &thisMutex(*infoMap.mutexs.find(pSelect->first)->second);
-			thisMutex.lock();
-			pNewPlan->bunches[bunchId].addFlight(infoMap.infos.find(pSelect->first)->second);
+			pNewPlan->bunches[bunchId].addFlight(infoMap.find(pSelect->first)->second);
 			addedDealyTable.erase(pSelect);
-			thisMutex.unlock();
 
 			/*
 			¸üÐÂaddedDealyTable±í
@@ -273,10 +246,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 				currIt(addedDealyTable.begin()); currIt != addedDealyTable.end(); ++currIt)
 			{
 				bool flag2 = false;
-				std::mutex &thisMutex(*infoMap.mutexs.find(currIt->first)->second);
-				thisMutex.lock();
-				std::shared_ptr<FlightInfo> pThisInfo(infoMap.infos.find(currIt->first)->second);
-
+				std::shared_ptr<FlightInfo> pThisInfo(infoMap.find(currIt->first)->second);
 				
 				std::vector<std::pair<unsigned int, int>>::iterator pSelectBunch(
 					std::find_if(currIt->second.begin(), currIt->second.end(), [bunchId]
@@ -310,7 +280,6 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 					}
 					else
 					{
-						thisMutex.unlock();
 						flag = true;
 						break;
 					}
@@ -328,7 +297,6 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 						return lop.second < rop.second;
 					});
 				}
-				thisMutex.lock();
 			}
 		}
 

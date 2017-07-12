@@ -2,10 +2,9 @@
 
 #include "Time.h"
 #include <deque>
-#include <unordered_set>
-#include <unordered_map>
+#include <set>
+#include <map>
 #include <memory>
-#include <mutex>
 
 struct FlightInfo
 {
@@ -33,21 +32,8 @@ struct FlightInfo
 bool operator<(const FlightInfo &lop, const FlightInfo &rop);
 std::ostream &operator<<(std::ostream &os, const FlightInfo &flightInfo);
 
-using FlightInfoSet = std::unordered_set<std::shared_ptr<FlightInfo>>;
-using FlightInfoMap = struct FlightInfoMapStr
-{
-	~FlightInfoMapStr()
-	{
-		for (std::pair<unsigned int, std::mutex *> mutexPair : mutexs)
-		{
-			mutexPair.second->unlock();
-			delete mutexPair.second;
-		}
-	}
-
-	std::unordered_map<unsigned int, std::mutex *> mutexs;
-	std::unordered_map<unsigned int, std::shared_ptr<FlightInfo>> infos;
-};
+using FlightInfoSet = std::set<std::shared_ptr<FlightInfo>>;
+using FlightInfoMap = std::map<unsigned int, std::shared_ptr<FlightInfo>>;
 
 class Flight
 {
@@ -93,7 +79,7 @@ public:
 	const Flight &operator[](const int i) const;
 	std::deque<Flight>::size_type size() const;
 	std::deque<Flight> &flights(void);
-	std::unordered_set<unsigned int> &ids(void);
+	std::set<unsigned int> &ids(void);
 
 	std::deque<Flight>::iterator begin();
 	std::deque<Flight>::const_iterator cbegin() const;
@@ -103,7 +89,7 @@ public:
 private:
 	void calDelayTime(void);
 
-	std::unordered_set<unsigned int> flightId;
+	std::set<unsigned int> flightId;
 	std::deque<Flight> flight;
 	Time totalDelay;
 };
