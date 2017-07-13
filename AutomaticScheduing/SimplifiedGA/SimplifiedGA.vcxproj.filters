@@ -13,5 +13,48 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="头文件\ModelFrame">
+      <UniqueIdentifier>{f5bcb356-b429-44e0-b8d7-36d3cee9b2e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\ModelFrame">
+      <UniqueIdentifier>{8328ce35-c9ae-44c3-a24a-cd769b3c76b5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SimplifiedGA.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FlightBunch.h">
+      <Filter>头文件\ModelFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="FlightPlan.h">
+      <Filter>头文件\ModelFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="GenerateFlightPlan.h">
+      <Filter>头文件\ModelFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>头文件\ModelFrame</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FlightPlan.cpp">
+      <Filter>源文件\ModelFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="FlightBunch.cpp">
+      <Filter>源文件\ModelFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="GenerateFlightPlan.cpp">
+      <Filter>源文件\ModelFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>源文件\ModelFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="SimplifiedGA.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

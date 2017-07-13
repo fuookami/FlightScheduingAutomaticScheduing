@@ -110,6 +110,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FlightBunch.h" />
+    <ClInclude Include="FlightPlan.h" />
+    <ClInclude Include="GenerateFlightPlan.h" />
+    <ClInclude Include="SimplifiedGA.h" />
+    <ClInclude Include="Time.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="FlightBunch.cpp" />
+    <ClCompile Include="FlightPlan.cpp" />
+    <ClCompile Include="GenerateFlightPlan.cpp" />
+    <ClCompile Include="SimplifiedGA.cpp" />
+    <ClCompile Include="Time.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
