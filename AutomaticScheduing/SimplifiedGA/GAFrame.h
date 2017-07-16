@@ -13,7 +13,7 @@ namespace GA
 	static unsigned int maxSolutionNum;
 
 	GenerateFlightPlan::OutputDatas run(const std::vector<PlanTable> &initialSolution, bool FaultToTerant, 
-		GenerateFlightPlan::PlanTableScoreFunction_t toScoreFun, 
+		std::pair<unsigned int, unsigned int> range, GenerateFlightPlan::PlanTableScoreFunction_t toScoreFun, 
 		GenerateFlightPlan::PlanTbaleCompareFunciont_t compareFun);
 	void refreshOutputs(GenerateFlightPlan::OutputDatas &output, std::vector<Population::Population> &populations);
 
@@ -73,4 +73,4 @@ namespace GA
 			PlanTable Gaussian(const PlanTable &solt, const double rate, const std::pair<unsigned int, unsigned int> range);
 		};
 	};
-}
+};

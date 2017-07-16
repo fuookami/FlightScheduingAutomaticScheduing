@@ -32,7 +32,8 @@ namespace GenerateFlightPlan
 
 	using PlanTableScoreFunction_t = decltype(&SubFun::planTable2Score);
 	using PlanTbaleCompareFunciont_t = decltype(&SubFun::ComparePlanTable);
-	using SolveFunction_t = OutputDatas(*)(const std::vector<PlanTable> &initialSolution, bool FaultToTerant, PlanTableScoreFunction_t toScoreFun, PlanTbaleCompareFunciont_t compareFun);
+	using SolveFunction_t = OutputDatas(*)(const std::vector<PlanTable> &initialSolution, bool FaultToTerant, std::pair<unsigned int, unsigned int> range, 
+		PlanTableScoreFunction_t toScoreFun, PlanTbaleCompareFunciont_t compareFun);
 
 	void run(bool FaultToTerant, SolveFunction_t solveFun, const std::string &dataOutputFileName);
 };
