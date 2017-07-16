@@ -113,14 +113,14 @@
     <ClInclude Include="FlightBunch.h" />
     <ClInclude Include="FlightPlan.h" />
     <ClInclude Include="GenerateFlightPlan.h" />
-    <ClInclude Include="SimplifiedGA.h" />
+    <ClInclude Include="GAFrame.h" />
     <ClInclude Include="Time.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FlightBunch.cpp" />
     <ClCompile Include="FlightPlan.cpp" />
     <ClCompile Include="GenerateFlightPlan.cpp" />
-    <ClCompile Include="SimplifiedGA.cpp" />
+    <ClCompile Include="GAFrame.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>

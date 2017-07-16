@@ -4,6 +4,7 @@
 #include <vector>
 
 using PlanTable = std::vector<unsigned int>;
+using PlanTableWithScore = std::pair<PlanTable, unsigned int>;
 
 class FlightPlan
 {

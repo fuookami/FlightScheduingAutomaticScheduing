@@ -19,11 +19,14 @@
     <Filter Include="源文件\ModelFrame">
       <UniqueIdentifier>{8328ce35-c9ae-44c3-a24a-cd769b3c76b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\GA">
+      <UniqueIdentifier>{c13e7ab6-ac0c-49aa-b17d-7149742e280e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\GA">
+      <UniqueIdentifier>{bae1898f-a3e3-42d0-9009-a7e497ce59f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SimplifiedGA.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="FlightBunch.h">
       <Filter>头文件\ModelFrame</Filter>
     </ClInclude>
@@ -35,6 +38,9 @@
     </ClInclude>
     <ClInclude Include="Time.h">
       <Filter>头文件\ModelFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="GAFrame.h">
+      <Filter>头文件\GA</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -53,8 +59,8 @@
     <ClCompile Include="Time.cpp">
       <Filter>源文件\ModelFrame</Filter>
     </ClCompile>
-    <ClCompile Include="SimplifiedGA.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="GAFrame.cpp">
+      <Filter>源文件\GA</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

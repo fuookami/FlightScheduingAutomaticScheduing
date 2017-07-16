@@ -4,8 +4,6 @@
 #include <thread>
 #include <algorithm>
 
-#include "SimplifiedGA.h"
-
 namespace GenerateFlightPlan
 {
 	unsigned int FlighterNum = 0;
@@ -90,6 +88,11 @@ namespace GenerateFlightPlan
 			if (lastIt != ret.end())
 				ret.erase(lastIt, ret.end());
 			return std::move(ret);
+		}
+
+		bool ComparePlanTable(const std::pair<PlanTable, unsigned int> & lop, const std::pair<PlanTable, unsigned int> & rop)
+		{	
+			return lop.second > rop.second;
 		}
 
 		void outputDatas(const OutputDatas &datas, const std::string & dataOutputFileName)
