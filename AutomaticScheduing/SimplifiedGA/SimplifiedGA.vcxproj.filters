@@ -62,5 +62,17 @@
     <ClCompile Include="GAFrame.cpp">
       <Filter>源文件\GA</Filter>
     </ClCompile>
+    <ClCompile Include="GAPopultaion.cpp">
+      <Filter>源文件\GA</Filter>
+    </ClCompile>
+    <ClCompile Include="GASelect.cpp">
+      <Filter>源文件\GA</Filter>
+    </ClCompile>
+    <ClCompile Include="GACross.cpp">
+      <Filter>源文件\GA</Filter>
+    </ClCompile>
+    <ClCompile Include="GAMutation.cpp">
+      <Filter>源文件\GA</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

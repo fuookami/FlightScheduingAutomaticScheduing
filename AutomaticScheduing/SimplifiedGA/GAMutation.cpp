@@ -2,8 +2,7 @@
 
 namespace GA
 {
-
-	namespace Sub
+	namespace Mutation
 	{
 
 	};

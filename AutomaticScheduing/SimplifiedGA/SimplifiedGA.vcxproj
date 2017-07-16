@@ -119,6 +119,10 @@
   <ItemGroup>
     <ClCompile Include="FlightBunch.cpp" />
     <ClCompile Include="FlightPlan.cpp" />
+    <ClCompile Include="GACross.cpp" />
+    <ClCompile Include="GAMutation.cpp" />
+    <ClCompile Include="GAPopultaion.cpp" />
+    <ClCompile Include="GASelect.cpp" />
     <ClCompile Include="GenerateFlightPlan.cpp" />
     <ClCompile Include="GAFrame.cpp" />
     <ClCompile Include="Time.cpp" />

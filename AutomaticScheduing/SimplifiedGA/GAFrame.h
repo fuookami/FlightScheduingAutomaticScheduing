@@ -15,7 +15,12 @@ namespace GA
 	GenerateFlightPlan::OutputDatas run(const std::vector<PlanTable> &initialSolution, bool FaultToTerant, 
 		std::pair<unsigned int, unsigned int> range, GenerateFlightPlan::PlanTableScoreFunction_t toScoreFun, 
 		GenerateFlightPlan::PlanTbaleCompareFunciont_t compareFun);
-	void refreshOutputs(GenerateFlightPlan::OutputDatas &output, std::vector<Population::Population> &populations);
+	
+	namespace Sub
+	{
+		void init(const std::vector<PlanTable> &initialSolution, std::pair<unsigned int, unsigned int> range);
+		void refreshOutputs(GenerateFlightPlan::OutputDatas &output, std::vector<Population::Population> &populations);
+	};
 
 	namespace Population
 	{
