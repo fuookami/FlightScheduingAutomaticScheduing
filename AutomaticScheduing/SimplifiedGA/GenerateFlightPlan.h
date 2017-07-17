@@ -2,6 +2,9 @@
 
 #include "FlightPlan.h"
 
+using Solution = PlanTable;
+using SolutionWithScore = PlanTableWithScore;
+
 namespace GenerateFlightPlan
 {
 	extern unsigned int FlighterNum;
@@ -17,7 +20,7 @@ namespace GenerateFlightPlan
 		std::vector<std::pair<unsigned int, unsigned int>> minAndMaxScoresOfIters;
 		std::vector<std::pair<unsigned int, unsigned int>> minAndMaxPopulationQuantityOfIters;
 		std::vector<double> mutationRateOfIters;
-		std::pair<PlanTable, unsigned int> bestPair;
+		PlanTableWithScore bestPair;
 	};
 
 	void loadDatas(const std::string &dataInputFileName);
@@ -30,10 +33,10 @@ namespace GenerateFlightPlan
 		void outputDatas(const OutputDatas &datas, const std::string &dataOutputFileName);
 	};
 
-	using PlanTableScoreFunction_t = decltype(&SubFun::planTable2Score);
-	using PlanTbaleCompareFunciont_t = decltype(&SubFun::ComparePlanTable);
+	using SolutionScoreFunction_t = decltype(&SubFun::planTable2Score);
+	using SolutionCompareFunciont_t = decltype(&SubFun::ComparePlanTable);
 	using SolveFunction_t = OutputDatas(*)(const std::vector<PlanTable> &initialSolution, bool FaultToTerant, std::pair<unsigned int, unsigned int> range, 
-		PlanTableScoreFunction_t toScoreFun, PlanTbaleCompareFunciont_t compareFun);
+		SolutionScoreFunction_t toScoreFun, SolutionCompareFunciont_t compareFun);
 
 	void run(bool FaultToTerant, SolveFunction_t solveFun, const std::string &dataOutputFileName);
 };

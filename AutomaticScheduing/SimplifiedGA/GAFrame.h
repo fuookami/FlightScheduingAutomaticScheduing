@@ -11,52 +11,54 @@ namespace GA
 	static unsigned int minSolutionNum;
 	static unsigned int currMaxSolutionNum;
 	static unsigned int maxSolutionNum;
+	static std::pair<unsigned int, unsigned int> range;
 
-	GenerateFlightPlan::OutputDatas run(const std::vector<PlanTable> &initialSolution, bool FaultToTerant, 
-		std::pair<unsigned int, unsigned int> range, GenerateFlightPlan::PlanTableScoreFunction_t toScoreFun, 
-		GenerateFlightPlan::PlanTbaleCompareFunciont_t compareFun);
+	GenerateFlightPlan::OutputDatas run(const std::vector<Solution> &initialSolution, bool FaultToTerant, 
+		std::pair<unsigned int, unsigned int> _range, GenerateFlightPlan::SolutionScoreFunction_t toScoreFun, 
+		GenerateFlightPlan::SolutionCompareFunciont_t compareFun);
 	
 	namespace Sub
 	{
-		void init(const std::vector<PlanTable> &initialSolution, std::pair<unsigned int, unsigned int> range);
-		void refreshOutputs(GenerateFlightPlan::OutputDatas &output, std::vector<Population::Population> &populations);
+		void init(const std::vector<Solution> &initialSolution, std::pair<unsigned int, unsigned int> range);
+		bool refreshOutputs(GenerateFlightPlan::OutputDatas &output, std::vector<GA::Population::Population> &populations,
+			GenerateFlightPlan::SolutionCompareFunciont_t compareFun);
 	};
 
 	namespace Population
 	{
 		struct Population
 		{
-			std::vector<PlanTableWithScore> paris;
-			PlanTableWithScore best;
+			std::vector<SolutionWithScore> paris;
+			SolutionWithScore best;
 		};
 
 		static const unsigned int PopulationNum = 4;
 
-		std::vector<Population> generateInitialPopulation(const std::vector<PlanTable> &initialSolution, bool FaultToTerant,
-			GenerateFlightPlan::PlanTableScoreFunction_t toScoreFun);
-		void run(std::vector<Population> &populations, GenerateFlightPlan::PlanTableScoreFunction_t toScoreFun,
-			GenerateFlightPlan::PlanTbaleCompareFunciont_t compareFun);
+		std::vector<Population> generateInitialPopulation(const std::vector<Solution> &initialSolution, bool FaultToTerant,
+			GenerateFlightPlan::SolutionScoreFunction_t toScoreFun);
+		void run(std::vector<Population> &populations, GenerateFlightPlan::SolutionScoreFunction_t toScoreFun, bool FaultToTerant,
+			GenerateFlightPlan::SolutionCompareFunciont_t compareFun);
 		void comunicate(std::vector<Population> &populations);
 	};
 
 	namespace Select
 	{
-		void run(std::vector<PlanTableWithScore> &pairs, GenerateFlightPlan::PlanTbaleCompareFunciont_t compareFun);
-		std::vector<bool> select(const std::vector<PlanTableWithScore> &pairs);
+		void run(std::vector<SolutionWithScore> &pairs, GenerateFlightPlan::SolutionCompareFunciont_t compareFun);
+		std::vector<bool> select(const std::vector<SolutionWithScore> &pairs);
 		
 		static const double rate = 0.2;
 		inline unsigned int getCurrIterSolutionNum(void);
 
 		namespace Operator
 		{
-			std::vector<bool> Tournament(const std::vector<PlanTableWithScore> &pairs, unsigned int targetNum);
+			std::vector<bool> Tournament(const std::vector<SolutionWithScore> &pairs, unsigned int targetNum);
 		};
 	};
 
 	namespace Cross
 	{
-		std::vector<PlanTableWithScore> run(const std::vector<PlanTableWithScore> &pairs);
-		std::vector<PlanTable> cross(const std::vector<PlanTableWithScore *> &pairs);
+		std::vector<SolutionWithScore> run(const std::vector<SolutionWithScore> &pairs);
+		std::vector<Solution> cross(const std::vector<SolutionWithScore *> &pairs);
 
 		namespace Operator
 		{
@@ -66,8 +68,8 @@ namespace GA
 
 	namespace Mutation
 	{
-		std::vector<PlanTableWithScore> run(const std::vector<PlanTableWithScore> &pairs);
-		PlanTable mutate(const PlanTable &solt, const std::pair<unsigned int, unsigned int> range);
+		std::vector<SolutionWithScore> run(const std::vector<SolutionWithScore> &pairs);
+		Solution mutate(const Solution &solt, const std::pair<unsigned int, unsigned int> range);
 
 		static const double k = 2.5;
 		static const double b = .4;
@@ -75,7 +77,7 @@ namespace GA
 
 		namespace Operator
 		{
-			PlanTable Gaussian(const PlanTable &solt, const double rate, const std::pair<unsigned int, unsigned int> range);
+			Solution Gaussian(const Solution &solt, const double rate, const std::pair<unsigned int, unsigned int> range);
 		};
 	};
 };
