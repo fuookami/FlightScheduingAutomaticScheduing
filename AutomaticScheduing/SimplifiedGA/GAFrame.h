@@ -20,7 +20,7 @@ namespace GA
 	namespace Sub
 	{
 		void init(const std::vector<Solution> &initialSolution, std::pair<unsigned int, unsigned int> range);
-		bool refreshOutputs(GenerateFlightPlan::OutputDatas &output, std::vector<GA::Population::Population> &populations,
+		bool refreshOutputs(GenerateFlightPlan::OutputDatas &output, std::vector<std::shared_ptr<GA::Population::Population>> &populations,
 			GenerateFlightPlan::SolutionCompareFunciont_t compareFun);
 	};
 
@@ -34,11 +34,13 @@ namespace GA
 
 		static const unsigned int PopulationNum = 4;
 
-		std::vector<Population> generateInitialPopulation(const std::vector<Solution> &initialSolution, bool FaultToTerant,
+		std::vector<std::shared_ptr<Population>> generateInitialPopulation(const std::vector<Solution> &initialSolution, bool FaultToTerant,
 			GenerateFlightPlan::SolutionScoreFunction_t toScoreFun);
-		void run(std::vector<Population> &populations, GenerateFlightPlan::SolutionScoreFunction_t toScoreFun, bool FaultToTerant,
+		void run(std::vector<std::shared_ptr<Population>> &populations, GenerateFlightPlan::SolutionScoreFunction_t toScoreFun, bool FaultToTerant,
 			GenerateFlightPlan::SolutionCompareFunciont_t compareFun);
-		void comunicate(std::vector<Population> &populations);
+		void iteration(Population *pPopulation, GenerateFlightPlan::SolutionScoreFunction_t toScoreFun, bool FaultToTerant,
+			GenerateFlightPlan::SolutionCompareFunciont_t compareFun);
+		void comunicate(std::vector<std::shared_ptr<Population>> &populations, GenerateFlightPlan::SolutionCompareFunciont_t compareFun);
 	};
 
 	namespace Select
@@ -57,7 +59,7 @@ namespace GA
 
 	namespace Cross
 	{
-		std::vector<SolutionWithScore> run(const std::vector<SolutionWithScore> &pairs);
+		std::vector<Solution> run(const std::vector<SolutionWithScore> &pairs);
 		std::vector<Solution> cross(const std::vector<SolutionWithScore *> &pairs);
 
 		namespace Operator
@@ -68,7 +70,7 @@ namespace GA
 
 	namespace Mutation
 	{
-		std::vector<SolutionWithScore> run(const std::vector<SolutionWithScore> &pairs);
+		std::vector<Solution> run(const std::vector<SolutionWithScore> &pairs);
 		Solution mutate(const Solution &solt, const std::pair<unsigned int, unsigned int> range);
 
 		static const double k = 2.5;

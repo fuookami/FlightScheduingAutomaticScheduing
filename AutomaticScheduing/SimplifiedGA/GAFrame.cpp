@@ -9,11 +9,11 @@ namespace GA
 		GenerateFlightPlan::SolutionCompareFunciont_t compareFun)
 	{
 		Sub::init(initialSolution, range);
-		std::vector<Population::Population> populations(Population::generateInitialPopulation(initialSolution, 
+		auto populations(Population::generateInitialPopulation(initialSolution, 
 			FaultToTerant, toScoreFun));
 		
 		GenerateFlightPlan::OutputDatas output;
-		output.bestPair = populations.front().best;
+		output.bestPair = populations.front()->best;
 
 		while (iter != maxIter && bestContinueIter != maxBestContinueIter)
 		{
@@ -51,7 +51,7 @@ namespace GA
 			range = _range;
 		}
 
-		bool refreshOutputs(GenerateFlightPlan::OutputDatas &output, std::vector<GA::Population::Population> &populations,
+		bool refreshOutputs(GenerateFlightPlan::OutputDatas &output, std::vector<std::shared_ptr<GA::Population::Population>> &populations,
 			GenerateFlightPlan::SolutionCompareFunciont_t compareFun)
 		{
 			std::vector<unsigned int> extremumScore;
@@ -61,14 +61,14 @@ namespace GA
 			output.mutationRateOfIters.push_back(Mutation::getCurrIterMutationRate());
 			for (auto population : populations)
 			{
-				populationQuantityOfIters.push_back(population.paris.size());
-				extremumScore.push_back(population.paris.front().second);
-				extremumScore.push_back(population.paris.back().second);
+				populationQuantityOfIters.push_back(population->paris.size());
+				extremumScore.push_back(population->paris.front().second);
+				extremumScore.push_back(population->paris.back().second);
 
-				if (compareFun(population.best, output.bestPair))
+				if (compareFun(population->best, output.bestPair))
 				{
 					ret = true;
-					output.bestPair = population.best;
+					output.bestPair = population->best;
 				}
 			}
 
