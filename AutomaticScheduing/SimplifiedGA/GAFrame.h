@@ -46,14 +46,14 @@ namespace GA
 	namespace Select
 	{
 		void run(std::vector<SolutionWithScore> &pairs, GenerateFlightPlan::SolutionCompareFunciont_t compareFun);
-		std::vector<bool> select(const std::vector<SolutionWithScore> &pairs);
+		std::vector<bool> select(const std::vector<SolutionWithScore> &pairs, GenerateFlightPlan::SolutionCompareFunciont_t compareFun);
 		
 		static const double rate = 0.2;
-		inline unsigned int getCurrIterSolutionNum(void);
+		unsigned int getCurrIterSolutionNum(unsigned int currSolutionNum);
 
 		namespace Operator
 		{
-			std::vector<bool> Tournament(const std::vector<SolutionWithScore> &pairs, unsigned int targetNum);
+			std::vector<bool> Tournament(const std::vector<SolutionWithScore> &pairs, unsigned int targetNum, GenerateFlightPlan::SolutionCompareFunciont_t compareFun);
 		};
 	};
 
