@@ -60,7 +60,8 @@ namespace GA
 	namespace Cross
 	{
 		std::vector<Solution> run(const std::vector<SolutionWithScore> &pairs);
-		std::vector<Solution> cross(const std::vector<SolutionWithScore *> &pairs);
+		static const unsigned int parentNum = 4;
+		std::vector<Solution> cross(const std::vector<SolutionWithScore> &pairs);
 
 		namespace Operator
 		{
