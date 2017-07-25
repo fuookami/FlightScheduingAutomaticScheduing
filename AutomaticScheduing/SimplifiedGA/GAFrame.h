@@ -72,15 +72,17 @@ namespace GA
 	namespace Mutation
 	{
 		std::vector<Solution> run(const std::vector<SolutionWithScore> &pairs);
-		Solution mutate(const Solution &solt, const std::pair<unsigned int, unsigned int> range);
+		Solution mutate(const Solution &solt, const double rate);
 
 		static const double k = 2.5;
 		static const double b = .4;
-		inline double getCurrIterMutationRate(void);
+		static const double startMutationRate = .1;
+		static double currMutationRate = startMutationRate;
+		double getCurrIterMutationRate(void);
 
 		namespace Operator
 		{
-			Solution Gaussian(const Solution &solt, const double rate, const std::pair<unsigned int, unsigned int> range);
+			std::vector<unsigned int> Gaussian(const unsigned int size, const double rate);
 		};
 	};
 };

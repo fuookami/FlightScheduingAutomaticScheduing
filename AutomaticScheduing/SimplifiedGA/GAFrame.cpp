@@ -49,6 +49,8 @@ namespace GA
 			maxSolutionNum = initialSolution.size() * 2;
 
 			range = _range;
+
+			Mutation::currMutationRate = Mutation::startMutationRate;
 		}
 
 		bool refreshOutputs(GenerateFlightPlan::OutputDatas &output, std::vector<std::shared_ptr<GA::Population::Population>> &populations,
