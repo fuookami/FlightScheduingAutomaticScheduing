@@ -43,6 +43,7 @@ namespace GenerateFlightPlan
 		std::ofstream fout("ResultTestInitialSolution.txt");
 		std::unordered_map<unsigned int, unsigned int> counter;
 
+		unsigned int num(0);
 		for (unsigned int i(0), j(time / GenerateFlightPlan::FlighterNum + 1); i != j; ++i)
 		{
 			std::vector<PlanTableWithScore> thisInitialSolution(SubFun::planTable2Score(SubFun::generateInitialSolution()));
@@ -50,6 +51,9 @@ namespace GenerateFlightPlan
 			{
 				++counter[thisSolution.second];
 			}
+
+			num += GenerateFlightPlan::FlightInfoNum;
+			std::cout << num << std::endl;
 		}
 
 		for (const std::pair<unsigned int, unsigned int> &pair : counter)
