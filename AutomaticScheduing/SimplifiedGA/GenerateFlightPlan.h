@@ -39,4 +39,5 @@ namespace GenerateFlightPlan
 		SolutionScoreFunction_t toScoreFun, SolutionCompareFunciont_t compareFun);
 
 	void run(bool FaultToTerant, SolveFunction_t solveFun, const std::string &dataOutputFileName);
+	void testInitialSolution(const unsigned int time);
 };

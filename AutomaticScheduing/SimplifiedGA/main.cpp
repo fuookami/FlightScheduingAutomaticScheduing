@@ -3,8 +3,9 @@
 
 int main(void)
 {
-	GenerateFlightPlan::loadDatas("test2.txt");
-	GenerateFlightPlan::run(true, &GA::run, "result2.txt");
+	GenerateFlightPlan::loadDatas("data2.txt");
+	//GenerateFlightPlan::run(true, &GA::run, "result2.txt");
+	GenerateFlightPlan::testInitialSolution(1000000);
 
 	system("pause");
 	return 0;

@@ -3,6 +3,7 @@
 #include <fstream>
 #include <thread>
 #include <algorithm>
+#include <unordered_map>
 
 namespace GenerateFlightPlan
 {
@@ -35,6 +36,28 @@ namespace GenerateFlightPlan
 		OutputDatas outputData(solveFun(initialSolution, FaultToTerant, std::make_pair(0, flightInfoSet.size()), 
 			&SubFun::planTable2Score, &SubFun::ComparePlanTable));
 		SubFun::outputDatas(outputData, dataOutputFileName);
+	}
+
+	void testInitialSolution(const unsigned int time)
+	{
+		std::ofstream fout("ResultTestInitialSolution.txt");
+		std::unordered_map<unsigned int, unsigned int> counter;
+
+		for (unsigned int i(0), j(time / GenerateFlightPlan::FlighterNum + 1); i != j; ++i)
+		{
+			std::vector<PlanTableWithScore> thisInitialSolution(SubFun::planTable2Score(SubFun::generateInitialSolution()));
+			for (const PlanTableWithScore &thisSolution : thisInitialSolution)
+			{
+				++counter[thisSolution.second];
+			}
+		}
+
+		for (const std::pair<unsigned int, unsigned int> &pair : counter)
+		{
+			fout << pair.first << ' ' << pair.second << std::endl;
+		}
+		fout.close();
+		return;
 	}
 
 	namespace SubFun
