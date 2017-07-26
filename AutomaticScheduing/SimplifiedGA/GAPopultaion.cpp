@@ -6,22 +6,22 @@ namespace GA
 {
 	namespace Population
 	{
-		std::vector<std::shared_ptr<Population>> generateInitialPopulation(const std::vector<Solution> &initialSolution, bool FaultToTerant,
+		std::vector<std::shared_ptr<PopulationData>> generateInitialPopulation(const std::vector<Solution> &initialSolution, bool FaultToTerant,
 			GenerateFlightPlan::SolutionScoreFunction_t toScoreFun)
 		{
-			std::shared_ptr<Population> pPopulation(new Population());
+			std::shared_ptr<PopulationData> pPopulation(new PopulationData());
 			pPopulation->paris = toScoreFun(initialSolution, FaultToTerant);
 			pPopulation->best = pPopulation->paris.front();
 
-			std::vector<std::shared_ptr<Population>> ret;
+			std::vector<std::shared_ptr<PopulationData>> ret;
 			ret.push_back(pPopulation);
 			for (unsigned int i(1); i != PopulationNum; ++i)
-				ret.push_back(std::shared_ptr<Population>(new Population(*pPopulation)));
+				ret.push_back(std::shared_ptr<PopulationData>(new PopulationData(*pPopulation)));
 
 			return ret;
 		}
 
-		void run(std::vector<std::shared_ptr<Population>> &populations, GenerateFlightPlan::SolutionScoreFunction_t toScoreFun, bool FaultToTerant,
+		void run(std::vector<std::shared_ptr<PopulationData>> &populations, GenerateFlightPlan::SolutionScoreFunction_t toScoreFun, bool FaultToTerant,
 			GenerateFlightPlan::SolutionCompareFunciont_t compareFun)
 		{
 			std::vector<std::thread> threads;
@@ -38,10 +38,10 @@ namespace GA
 			return;
 		}
 
-		void iteration(Population *pPopulation, GenerateFlightPlan::SolutionScoreFunction_t toScoreFun, bool FaultToTerant,
+		void iteration(PopulationData *pPopulation, GenerateFlightPlan::SolutionScoreFunction_t toScoreFun, bool FaultToTerant,
 			GenerateFlightPlan::SolutionCompareFunciont_t compareFun)
 		{
-			Population &population(*pPopulation);
+			PopulationData &population(*pPopulation);
 			Select::run(population.paris, compareFun);
 
 			auto newIterAfterCross(Cross::run(population.paris));
@@ -65,7 +65,7 @@ namespace GA
 				population.best = population.paris.front();
 		}
 
-		void comunicate(std::vector<std::shared_ptr<Population>> &populations, GenerateFlightPlan::SolutionCompareFunciont_t compareFun)
+		void comunicate(std::vector<std::shared_ptr<PopulationData>> &populations, GenerateFlightPlan::SolutionCompareFunciont_t compareFun)
 		{
 			for (unsigned int i(0); i != PopulationNum; ++i)
 			{
@@ -82,9 +82,9 @@ namespace GA
 						{
 							const SolutionWithScore &thisBest(populations[j]->best);
 							auto insertIt(std::find_if(populations[i]->paris.begin(), populations[i]->paris.end(),
-								[compareFun, &thisBest](const std::shared_ptr<Population> &lps)->bool
+								[compareFun, &thisBest](const SolutionWithScore &lps)->bool
 							{
-								return compareFun(lps->best, thisBest);
+								return compareFun(lps, thisBest);
 							}));
 							populations[i]->paris.insert(insertIt, thisBest);
 						}

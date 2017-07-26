@@ -53,7 +53,7 @@ namespace GA
 			Mutation::currMutationRate = Mutation::startMutationRate;
 		}
 
-		bool refreshOutputs(GenerateFlightPlan::OutputDatas &output, std::vector<std::shared_ptr<GA::Population::Population>> &populations,
+		bool refreshOutputs(GenerateFlightPlan::OutputDatas &output, std::vector<std::shared_ptr<PopulationData>> &populations,
 			GenerateFlightPlan::SolutionCompareFunciont_t compareFun)
 		{
 			std::vector<unsigned int> extremumScore;

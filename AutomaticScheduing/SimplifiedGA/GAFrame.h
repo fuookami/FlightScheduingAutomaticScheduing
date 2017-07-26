@@ -13,6 +13,12 @@ namespace GA
 	static unsigned int maxSolutionNum;
 	static std::pair<unsigned int, unsigned int> range;
 
+	using PopulationData = struct
+	{
+		std::vector<SolutionWithScore> paris;
+		SolutionWithScore best;
+	};
+
 	GenerateFlightPlan::OutputDatas run(const std::vector<Solution> &initialSolution, bool FaultToTerant, 
 		std::pair<unsigned int, unsigned int> _range, GenerateFlightPlan::SolutionScoreFunction_t toScoreFun, 
 		GenerateFlightPlan::SolutionCompareFunciont_t compareFun);
@@ -20,27 +26,21 @@ namespace GA
 	namespace Sub
 	{
 		void init(const std::vector<Solution> &initialSolution, std::pair<unsigned int, unsigned int> range);
-		bool refreshOutputs(GenerateFlightPlan::OutputDatas &output, std::vector<std::shared_ptr<GA::Population::Population>> &populations,
+		bool refreshOutputs(GenerateFlightPlan::OutputDatas &output, std::vector<std::shared_ptr<PopulationData>> &populations,
 			GenerateFlightPlan::SolutionCompareFunciont_t compareFun);
 	};
 
 	namespace Population
 	{
-		struct Population
-		{
-			std::vector<SolutionWithScore> paris;
-			SolutionWithScore best;
-		};
-
 		static const unsigned int PopulationNum = 4;
 
-		std::vector<std::shared_ptr<Population>> generateInitialPopulation(const std::vector<Solution> &initialSolution, bool FaultToTerant,
+		std::vector<std::shared_ptr<PopulationData>> generateInitialPopulation(const std::vector<Solution> &initialSolution, bool FaultToTerant,
 			GenerateFlightPlan::SolutionScoreFunction_t toScoreFun);
-		void run(std::vector<std::shared_ptr<Population>> &populations, GenerateFlightPlan::SolutionScoreFunction_t toScoreFun, bool FaultToTerant,
+		void run(std::vector<std::shared_ptr<PopulationData>> &populations, GenerateFlightPlan::SolutionScoreFunction_t toScoreFun, bool FaultToTerant,
 			GenerateFlightPlan::SolutionCompareFunciont_t compareFun);
-		void iteration(Population *pPopulation, GenerateFlightPlan::SolutionScoreFunction_t toScoreFun, bool FaultToTerant,
+		void iteration(PopulationData *pPopulation, GenerateFlightPlan::SolutionScoreFunction_t toScoreFun, bool FaultToTerant,
 			GenerateFlightPlan::SolutionCompareFunciont_t compareFun);
-		void comunicate(std::vector<std::shared_ptr<Population>> &populations, GenerateFlightPlan::SolutionCompareFunciont_t compareFun);
+		void comunicate(std::vector<std::shared_ptr<PopulationData>> &populations, GenerateFlightPlan::SolutionCompareFunciont_t compareFun);
 	};
 
 	namespace Select
@@ -61,7 +61,7 @@ namespace GA
 	{
 		std::vector<Solution> run(const std::vector<SolutionWithScore> &pairs);
 		static const unsigned int parentNum = 4;
-		std::vector<Solution> cross(const std::vector<SolutionWithScore> &pairs);
+		void cross(std::vector<Solution> &pairs);
 
 		namespace Operator
 		{
