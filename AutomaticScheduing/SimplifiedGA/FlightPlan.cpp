@@ -39,15 +39,15 @@ void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, co
 		{
 			std::vector<std::pair<unsigned int, Time>> addedDelays;
 
-			for (unsigned int i(0), j(pNewPlan->bunches.size()); i != j
-				&& pNewPlan->bunches[i].size() != 0; ++i)
+			for (unsigned int i(0), j(pNewPlan->m_bunches.size()); i != j
+				&& pNewPlan->m_bunches[i].size() != 0; ++i)
 			{
-				Time thisDelay(pNewPlan->bunches[i].addedDelayIfAddFlight(infoPair.second));
+				Time thisDelay(pNewPlan->m_bunches[i].addedDelayIfAddFlight(infoPair.second));
 				if (thisDelay != SpecialTime::MaxTime)
 					addedDelays.push_back(std::make_pair(i, thisDelay.totalMins()));
 			}
 
-			if (addedDelays.empty() && pNewPlan->bunches.back().size() != 0)
+			if (addedDelays.empty() && pNewPlan->m_bunches.back().size() != 0)
 			{
 				flag = true;
 				break;
@@ -63,18 +63,18 @@ void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, co
 				unsigned int currRank(randomRank());
 				currRank = currRank >= addedDelays.size() ? addedDelays.size() - 1 : currRank;
 
-				pNewPlan->bunches[addedDelays[currRank].first].addFlight(infoPair.second);
+				pNewPlan->m_bunches[addedDelays[currRank].first].addFlight(infoPair.second);
 			}
 			else 
 			{
-				unsigned int i(0), j(pNewPlan->bunches.size());
-				for (; i != j && pNewPlan->bunches[i].size() != 0; ++i);
+				unsigned int i(0), j(pNewPlan->m_bunches.size());
+				for (; i != j && pNewPlan->m_bunches[i].size() != 0; ++i);
 				if (i == j)
 				{
 					flag = true;
 					break;
 				}
-				pNewPlan->bunches[i].addFlight(infoPair.second);
+				pNewPlan->m_bunches[i].addFlight(infoPair.second);
 			}
 		}
 	}
@@ -87,11 +87,11 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTable(const PlanTable & 
 	std::shared_ptr<FlightPlan> pNewPlan(new FlightPlan());
 	for (unsigned int i(0), j(t.size()); i != j; ++i)
 	{
-		if (!pNewPlan->bunches[t[i]].addFlight(infoMap.find(i)->second))
+		if (!pNewPlan->m_bunches[t[i]].addFlight(infoMap.find(i)->second))
 			return nullptr;
 	}
 
-	for (const FlightBunch &bunch : pNewPlan->bunches)
+	for (const FlightBunch &bunch : pNewPlan->m_bunches)
 		pNewPlan->totalDelay += bunch.delay();
 
 	return pNewPlan;
@@ -118,7 +118,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 		{
 			std::shared_ptr<FlightInfo> pThisFlight(infoMap.find(i)->second);
 
-			if (!pNewPlan->bunches[tCopy[i]].addFlight(pThisFlight))
+			if (!pNewPlan->m_bunches[tCopy[i]].addFlight(pThisFlight))
 			{
 				if (d(gen) < maxRank)
 					addedDealyTable.push_back(std::make_pair(i, 
@@ -126,12 +126,12 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 				else
 				{
 					// 寻找一条空航班串
-					unsigned int p(0), q(pNewPlan->bunches.size());
-					for (; p != q && pNewPlan->bunches[p].size() != 0; ++p);
+					unsigned int p(0), q(pNewPlan->m_bunches.size());
+					for (; p != q && pNewPlan->m_bunches[p].size() != 0; ++p);
 					if (p != q)
 					{
 						// 加入到这条航班串里
-						pNewPlan->bunches[p].addFlight(pThisFlight);
+						pNewPlan->m_bunches[p].addFlight(pThisFlight);
 						tCopy[i] = p;
 					}
 					else
@@ -163,9 +163,9 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 		{
 			std::shared_ptr<FlightInfo> pThisFlight(infoMap.find(ele.first)->second);
 
-			for (unsigned int i(0), j(pNewPlan->bunches.size()); i != j; ++i)
+			for (unsigned int i(0), j(pNewPlan->m_bunches.size()); i != j; ++i)
 			{
-				Time cost(pNewPlan->bunches[i].addedDelayIfAddFlight(pThisFlight));
+				Time cost(pNewPlan->m_bunches[i].addedDelayIfAddFlight(pThisFlight));
 				if (cost != SpecialTime::MaxTime)
 				{
 					ele.second.push_back(std::make_pair(i, cost.totalMins()));
@@ -183,11 +183,11 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 			}
 			else
 			{
-				unsigned int p(0), q(pNewPlan->bunches.size());
-				for (; p != q && pNewPlan->bunches[p].size() != 0; ++p);
+				unsigned int p(0), q(pNewPlan->m_bunches.size());
+				for (; p != q && pNewPlan->m_bunches[p].size() != 0; ++p);
 				if (p != q)
 				{
-					pNewPlan->bunches[p].addFlight(pThisFlight);
+					pNewPlan->m_bunches[p].addFlight(pThisFlight);
 					tCopy[ele.first] = p;
 				}
 				else
@@ -236,7 +236,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 			unsigned int selectBunch(d(gen));
 			selectBunch = selectBunch >= pSelect->second.size() ? pSelect->second.size() - 1 : selectBunch;
 			unsigned int bunchId(pSelect->second[selectBunch].first);
-			pNewPlan->bunches[bunchId].addFlight(infoMap.find(pSelect->first)->second);
+			pNewPlan->m_bunches[bunchId].addFlight(infoMap.find(pSelect->first)->second);
 			addedDealyTable.erase(pSelect);
 
 			/*
@@ -266,7 +266,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 				);
 				if (pSelectBunch != currIt->second.end())
 				{
-					Time newCost(pNewPlan->bunches[bunchId].addedDelayIfAddFlight(pThisInfo));
+					Time newCost(pNewPlan->m_bunches[bunchId].addedDelayIfAddFlight(pThisInfo));
 					if (newCost != SpecialTime::MaxTime)
 					{
 						pSelectBunch->second = newCost.totalMins();
@@ -285,11 +285,11 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 
 						if (currIt->second.empty())
 						{
-							unsigned int p(0), q(pNewPlan->bunches.size());
-							for (; p != q && pNewPlan->bunches[p].size() != 0; ++p);
+							unsigned int p(0), q(pNewPlan->m_bunches.size());
+							for (; p != q && pNewPlan->m_bunches[p].size() != 0; ++p);
 							if (p != q)
 							{
-								pNewPlan->bunches[p].addFlight(infoMap.find(currIt->first)->second);
+								pNewPlan->m_bunches[p].addFlight(infoMap.find(currIt->first)->second);
 								tCopy[currIt->first] = p;
 								currIt = addedDealyTable.erase(currIt);
 							}
@@ -313,7 +313,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 		}
 	}
 
-	for (const FlightBunch &bunch : pNewPlan->bunches)
+	for (const FlightBunch &bunch : pNewPlan->m_bunches)
 		pNewPlan->totalDelay += bunch.delay();
 
 	
@@ -324,15 +324,20 @@ PlanTable FlightPlan::getPlanTable(void) const
 {
 	PlanTable ret(orgPlanTable);
 
-	for (unsigned int i(0), j(bunches.size()); i != j; ++i)
+	for (unsigned int i(0), j(m_bunches.size()); i != j; ++i)
 	{
-		for (unsigned int m(0), n(bunches[i].size()); m != n; ++m)
+		for (unsigned int m(0), n(m_bunches[i].size()); m != n; ++m)
 		{
-			ret[bunches[i][m].info().id] = i;
+			ret[m_bunches[i][m].info().id] = i;
 		}
 	}
 
 	return std::move(ret);
+}
+
+const std::vector<FlightBunch> &FlightPlan::bunches(void) const
+{
+	return m_bunches;
 }
 
 const Time &FlightPlan::delay(void) const
@@ -341,7 +346,7 @@ const Time &FlightPlan::delay(void) const
 }
 
 FlightPlan::FlightPlan()
-	: bunches(orgBunches), totalDelay(Time(0, 0))
+	: m_bunches(orgBunches), totalDelay(Time(0, 0))
 {
 
 }

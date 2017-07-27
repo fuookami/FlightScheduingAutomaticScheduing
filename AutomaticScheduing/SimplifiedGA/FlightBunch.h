@@ -78,7 +78,7 @@ public:
 	Flight &operator[](const int i);
 	const Flight &operator[](const int i) const;
 	std::deque<Flight>::size_type size() const;
-	std::deque<Flight> &flights(void);
+	const std::deque<Flight> &flights(void) const;
 	std::set<unsigned int> &ids(void);
 
 	std::deque<Flight>::iterator begin();

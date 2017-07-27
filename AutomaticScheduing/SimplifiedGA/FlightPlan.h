@@ -16,6 +16,7 @@ public:
 	static std::shared_ptr<FlightPlan> generateFromPlanTableWithFaultTolerant(PlanTable &t, const FlightInfoMap &infoMap);
 	
 	PlanTable getPlanTable(void) const;
+	const std::vector<FlightBunch> &bunches(void) const;
 	const Time &delay(void) const;
 
 private:
@@ -24,6 +25,6 @@ private:
 private:
 	static std::vector<FlightBunch> orgBunches;
 	static PlanTable orgPlanTable;
-	std::vector<FlightBunch> bunches;
+	std::vector<FlightBunch> m_bunches;
 	Time totalDelay;
 };

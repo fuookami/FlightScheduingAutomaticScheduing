@@ -126,8 +126,36 @@ namespace GenerateFlightPlan
 		void outputDatas(const OutputDatas &datas, const std::string & dataOutputFileName)
 		{
 			std::ofstream fout(dataOuputFilter + dataOutputFileName);
+			
+			unsigned int size(datas.mutationRateOfIters.size());
+			fout << size << std::endl;
+			for (unsigned int i(0), j(size); i != j; ++i)
+			{
+				fout << datas.minAndMaxPopulationQuantityOfIters[i].first << ' '
+					<< datas.minAndMaxPopulationQuantityOfIters[i].second << ' '
+					<< datas.minAndMaxScoresOfIters[i].first << ' '
+					<< datas.minAndMaxScoresOfIters[i].second << ' '
+					<< datas.mutationRateOfIters[i] << std::endl;
+			}
+			fout.close();
 
-			// to do
+			fout.open(dataOuputFilter + "BestPlanTable.txt");
+
+			std::shared_ptr<FlightPlan> plan(FlightPlan::generateFromPlanTable(datas.bestPair.first, flightInfoMap));
+			unsigned int i = 1;
+			Time total_delay(0, 0);
+			for (const FlightBunch &bunch : plan->bunches())
+			{
+				fout << "Aircraft" << i << ": " << std::endl;
+				for (const Flight &flight : bunch.flights())
+				{
+					fout << flight << std::endl;
+				}
+				fout << std::endl;
+				total_delay += bunch.delay();
+				++i;
+			}
+			fout << "Total delay: " << plan->delay().totalMins() << std::endl;
 
 			fout.close();
 		}

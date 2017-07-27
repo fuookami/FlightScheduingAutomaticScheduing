@@ -243,7 +243,7 @@ std::deque<Flight>::size_type FlightBunch::size() const
 	return flight.size();
 }
 
-std::deque<Flight>& FlightBunch::flights(void)
+const std::deque<Flight>& FlightBunch::flights(void) const
 {
 	return flight;
 }
