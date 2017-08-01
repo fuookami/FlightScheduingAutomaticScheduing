@@ -4,34 +4,38 @@
 
 namespace GA
 {
-	GenerateFlightPlan::OutputDatas run(const std::vector<Solution> &initialSolution, bool FaultToTerant, 
-		std::pair<unsigned int, unsigned int> range, GenerateFlightPlan::SolutionScoreFunction_t toScoreFun, 
+	GenerateFlightPlan::OutputDatas run(const std::vector<Solution> &initialSolution, bool FaultToTerant,
+		const std::pair<unsigned int, unsigned int> &_solutionNumRange, const std::pair<unsigned int, unsigned int> &_range, 
+		GenerateFlightPlan::SolutionScoreFunction_t toScoreFun,
 		GenerateFlightPlan::SolutionCompareFunciont_t compareFun)
 	{
-		Sub::init(initialSolution, range);
-		auto populations(Population::generateInitialPopulation(initialSolution, 
+		Setting setting(_solutionNumRange, _range);
+
+		Mutation::currMutationRate = Mutation::startMutationRate;
+
+		auto populations(Population::generateInitialPopulation(initialSolution,
 			FaultToTerant, toScoreFun));
-		
+
 		GenerateFlightPlan::OutputDatas output;
 		output.bestPair = populations.front()->best;
 
-		while (iter != maxIter && bestContinueIter != maxBestContinueIter)
+		while (setting.iter != maxIter && setting.bestContinueIter != maxBestContinueIter)
 		{
-			Population::run(populations, toScoreFun, FaultToTerant, compareFun);
-			
-			if (Sub::refreshOutputs(output, populations, compareFun))
+			Population::run(populations, toScoreFun, FaultToTerant, compareFun, setting);
+
+			if (Sub::refreshOutputs(output, populations, compareFun, setting))
 			{
-				bestContinueIter = 0;
-				currMaxSolutionNum = minSolutionNum;
+				setting.bestContinueIter = 0;
+				setting.currMaxSolutionNum = setting.solutionNumRange.first;
 			}
-			else if (currMaxSolutionNum < maxSolutionNum)
+			else if (setting.currMaxSolutionNum < setting.solutionNumRange.second)
 			{
-				currMaxSolutionNum += (maxSolutionNum - minSolutionNum) * Select::rate;
-				currMaxSolutionNum = (currMaxSolutionNum > maxSolutionNum) ? maxSolutionNum : currMaxSolutionNum;
+				setting.currMaxSolutionNum += (setting.solutionNumRange.second - setting.solutionNumRange.first) * Select::rate;
+				setting.currMaxSolutionNum = (setting.currMaxSolutionNum > setting.solutionNumRange.second) ? setting.solutionNumRange.second : setting.currMaxSolutionNum;
 			}
 
-			++bestContinueIter;
-			++iter;
+			++setting.bestContinueIter;
+			++setting.iter;
 		}
 
 		return std::move(output);
@@ -39,28 +43,14 @@ namespace GA
 
 	namespace Sub
 	{
-		void init(const std::vector<Solution> &initialSolution, std::pair<unsigned int, unsigned int> _range)
-		{
-			iter = 0;
-			bestContinueIter = 0;
-
-			minSolutionNum = initialSolution.size() * 3 / 4;
-			currMaxSolutionNum = minSolutionNum;
-			maxSolutionNum = initialSolution.size() * 2;
-
-			range = _range;
-
-			Mutation::currMutationRate = Mutation::startMutationRate;
-		}
-
 		bool refreshOutputs(GenerateFlightPlan::OutputDatas &output, std::vector<std::shared_ptr<PopulationData>> &populations,
-			GenerateFlightPlan::SolutionCompareFunciont_t compareFun)
+			GenerateFlightPlan::SolutionCompareFunciont_t compareFun, const Setting &setting)
 		{
 			std::vector<unsigned int> extremumScore;
 			std::vector<unsigned int> populationQuantityOfIters;
-			
+
 			bool ret(false);
-			output.mutationRateOfIters.push_back(Mutation::getCurrIterMutationRate());
+			output.mutationRateOfIters.push_back(Mutation::getCurrIterMutationRate(setting));
 			for (auto population : populations)
 			{
 				populationQuantityOfIters.push_back(population->paris.size());
@@ -77,9 +67,9 @@ namespace GA
 			std::sort(extremumScore.begin(), extremumScore.end());
 			std::sort(populationQuantityOfIters.begin(), populationQuantityOfIters.end());
 			output.minAndMaxScoresOfIters.push_back(std::make_pair
-				(extremumScore.front(), extremumScore.back()));
+			(extremumScore.front(), extremumScore.back()));
 			output.minAndMaxPopulationQuantityOfIters.push_back(std::make_pair
-				(populationQuantityOfIters.front(), populationQuantityOfIters.back()));
+			(populationQuantityOfIters.front(), populationQuantityOfIters.back()));
 
 			return ret;
 		}

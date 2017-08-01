@@ -5,14 +5,14 @@ namespace GA
 {
 	namespace Mutation
 	{
-		std::vector<Solution> run(const std::vector<SolutionWithScore> &pairs)
+		std::vector<Solution> run(const std::vector<SolutionWithScore> &pairs, const Setting &setting)
 		{
 			std::vector<Solution> ret;
-			double thisRate(getCurrIterMutationRate());
+			double thisRate(getCurrIterMutationRate(setting));
 
 			for (const SolutionWithScore &pair : pairs)
 			{
-				Solution afterMutate(mutate(pair.first, thisRate));
+				Solution afterMutate(mutate(pair.first, thisRate, setting));
 				if (!afterMutate.empty())
 				{
 					ret.push_back(std::move(afterMutate));
@@ -22,12 +22,12 @@ namespace GA
 			return std::move(ret);
 		}
 
-		Solution mutate(const Solution &solt, const double rate)
+		Solution mutate(const Solution &solt, const double rate, const Setting &setting)
 		{
 			static std::random_device rd;
 			static std::mt19937_64 gen(rd());
 
-			std::uniform_int_distribution<> dis(range.first, range.second - 1);
+			std::uniform_int_distribution<> dis(setting.range.first, setting.range.second - 1);
 			std::vector<unsigned int> poses(Operator::Gaussian(solt.size(), rate));
 
 			if (poses.empty())
@@ -43,9 +43,9 @@ namespace GA
 			return std::move(ret);
 		}
 
-		double getCurrIterMutationRate(void)
+		double getCurrIterMutationRate(const Setting &setting)
 		{
-			currMutationRate = pow(iter / k, b / iter) * currMutationRate;
+			currMutationRate = pow(setting.iter / k, b / setting.iter) * currMutationRate;
 			return currMutationRate / 100.0;
 		}
 

@@ -30,10 +30,12 @@ namespace GenerateFlightPlan
 		FlightPlan::setFlightInfoNum(flightInfoSet.size());
 	}
 
-	void run(bool FaultToTerant, SolveFunction_t solveFun, const std::string &dataOutputFileName)
+	void run(bool FaultToTerant, SolveFunction_t solveFun, const std::pair<double, double> &solutionNumRate, const std::string &dataOutputFileName)
 	{
 		std::vector<PlanTable> initialSolution(SubFun::generateInitialSolution());
-		OutputDatas outputData(solveFun(initialSolution, FaultToTerant, std::make_pair(0, flightInfoSet.size()), 
+		OutputDatas outputData(solveFun(initialSolution, FaultToTerant, 
+			std::make_pair(initialSolution.size() * solutionNumRate.first, initialSolution.size() * solutionNumRate.second),
+			std::make_pair(0, flightInfoSet.size()), 
 			&SubFun::planTable2Score, &SubFun::ComparePlanTable));
 		SubFun::outputDatas(outputData, dataOutputFileName);
 	}

@@ -5,9 +5,9 @@ namespace GA
 {
 	namespace Select
 	{
-		void run(std::vector<SolutionWithScore> &pairs, GenerateFlightPlan::SolutionCompareFunciont_t compareFun)
+		void run(std::vector<SolutionWithScore> &pairs, GenerateFlightPlan::SolutionCompareFunciont_t compareFun, const Setting &setting)
 		{
-			std::vector<bool> shade(select(pairs, compareFun));
+			std::vector<bool> shade(select(pairs, compareFun, setting));
 
 			std::vector<SolutionWithScore> newPairs;
 			for (unsigned int i(0), j(shade.size()); i != j; ++i)
@@ -18,27 +18,27 @@ namespace GA
 			pairs = newPairs;
 		}
 
-		std::vector<bool> select(const std::vector<SolutionWithScore> &pairs, GenerateFlightPlan::SolutionCompareFunciont_t compareFun)
+		std::vector<bool> select(const std::vector<SolutionWithScore> &pairs, GenerateFlightPlan::SolutionCompareFunciont_t compareFun, const Setting &setting)
 		{
-			unsigned int targetNum(getCurrIterSolutionNum(pairs.size()));
-			std::vector<bool> ret(Operator::Tournament(pairs, targetNum, compareFun));
+			unsigned int targetNum(getCurrIterSolutionNum(pairs.size(), setting));
+			std::vector<bool> ret(Operator::Tournament(pairs, targetNum, compareFun, setting));
 			return std::move(ret);
 		}
 
-		unsigned int getCurrIterSolutionNum(unsigned int currSolutionNum)
+		unsigned int getCurrIterSolutionNum(unsigned int currSolutionNum, const Setting &setting)
 		{
-			return currMaxSolutionNum / (1 + 
-				(currMaxSolutionNum - currSolutionNum) / currSolutionNum * exp(-rate * bestContinueIter));
+			return setting.currMaxSolutionNum / (1.0 +
+				((long)setting.currMaxSolutionNum - (long)currSolutionNum) * exp(-rate * setting.bestContinueIter) / currSolutionNum);
 		}
 
 		namespace Operator
 		{
-			std::vector<bool> Tournament(const std::vector<SolutionWithScore> &pairs, unsigned int targetNum, GenerateFlightPlan::SolutionCompareFunciont_t compareFun)
+			std::vector<bool> Tournament(const std::vector<SolutionWithScore> &pairs, unsigned int targetNum, GenerateFlightPlan::SolutionCompareFunciont_t compareFun, const Setting &setting)
 			{
 				static std::random_device rd;
 				static std::mt19937_64 gen(rd());
 
-				unsigned int numOfEachGroup(targetNum / minSolutionNum + 1);
+				unsigned int numOfEachGroup(targetNum / setting.solutionNumRange.first + 1);
 				unsigned int numOfGroup(targetNum / numOfEachGroup + 1);
 
 				std::poisson_distribution<> dis1(numOfEachGroup > 2 ? numOfEachGroup - 1 : numOfEachGroup);

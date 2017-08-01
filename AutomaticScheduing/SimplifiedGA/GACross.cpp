@@ -5,7 +5,7 @@ namespace GA
 {
 	namespace Cross
 	{
-		std::vector<Solution> run(const std::vector<SolutionWithScore> &pairs)
+		std::vector<Solution> run(const std::vector<SolutionWithScore> &pairs, const Setting &setting)
 		{
 			static std::random_device rd;
 			static std::mt19937_64 gen(rd());

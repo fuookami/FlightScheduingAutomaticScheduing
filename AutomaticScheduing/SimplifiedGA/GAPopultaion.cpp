@@ -18,17 +18,17 @@ namespace GA
 			for (unsigned int i(1); i != PopulationNum; ++i)
 				ret.push_back(std::shared_ptr<PopulationData>(new PopulationData(*pPopulation)));
 
-			return ret;
+			return std::move(ret);
 		}
 
 		void run(std::vector<std::shared_ptr<PopulationData>> &populations, GenerateFlightPlan::SolutionScoreFunction_t toScoreFun, bool FaultToTerant,
-			GenerateFlightPlan::SolutionCompareFunciont_t compareFun)
+			GenerateFlightPlan::SolutionCompareFunciont_t compareFun, const Setting &setting)
 		{
 			std::vector<std::thread> threads;
 
 			for (unsigned int i(0); i != PopulationNum; ++i)
 				threads.push_back(std::thread(
-					iteration, populations[i].get(), toScoreFun, FaultToTerant, compareFun));
+					iteration, populations[i].get(), toScoreFun, FaultToTerant, compareFun, setting));
 			
 			for (unsigned int i(0); i != PopulationNum; ++i)
 				threads[i].join();
@@ -39,16 +39,16 @@ namespace GA
 		}
 
 		void iteration(PopulationData *pPopulation, GenerateFlightPlan::SolutionScoreFunction_t toScoreFun, bool FaultToTerant,
-			GenerateFlightPlan::SolutionCompareFunciont_t compareFun)
+			GenerateFlightPlan::SolutionCompareFunciont_t compareFun, const Setting &setting)
 		{
 			PopulationData &population(*pPopulation);
-			Select::run(population.paris, compareFun);
+			Select::run(population.paris, compareFun, setting);
 
-			auto newIterAfterCross(Cross::run(population.paris));
+			auto newIterAfterCross(Cross::run(population.paris, setting));
 			auto newIterWithScoreAfterCross(toScoreFun(newIterAfterCross, FaultToTerant));
 			population.paris.insert(population.paris.end(), newIterWithScoreAfterCross.begin(), newIterWithScoreAfterCross.end());
 
-			auto newIterAfterMutation(Mutation::run(population.paris));
+			auto newIterAfterMutation(Mutation::run(population.paris, setting));
 			if (!newIterAfterMutation.empty())
 			{
 				auto newIterWithScoreAfterMutation(toScoreFun(newIterAfterMutation, FaultToTerant));
