@@ -113,7 +113,10 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 	bool flag(true);
 	PlanTable tCopy;
 	
-	for (unsigned int counter(0), maxTime(d(gen)); flag && counter != maxTime; ++counter)
+	unsigned int maxTime(maxRank + d(gen));
+	maxTime = maxTime > 10 ? 10 : maxTime;
+	unsigned int counter(0);
+	for (; flag && counter != maxTime; ++counter)
 	{
 		pNewPlan.reset(new FlightPlan());
 		tCopy = t;
@@ -325,11 +328,18 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 		}
 	}
 
-	for (const FlightBunch &bunch : pNewPlan->m_bunches)
-		pNewPlan->totalDelay += bunch.delay();
-	t = std::move(tCopy);
-	
-	return pNewPlan;
+	if (!flag)
+	{
+		for (const FlightBunch &bunch : pNewPlan->m_bunches)
+			pNewPlan->totalDelay += bunch.delay();
+		t = std::move(tCopy);
+
+		return pNewPlan;
+	}
+	else
+	{
+		return nullptr;
+	}
 }
 
 PlanTable FlightPlan::getPlanTable(void) const
