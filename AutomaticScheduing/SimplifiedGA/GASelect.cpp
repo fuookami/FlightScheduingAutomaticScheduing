@@ -23,6 +23,7 @@ namespace GA
 		{
 			unsigned int targetNum(getCurrIterSolutionNum(pairs.size(), setting));
 			std::vector<bool> ret(Operator::Tournament(pairs, targetNum, compareFun, setting));
+			ret.front() = true;
 			return std::move(ret);
 		}
 

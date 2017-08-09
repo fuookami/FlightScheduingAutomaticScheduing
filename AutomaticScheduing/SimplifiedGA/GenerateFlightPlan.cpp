@@ -126,7 +126,7 @@ namespace GenerateFlightPlan
 
 		bool ComparePlanTable(const std::pair<PlanTable, unsigned int> & lop, const std::pair<PlanTable, unsigned int> & rop)
 		{	
-			return lop.second > rop.second;
+			return lop.second < rop.second;
 		}
 
 		void outputDatas(const OutputDatas &datas, const std::string & dataOutputFileName)

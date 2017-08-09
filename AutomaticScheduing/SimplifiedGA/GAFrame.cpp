@@ -57,7 +57,7 @@ namespace GA
 				extremumScore.push_back(population->paris.front().second);
 				extremumScore.push_back(population->paris.back().second);
 
-				if (compareFun(output.bestPair, population->best))
+				if (compareFun(population->best, output.bestPair))
 				{
 					ret = true;
 					output.bestPair = population->best;
