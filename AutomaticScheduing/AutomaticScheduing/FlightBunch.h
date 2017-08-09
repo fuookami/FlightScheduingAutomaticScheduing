@@ -43,7 +43,7 @@ class Flight
 public:
 	Flight(std::shared_ptr<FlightInfo> _ptrInfo, const Time &_propagatedDelay = Time(0, 0)) : ptrInfo(_ptrInfo) {}
 
-	const FlightInfo &info(void) const;
+	const std::shared_ptr<FlightInfo> &info(void) const;
 	const Time &delay(void) const;
 
 	void setPropagatedDelayFollow(const Flight &preFlight);

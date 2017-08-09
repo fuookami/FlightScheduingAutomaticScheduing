@@ -3,7 +3,7 @@
 #include <fstream>
 #include <thread>
 #include <algorithm>
-#include <unordered_map>
+#include <map>
 
 namespace GenerateFlightPlan
 {
@@ -35,7 +35,7 @@ namespace GenerateFlightPlan
 		std::vector<PlanTable> initialSolution(SubFun::generateInitialSolution());
 		OutputDatas outputData(solveFun(initialSolution, FaultToTerant, 
 			std::make_pair(initialSolution.size() * solutionNumRate.first, initialSolution.size() * solutionNumRate.second),
-			std::make_pair(0, flightInfoSet.size()), 
+			std::make_pair(0, FlighterNum), 
 			&SubFun::planTable2Score, &SubFun::ComparePlanTable));
 		SubFun::outputDatas(outputData, dataOutputFileName);
 	}
@@ -43,7 +43,7 @@ namespace GenerateFlightPlan
 	void testInitialSolution(const unsigned int time)
 	{
 		std::ofstream fout("ResultTestInitialSolution.txt");
-		std::unordered_map<unsigned int, unsigned int> counter;
+		std::map<unsigned int, unsigned int> counter;
 
 		unsigned int num(0);
 		for (unsigned int i(0), j(time / GenerateFlightPlan::FlighterNum + 1); i != j; ++i)
@@ -98,7 +98,7 @@ namespace GenerateFlightPlan
 
 			
 			for (unsigned int i(0), j(planTables.size()); i != j; ++i)
-				ret.emplace_back(std::make_pair(planTables[i], 0));
+				ret.push_back(std::make_pair(planTables[i], 0));
 
 			for (unsigned int i(0), j(planTables.size()); i != j; ++i)
 				calScore(&ret[i]);

@@ -59,9 +59,9 @@ std::ostream &operator<<(std::ostream &os, const Flight &flight)
 	return os;
 }
 
-const FlightInfo & Flight::info(void) const
+const std::shared_ptr<FlightInfo> & Flight::info(void) const
 {
-	return *ptrInfo;
+	return ptrInfo;
 }
 
 const Time & Flight::delay(void) const

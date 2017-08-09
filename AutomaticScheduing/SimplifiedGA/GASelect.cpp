@@ -64,7 +64,7 @@ namespace GA
 				std::vector<bool> ret(pairs.size(), false);
 				for (const std::vector<unsigned int> &group : groups)
 				{
-					std::unordered_set<unsigned int> thisGroup;
+					std::set<unsigned int> thisGroup;
 					if (group.size() == numOfEachGroup)
 						thisGroup.insert(group.cbegin(), group.cend());
 					else
