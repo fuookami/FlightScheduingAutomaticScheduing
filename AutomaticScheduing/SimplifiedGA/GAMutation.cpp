@@ -65,6 +65,7 @@ namespace GA
 						ret.push_back(i);
 					}
 				}
+
 				return std::move(ret);
 			}
 		};

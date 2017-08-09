@@ -1,5 +1,6 @@
 #include "GAFrame.h"
 #include <random>
+#include <algorithm>
 
 namespace GA
 {
@@ -13,9 +14,9 @@ namespace GA
 			for (unsigned int i(0), j(shade.size()); i != j; ++i)
 			{
 				if (shade[i])
-					newPairs.push_back(std::move(pairs[i]));
+					newPairs.push_back(pairs[i]);
 			}
-			pairs = newPairs;
+			pairs = std::move(newPairs);
 		}
 
 		std::vector<bool> select(const std::vector<SolutionWithScore> &pairs, GenerateFlightPlan::SolutionCompareFunciont_t compareFun, const Setting &setting)
@@ -46,6 +47,19 @@ namespace GA
 				std::vector<std::vector<unsigned int>> groups(numOfGroup, std::vector<unsigned int>());
 				for (unsigned int i(0), j(pairs.size()); i != j; ++i)
 					groups[dis2(gen)].push_back(i);
+
+				std::sort(groups.begin(), groups.end(),
+					[](const std::vector<unsigned int> &lop, const std::vector<unsigned int> &rop)
+				{
+					return lop.size() > rop.size();
+				});
+				for (auto lIt(groups.begin()), rIt(groups.end() - 1); lIt < rIt && rIt->empty(); ++lIt, --rIt)
+				{
+					std::random_shuffle(lIt->begin(), lIt->end());
+					auto moveBgIt(lIt->begin()), moveEdIt(lIt->begin() + lIt->size() / 2);
+					rIt->insert(rIt->end(), moveBgIt, moveEdIt);
+					lIt->erase(moveBgIt, moveEdIt);
+				}
 
 				std::vector<bool> ret(pairs.size(), false);
 				for (const std::vector<unsigned int> &group : groups)

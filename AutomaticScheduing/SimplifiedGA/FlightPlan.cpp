@@ -270,7 +270,6 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 					if (newCost != SpecialTime::MaxTime)
 					{
 						pSelectBunch->second = newCost.totalMins();
-						++currIt;
 
 						std::sort(currIt->second.begin(), currIt->second.end(),
 							[](std::pair<unsigned int, int> &lop,
@@ -278,6 +277,8 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 						{
 							return lop.second < rop.second;
 						});
+
+						++currIt;
 					}
 					else
 					{
@@ -303,6 +304,10 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 							++currIt;
 					}
 				}
+				else
+				{
+					++currIt;
+				}
 
 				if (flag)
 					break;
@@ -315,7 +320,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 
 	for (const FlightBunch &bunch : pNewPlan->m_bunches)
 		pNewPlan->totalDelay += bunch.delay();
-
+	t = std::move(tCopy);
 	
 	return pNewPlan;
 }

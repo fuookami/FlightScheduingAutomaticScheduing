@@ -30,7 +30,7 @@ namespace GA
 			for (std::vector<Solution> &group : groups)
 			{
 				cross(group);
-				std::move(group.begin(), group.end(), ret.end());
+				ret.insert(ret.end(), group.cbegin(), group.cend());
 			}
 
 			return std::move(ret);
