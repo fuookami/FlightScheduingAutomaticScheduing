@@ -111,25 +111,31 @@ Time Flight::calPropagatedDealy(const std::shared_ptr<FlightInfo> ptrPrepInfo, c
 	return std::move(propagatedDelay);
 }
 
+FlightBunch::~FlightBunch()
+{
+	flightId.clear();
+	flight.clear();
+}
+
 bool FlightBunch::addFlight(const std::shared_ptr<FlightInfo> pFlightInfo)
 {
 	if (flight.empty())
 	{
 		flight.emplace_back(Flight(pFlightInfo));
-		flightId.insert(pFlightInfo->id);
+		//flightId.insert(pFlightInfo->id);
 		return true;
 	}
 	else if (pFlightInfo->canBeFollowedBy(flight.front().info()))
 	{
 		flight.emplace_front(Flight(pFlightInfo));
-		flightId.insert(pFlightInfo->id);
+		//flightId.insert(pFlightInfo->id);
 		calDelayTime();
 		return true;
 	}
 	else if (flight.back().canBeFollowedBy(pFlightInfo))
 	{
 		flight.emplace_back(Flight(pFlightInfo));
-		flightId.insert(pFlightInfo->id);
+		//flightId.insert(pFlightInfo->id);
 		calDelayTime();
 		return true;
 	}
@@ -151,7 +157,7 @@ bool FlightBunch::addFlight(const std::shared_ptr<FlightInfo> pFlightInfo)
 
 		if (flag)
 		{
-			flightId.insert(pFlightInfo->id);
+			//flightId.insert(pFlightInfo->id);
 			calDelayTime();
 		}
 
@@ -171,7 +177,7 @@ std::deque<Flight>::iterator FlightBunch::findFlighById(const unsigned int id)
 bool FlightBunch::eraseFlight(const std::deque<Flight>::size_type i)
 {
 	std::deque<Flight>::iterator ptr(flight.begin() + (unsigned int)i);
-	flightId.erase(ptr->info().id);
+	//flightId.erase(ptr->info().id);
 	flight.erase(ptr);
 	calDelayTime();
 	return true;
@@ -179,7 +185,7 @@ bool FlightBunch::eraseFlight(const std::deque<Flight>::size_type i)
 
 bool FlightBunch::eraseFlight(const std::deque<Flight>::iterator it)
 {
-	flightId.erase(it->info().id);
+	//flightId.erase(it->info().id);
 	flight.erase(it);
 	calDelayTime();
 	return true;
@@ -248,7 +254,7 @@ const std::deque<Flight>& FlightBunch::flights(void) const
 	return flight;
 }
 
-std::set<unsigned int>& FlightBunch::ids(void)
+std::unordered_set<unsigned int>& FlightBunch::ids(void)
 {
 	return flightId;
 }

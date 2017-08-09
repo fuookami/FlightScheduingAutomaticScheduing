@@ -27,7 +27,7 @@ namespace GA
 			static std::random_device rd;
 			static std::mt19937_64 gen(rd());
 
-			std::uniform_int_distribution<> dis(setting.range.first, setting.range.second - 1);
+			std::uniform_int_distribution<> dis(setting.solutionNumRange.first, setting.solutionNumRange.second - 1);
 			std::vector<unsigned int> poses(Operator::Gaussian(solt.size(), rate));
 
 			if (poses.empty())

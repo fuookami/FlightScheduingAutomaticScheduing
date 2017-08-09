@@ -6,6 +6,11 @@
 std::vector<FlightBunch> FlightPlan::orgBunches = std::vector<FlightBunch>();
 PlanTable FlightPlan::orgPlanTable = PlanTable();
 
+FlightPlan::~FlightPlan()
+{
+	m_bunches.clear();
+}
+
 void FlightPlan::setFlighterNum(const unsigned int i)
 {
 	orgBunches.insert(orgBunches.begin(), i, FlightBunch());
@@ -256,7 +261,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 				currIt(addedDealyTable.begin()); currIt != addedDealyTable.end();)
 			{
 				std::shared_ptr<FlightInfo> pThisInfo(infoMap.find(currIt->first)->second);
-				
+
 				std::vector<std::pair<unsigned int, int>>::iterator pSelectBunch(
 					std::find_if(currIt->second.begin(), currIt->second.end(), [bunchId]
 					(std::pair<unsigned int, int> &lop) -> bool
@@ -264,7 +269,11 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 						return lop.first == bunchId;
 					})
 				);
-				if (pSelectBunch != currIt->second.end())
+				if (pSelectBunch == currIt->second.end())
+				{
+					++currIt;
+				}
+				else
 				{
 					Time newCost(pNewPlan->m_bunches[bunchId].addedDelayIfAddFlight(pThisInfo));
 					if (newCost != SpecialTime::MaxTime)
@@ -284,7 +293,11 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 					{
 						currIt->second.erase(pSelectBunch);
 
-						if (currIt->second.empty())
+						if (!currIt->second.empty())
+						{
+							++currIt;
+						}
+						else
 						{
 							unsigned int p(0), q(pNewPlan->m_bunches.size());
 							for (; p != q && pNewPlan->m_bunches[p].size() != 0; ++p);
@@ -300,19 +313,12 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 								break;
 							}
 						}
-						else
-							++currIt;
 					}
-				}
-				else
-				{
-					++currIt;
 				}
 
 				if (flag)
 					break;
 			}
-
 			if (flag)
 				break;
 		}

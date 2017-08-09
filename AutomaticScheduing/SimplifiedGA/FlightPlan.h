@@ -9,6 +9,8 @@ using PlanTableWithScore = std::pair<PlanTable, unsigned int>;
 class FlightPlan
 {
 public:
+	~FlightPlan();
+
 	static void setFlighterNum(const unsigned int i);
 	static void setFlightInfoNum(const unsigned int i);
 	static void generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, const FlightInfoMap &infoMap);

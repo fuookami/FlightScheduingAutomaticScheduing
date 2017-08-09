@@ -21,7 +21,7 @@ namespace GA
 
 		while (setting.iter != maxIter && setting.bestContinueIter != maxBestContinueIter)
 		{
-			Population::run(populations, toScoreFun, FaultToTerant, compareFun, setting);
+ 			Population::run(populations, toScoreFun, FaultToTerant, compareFun, setting);
 
 			if (Sub::refreshOutputs(output, populations, compareFun, setting))
 			{
