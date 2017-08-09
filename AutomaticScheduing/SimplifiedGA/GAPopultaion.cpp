@@ -26,16 +26,15 @@ namespace GA
 		{
 			std::vector<std::thread> threads;
 
-			for (unsigned int i(0); i != PopulationNum; ++i)
-				iteration(populations[i].get(), toScoreFun, FaultToTerant, compareFun, setting);
-			/*
+			//for (unsigned int i(0); i != PopulationNum; ++i)
+			//	iteration(populations[i].get(), toScoreFun, FaultToTerant, compareFun, setting);
+
 			for (unsigned int i(0); i != PopulationNum; ++i)
 				threads.push_back(std::thread(
 					iteration, populations[i].get(), toScoreFun, FaultToTerant, compareFun, setting));
 			
 			for (unsigned int i(0); i != PopulationNum; ++i)
 				threads[i].join();
-			*/
 
 			comunicate(populations, compareFun);
 

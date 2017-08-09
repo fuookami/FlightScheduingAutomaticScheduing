@@ -100,16 +100,14 @@ namespace GenerateFlightPlan
 			for (unsigned int i(0), j(planTables.size()); i != j; ++i)
 				ret.push_back(std::make_pair(planTables[i], 0));
 
-			for (unsigned int i(0), j(planTables.size()); i != j; ++i)
-				calScore(&ret[i]);
+			//for (unsigned int i(0), j(planTables.size()); i != j; ++i)
+			//	calScore(&ret[i]);
 
-			/*
 			for (unsigned int i(0), j(planTables.size()); i != j; ++i)
 				threads.push_back(std::thread(calScore, &ret[i]));
 
 			for (std::thread &thread : threads)
 				thread.join();
-			*/
 
 			std::sort(ret.begin(), ret.end(), [](const std::pair<PlanTable, unsigned int> &lop,
 				const std::pair<PlanTable, unsigned int> &rop) -> bool

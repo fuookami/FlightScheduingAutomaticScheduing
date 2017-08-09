@@ -112,7 +112,8 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 	std::shared_ptr<FlightPlan> pNewPlan(nullptr);
 	bool flag(true);
 	PlanTable tCopy;
-	while (flag)
+	
+	for (unsigned int counter(0), maxTime(d(gen)); flag && counter != maxTime; ++counter)
 	{
 		pNewPlan.reset(new FlightPlan());
 		tCopy = t;
