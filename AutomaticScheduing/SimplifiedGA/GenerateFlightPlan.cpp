@@ -158,9 +158,8 @@ namespace GenerateFlightPlan
 				fout << "Aircraft" << i << ": " << std::endl;
 				for (const Flight &flight : bunch.flights())
 				{
-					fout << flight << std::endl;
+					fout << flight;
 				}
-				fout << std::endl;
 				total_delay += bunch.delay();
 				++i;
 			}

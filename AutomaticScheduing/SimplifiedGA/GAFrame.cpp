@@ -26,7 +26,7 @@ namespace GA
 		output.minAndMaxScoresOfIters.push_back(std::make_pair(
 			populations.front()->paris.front().second, populations.front()->paris.back().second));
 
-		time_t tt = time(NULL);//这句返回的只是一个时间cuo
+		time_t tt = time(NULL);
 		tm* t = localtime(&tt);
 		std::ostringstream sout;
 		sout << "log" << t->tm_year + 1900 << "_" << t->tm_mon + 1 << "_" << t->tm_mday << "_" << t->tm_hour << "_" << t->tm_min << "_" << t->tm_sec << ".txt";
@@ -34,6 +34,9 @@ namespace GA
 
 		while (setting.iter != maxIter && setting.bestContinueIter != maxBestContinueIter)
 		{
+			++setting.iter;
+			Mutation::refreshCurrIterMutationRate(setting);
+
  			Population::run(populations, toScoreFun, FaultToTerant, compareFun, setting);
 
 			if (Sub::refreshOutputs(output, populations, compareFun, setting))
@@ -48,7 +51,6 @@ namespace GA
 			}
 
 			++setting.bestContinueIter;
-			++setting.iter;
 
 			Sub::printCurrIter(fout, output, setting);
 		}
@@ -67,7 +69,7 @@ namespace GA
 			std::vector<unsigned int> populationQuantityOfIters;
 
 			bool ret(false);
-			output.mutationRateOfIters.push_back(Mutation::getCurrIterMutationRate(setting));
+			output.mutationRateOfIters.push_back(Mutation::getCurrIterMutationRate());
 			for (auto population : populations)
 			{
 				populationQuantityOfIters.push_back(population->paris.size());

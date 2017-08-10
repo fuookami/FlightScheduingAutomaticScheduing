@@ -88,7 +88,8 @@ namespace GA
 		static const double b = .4;
 		static const double startMutationRate = .1;
 		static double currMutationRate = startMutationRate;
-		double getCurrIterMutationRate(const Setting &setting);
+		void refreshCurrIterMutationRate(const Setting &setting);
+		double getCurrIterMutationRate();
 
 		namespace Operator
 		{

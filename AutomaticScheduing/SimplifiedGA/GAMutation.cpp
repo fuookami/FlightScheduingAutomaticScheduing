@@ -8,11 +8,12 @@ namespace GA
 		std::vector<Solution> run(const std::vector<SolutionWithScore> &pairs, const Setting &setting)
 		{
 			std::vector<Solution> ret;
-			double thisRate(getCurrIterMutationRate(setting));
+
+			double currRate(getCurrIterMutationRate());
 
 			for (const SolutionWithScore &pair : pairs)
 			{
-				Solution afterMutate(mutate(pair.first, thisRate, setting));
+				Solution afterMutate(mutate(pair.first, currRate, setting));
 				if (!afterMutate.empty())
 				{
 					ret.push_back(std::move(afterMutate));
@@ -43,9 +44,13 @@ namespace GA
 			return std::move(ret);
 		}
 
-		double getCurrIterMutationRate(const Setting &setting)
+		void refreshCurrIterMutationRate(const Setting &setting)
 		{
 			currMutationRate = pow(setting.iter / k, b / setting.iter) * currMutationRate;
+		}
+
+		double getCurrIterMutationRate()
+		{
 			return currMutationRate / 100.0;
 		}
 
