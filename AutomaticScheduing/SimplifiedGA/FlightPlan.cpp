@@ -246,6 +246,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 			selectBunch = selectBunch >= pSelect->second.size() ? pSelect->second.size() - 1 : selectBunch;
 			unsigned int bunchId(pSelect->second[selectBunch].first);
 			pNewPlan->m_bunches[bunchId].addFlight(infoMap.find(pSelect->first)->second);
+			tCopy[pSelect->first] = bunchId;
 			addedDealyTable.erase(pSelect);
 
 			/*
