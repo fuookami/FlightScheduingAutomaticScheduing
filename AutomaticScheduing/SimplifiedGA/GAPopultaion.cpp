@@ -87,7 +87,7 @@ namespace GA
 							auto insertIt(std::find_if(populations[i]->paris.begin(), populations[i]->paris.end(),
 								[compareFun, &thisBest](const SolutionWithScore &lps)->bool
 							{
-								return compareFun(lps, thisBest);
+								return compareFun(thisBest, lps);
 							}));
 							populations[i]->paris.insert(insertIt, thisBest);
 						}

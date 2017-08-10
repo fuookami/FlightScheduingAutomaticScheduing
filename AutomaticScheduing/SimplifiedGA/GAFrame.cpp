@@ -29,7 +29,7 @@ namespace GA
 		time_t tt = time(NULL);//这句返回的只是一个时间cuo
 		tm* t = localtime(&tt);
 		std::ostringstream sout;
-		sout << "log" << t->tm_year + 1900 << "-" << t->tm_mon + 1 << "-" << t->tm_mday << " " << t->tm_hour << ":" << t->tm_min << ":" << t->tm_sec << ".txt";
+		sout << "log" << t->tm_year + 1900 << "_" << t->tm_mon + 1 << "_" << t->tm_mday << "_" << t->tm_hour << "_" << t->tm_min << "_" << t->tm_sec << ".txt";
 		std::ofstream fout(sout.str());
 
 		while (setting.iter != maxIter && setting.bestContinueIter != maxBestContinueIter)

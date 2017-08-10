@@ -1,0 +1,36 @@
+------------------------------
+Iterator: 1
+Best Solution Continuing Iterator: 1
+Score: 203 ~ 865
+Quantity: 89 ~ 107
+Mutation Rate: 0
+Best Score: 203
+------------------------------
+
+------------------------------
+Iterator: 2
+Best Solution Continuing Iterator: 1
+Score: 146 ~ 863
+Quantity: 154 ~ 194
+Mutation Rate: 0
+Best Score: 146
+------------------------------
+
+------------------------------
+Iterator: 3
+Best Solution Continuing Iterator: 2
+Score: 146 ~ 863
+Quantity: 238 ~ 266
+Mutation Rate: 0
+Best Score: 146
+------------------------------
+
+------------------------------
+Iterator: 4
+Best Solution Continuing Iterator: 1
+Score: 138 ~ 700
+Quantity: 251 ~ 265
+Mutation Rate: 0
+Best Score: 138
+------------------------------
+
