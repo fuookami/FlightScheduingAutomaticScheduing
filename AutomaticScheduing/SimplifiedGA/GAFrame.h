@@ -37,6 +37,7 @@ namespace GA
 	{
 		bool refreshOutputs(GenerateFlightPlan::OutputDatas &output, std::vector<std::shared_ptr<PopulationData>> &populations,
 			GenerateFlightPlan::SolutionCompareFunciont_t compareFun, const Setting &setting);
+		void printCurrIter(std::ofstream &fout, const GenerateFlightPlan::OutputDatas &output, const Setting &setting);
 	};
 
 	namespace Population

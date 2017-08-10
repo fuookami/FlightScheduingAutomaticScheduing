@@ -1,6 +1,11 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "GAFrame.h"
 #include <functional>
 #include <algorithm>
+#include <fstream>
+#include <sstream>
+#include <ctime>
 
 namespace GA
 {
@@ -18,6 +23,14 @@ namespace GA
 
 		GenerateFlightPlan::OutputDatas output;
 		output.bestPair = populations.front()->best;
+		output.minAndMaxScoresOfIters.push_back(std::make_pair(
+			populations.front()->paris.front().second, populations.front()->paris.back().second));
+
+		time_t tt = time(NULL);//这句返回的只是一个时间cuo
+		tm* t = localtime(&tt);
+		std::ostringstream sout;
+		sout << "log" << t->tm_year + 1900 << "-" << t->tm_mon + 1 << "-" << t->tm_mday << " " << t->tm_hour << ":" << t->tm_min << ":" << t->tm_sec << ".txt";
+		std::ofstream fout(sout.str());
 
 		while (setting.iter != maxIter && setting.bestContinueIter != maxBestContinueIter)
 		{
@@ -36,7 +49,11 @@ namespace GA
 
 			++setting.bestContinueIter;
 			++setting.iter;
+
+			Sub::printCurrIter(fout, output, setting);
 		}
+
+		fout.close();
 
 		return std::move(output);
 	};
@@ -72,6 +89,27 @@ namespace GA
 			(populationQuantityOfIters.front(), populationQuantityOfIters.back()));
 
 			return ret;
+		}
+
+		void printCurrIter(std::ofstream &fout, const GenerateFlightPlan::OutputDatas &output, const Setting &setting)
+		{
+			std::cout << "------------------------------" << std::endl;
+			std::cout << "Iterator: " << setting.iter << std::endl;
+			std::cout << "Best Solution Continuing Iterator: " << setting.bestContinueIter << std::endl;
+			std::cout << "Score: " << output.minAndMaxScoresOfIters.back().first << " ~ " << output.minAndMaxScoresOfIters.back().second << std::endl;
+			std::cout << "Quantity: " << output.minAndMaxPopulationQuantityOfIters.back().first << " ~ " << output.minAndMaxPopulationQuantityOfIters.back().second << std::endl;
+			std::cout << "Mutation Rate: " << output.mutationRateOfIters.back() << std::endl;
+			std::cout << "Best Score: " << output.bestPair.second << std::endl;
+			std::cout << "------------------------------" << std::endl << std::endl;
+
+			fout << "------------------------------" << std::endl;
+			fout << "Iterator: " << setting.iter << std::endl;
+			fout << "Best Solution Continuing Iterator: " << setting.bestContinueIter << std::endl;
+			fout << "Score: " << output.minAndMaxScoresOfIters.back().first << " ~ " << output.minAndMaxScoresOfIters.back().second << std::endl;
+			fout << "Quantity: " << output.minAndMaxPopulationQuantityOfIters.back().first << " ~ " << output.minAndMaxPopulationQuantityOfIters.back().second << std::endl;
+			fout << "Mutation Rate: " << output.mutationRateOfIters.back() << std::endl;
+			fout << "Best Score: " << output.bestPair.second << std::endl;
+			fout << "------------------------------" << std::endl << std::endl;
 		}
 	};
 };
