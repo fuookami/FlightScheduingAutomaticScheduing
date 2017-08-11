@@ -59,9 +59,9 @@ std::ostream &operator<<(std::ostream &os, const Flight &flight)
 	return os;
 }
 
-const std::shared_ptr<FlightInfo> & Flight::info(void) const
+const FlightInfo & Flight::info(void) const
 {
-	return ptrInfo;
+	return *ptrInfo;
 }
 
 const Time & Flight::delay(void) const
@@ -84,14 +84,9 @@ Time Flight::getPropagatedDelayIfFollow(const std::shared_ptr<FlightInfo> ptrPre
 	return std::move(calPropagatedDealy(ptrPrepInfo, prepPropagatedDealy, ptrInfo));
 }
 
-bool Flight::canBeFollowedBy(const FlightInfo & nextFlightInfo) const
+bool Flight::canBeFollowedBy(const std::shared_ptr<FlightInfo> ptrNextInfo) const
 {
-	return ptrInfo->canBeFollowedBy(nextFlightInfo);
-}
-
-bool Flight::canBeFollowedBy(const Flight & nextFlight) const
-{
-	return ptrInfo->canBeFollowedBy(*nextFlight.ptrInfo);
+	return ptrInfo->canBeFollowedBy(*ptrNextInfo);
 }
 
 std::string Flight::toString(void) const
@@ -111,24 +106,30 @@ Time Flight::calPropagatedDealy(const std::shared_ptr<FlightInfo> ptrPrepInfo, c
 	return std::move(propagatedDelay);
 }
 
+FlightBunch::~FlightBunch()
+{
+	flightId.clear();
+	flight.clear();
+}
+
 bool FlightBunch::addFlight(const std::shared_ptr<FlightInfo> pFlightInfo)
 {
 	if (flight.empty())
 	{
-		flight.emplace_back(Flight(pFlightInfo));
+		flight.push_back(Flight(pFlightInfo));
 		flightId.insert(pFlightInfo->id);
 		return true;
 	}
 	else if (pFlightInfo->canBeFollowedBy(flight.front().info()))
 	{
-		flight.emplace_front(Flight(pFlightInfo));
+		flight.push_front(Flight(pFlightInfo));
 		flightId.insert(pFlightInfo->id);
 		calDelayTime();
 		return true;
 	}
 	else if (flight.back().canBeFollowedBy(pFlightInfo))
 	{
-		flight.emplace_back(Flight(pFlightInfo));
+		flight.push_back(Flight(pFlightInfo));
 		flightId.insert(pFlightInfo->id);
 		calDelayTime();
 		return true;
@@ -243,7 +244,7 @@ std::deque<Flight>::size_type FlightBunch::size() const
 	return flight.size();
 }
 
-std::deque<Flight> & FlightBunch::flights(void)
+const std::deque<Flight>& FlightBunch::flights(void) const
 {
 	return flight;
 }

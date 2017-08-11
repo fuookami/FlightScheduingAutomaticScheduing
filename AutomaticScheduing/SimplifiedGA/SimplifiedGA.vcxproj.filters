@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\ModelFrame">
+      <UniqueIdentifier>{f5bcb356-b429-44e0-b8d7-36d3cee9b2e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\ModelFrame">
+      <UniqueIdentifier>{8328ce35-c9ae-44c3-a24a-cd769b3c76b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\GA">
+      <UniqueIdentifier>{c13e7ab6-ac0c-49aa-b17d-7149742e280e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\GA">
+      <UniqueIdentifier>{bae1898f-a3e3-42d0-9009-a7e497ce59f9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FlightBunch.h">
+      <Filter>头文件\ModelFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="FlightPlan.h">
+      <Filter>头文件\ModelFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="GenerateFlightPlan.h">
+      <Filter>头文件\ModelFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>头文件\ModelFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="GAFrame.h">
+      <Filter>头文件\GA</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FlightPlan.cpp">
+      <Filter>源文件\ModelFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="FlightBunch.cpp">
+      <Filter>源文件\ModelFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="GenerateFlightPlan.cpp">
+      <Filter>源文件\ModelFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>源文件\ModelFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="GAFrame.cpp">
+      <Filter>源文件\GA</Filter>
+    </ClCompile>
+    <ClCompile Include="GAPopultaion.cpp">
+      <Filter>源文件\GA</Filter>
+    </ClCompile>
+    <ClCompile Include="GASelect.cpp">
+      <Filter>源文件\GA</Filter>
+    </ClCompile>
+    <ClCompile Include="GACross.cpp">
+      <Filter>源文件\GA</Filter>
+    </ClCompile>
+    <ClCompile Include="GAMutation.cpp">
+      <Filter>源文件\GA</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="data.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+    <Text Include="data2.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+  </ItemGroup>
+</Project>

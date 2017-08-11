@@ -41,16 +41,15 @@ class Flight
 	friend std::ostream &operator<<(std::ostream &os, const Flight &flight);
 
 public:
-	Flight(std::shared_ptr<FlightInfo> _ptrInfo, const Time &_propagatedDelay = Time(0, 0)) : ptrInfo(_ptrInfo) {}
+	Flight(const std::shared_ptr<FlightInfo> _ptrInfo, const Time &_propagatedDelay = Time(0, 0)) : ptrInfo(_ptrInfo) {}
 
-	const std::shared_ptr<FlightInfo> &info(void) const;
+	const FlightInfo &info(void) const;
 	const Time &delay(void) const;
 
 	void setPropagatedDelayFollow(const Flight &preFlight);
 	Time getPropagatedDelayIfFollowedBy(const std::shared_ptr<FlightInfo> ptrNextInfo) const;
 	Time getPropagatedDelayIfFollow(const std::shared_ptr<FlightInfo> ptrPrepInfo, const Time &prepPropagatedDealy) const;
-	bool canBeFollowedBy(const FlightInfo &nextFlightInfo) const;
-	bool canBeFollowedBy(const Flight &nextFlight) const;
+	bool canBeFollowedBy(const std::shared_ptr<FlightInfo> ptrNextInfo) const;
 
 	std::string toString(void) const;
 
@@ -65,7 +64,8 @@ private:
 class FlightBunch
 {
 public:
-	FlightBunch() : totalDelay(0, 0) {};
+	FlightBunch() : totalDelay(0, 0), flightId(), flight() {};
+	~FlightBunch();
 
 	bool addFlight(const std::shared_ptr<FlightInfo> pFlightInfo);
 	std::deque<Flight>::iterator findFlighById(const unsigned int id);
@@ -78,7 +78,7 @@ public:
 	Flight &operator[](const int i);
 	const Flight &operator[](const int i) const;
 	std::deque<Flight>::size_type size() const;
-	std::deque<Flight> &flights(void);
+	const std::deque<Flight> &flights(void) const;
 	std::set<unsigned int> &ids(void);
 
 	std::deque<Flight>::iterator begin();

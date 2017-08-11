@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{8D559F67-E2C3-4936-88ED-95FCF16FE91A}</ProjectGuid>
-    <RootNamespace>TestInitialSolutionResultProcesser</RootNamespace>
+    <ProjectGuid>{4F49A66D-495D-4337-A1C4-311278BED9E4}</ProjectGuid>
+    <RootNamespace>SimplifiedGA</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -110,16 +110,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ResultTestInitialSolution.txt" />
-    <Text Include="Result\SortedResultTestInitialSolution.txt" />
+    <ClInclude Include="FlightBunch.h" />
+    <ClInclude Include="FlightPlan.h" />
+    <ClInclude Include="GenerateFlightPlan.h" />
+    <ClInclude Include="GAFrame.h" />
+    <ClInclude Include="Time.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FlightBunch.cpp" />
+    <ClCompile Include="FlightPlan.cpp" />
+    <ClCompile Include="GACross.cpp" />
+    <ClCompile Include="GAMutation.cpp" />
+    <ClCompile Include="GAPopultaion.cpp" />
+    <ClCompile Include="GASelect.cpp" />
+    <ClCompile Include="GenerateFlightPlan.cpp" />
+    <ClCompile Include="GAFrame.cpp" />
+    <ClCompile Include="Time.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Result\ProcessResultTestInitialSolution.json" />
-    <None Include="Result\ResultReview.html" />
-    <None Include="Result\ResultReview.js" />
+    <Text Include="data.txt" />
+    <Text Include="data2.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
