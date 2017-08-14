@@ -1,22 +1,23 @@
-jQuery(document).ready(function(){
-    jQuery.getJSON("ResultProcess.json", function(data){
-        showValue(data);
-        showPercentage(data);
-        showAccumulateValue(data);
-        showAccumulatePercentage(data);
+jQuery(document).ready(function() {
+    jQuery.getJSON("ResultProcess.json", function(data) {
+        showQuantities(data.Quantities);
+        showScores(data.Scores);
+        showBestContinuingIter(data.BestContinuingIterators);
+        showMutationRate(data.MutationRate);
     });
 });
 
-function showValue(data) {
-    jQuery('#ValueViewContainer').highcharts({
+function showQuantities(data) {
+    jQuery("#QuantitiesContainer").highcharts({
         chart: {
-            type: 'area'
+            type: 'arearange',
+            zoomType: 'x'
         },
         title: {
-            text: '初始解值分布（100k次）'
+            text: '种群密度变化图'
         },
         credits: {
-            enabled:false // 禁用版权信息
+            enabled: false // 禁用版权信息
         },
         xAsis: {
             labels: {
@@ -25,7 +26,7 @@ function showValue(data) {
                 }
             },
             title: {
-                text: '波及延误（分钟）'
+                text: '代数'
             }
         },
         yAsis: {
@@ -35,12 +36,12 @@ function showValue(data) {
                 }
             },
             title: {
-                text: '初始解值频数（次）'
+                text: '种群密度（个）'
             }
         },
         tooltip: {
             split: true,
-            valueSuffix: '次'
+            valueSuffix: '个'
         },
         plotOptions: {
             area: {
@@ -54,75 +55,23 @@ function showValue(data) {
             }
         },
         series: [{
-            name: '初始解值分布',
-            data: data.Values
-        }]
-    });
-};
-
-function showPercentage(data) {
-    jQuery('#PercentageViewContainer').highcharts({
-        chart: {
-            type: 'area'
-        },
-        title: {
-            text: '初始解值分布（100k次）'
-        },
-        credits: {
-            enabled:false // 禁用版权信息
-        },
-        xAsis: {
-            labels: {
-                style: {
-                    fontSize: '32px'
-                }
-            },
-            title: {
-                text: '波及延误（分钟）'
-            }
-        },
-        yAsis: {
-            labels: {
-                style: {
-                    fontSize: '32px'
-                }
-            },
-            title: {
-                text: '初始解值频率（%）'
-            }
-        },
-        tooltip: {
-            split: true,
-            valueSuffix: '%'
-        },
-        plotOptions: {
-            area: {
-                stacking: 'normal',
-                lineColor: '#666666',
-                lineWidth: 1,
-                marker: {
-                    lineWidth: 1,
-                    lineColor: '#666666'
-                }
-            }
-        },
-        series: [{
-            name: '初始解值分布百分比',
-            data: data.Percentage
+            name: '种群密度',
+            data: data
         }]
     });
 }
 
-function showAccumulateValue(data) {
-    jQuery('#AccumulateValueViewContainer').highcharts({
+function showScores(data) {
+    jQuery("#ScoresContainer").highcharts({
         chart: {
-            type: 'area'
+            type: 'arearange',
+            zoomType: 'x'
         },
         title: {
-            text: '初始解值分布累积值（100k次）'
+            text: '波及延误变化图'
         },
         credits: {
-            enabled:false // 禁用版权信息
+            enabled: false // 禁用版权信息
         },
         xAsis: {
             labels: {
@@ -131,7 +80,7 @@ function showAccumulateValue(data) {
                 }
             },
             title: {
-                text: '波及延误（分钟）'
+                text: '代数'
             }
         },
         yAsis: {
@@ -141,12 +90,12 @@ function showAccumulateValue(data) {
                 }
             },
             title: {
-                text: "初始解值累积频数（次）"
+                text: '波及延误（分钟）'
             }
         },
         tooltip: {
             split: true,
-            valueSuffix: '次'
+            valueSuffix: '分钟'
         },
         plotOptions: {
             area: {
@@ -160,22 +109,22 @@ function showAccumulateValue(data) {
             }
         },
         series: [{
-            name: '初始解值分布累积值',
-            data: data.AccumulateValue
+            name: '波及延误',
+            data: data
         }]
     });
-};
+}
 
-function showAccumulatePercentage(data) {
-    jQuery('#AccumulatePercentageViewContainer').highcharts({
+function showBestContinuingIter(data) {
+    jQuery("#BestIteratorsContainer").highcharts({
         chart: {
-            type: 'area'
+            type: 'spline'
         },
         title: {
-            text: '初始解值分布累积百分比（100k次）'
+            text: '最优解持续代数变化图'
         },
         credits: {
-            enabled:false // 禁用版权信息
+            enabled: false // 禁用版权信息
         },
         xAsis: {
             labels: {
@@ -184,7 +133,7 @@ function showAccumulatePercentage(data) {
                 }
             },
             title: {
-                text: '波及延误（分钟）'
+                text: '代数'
             }
         },
         yAsis: {
@@ -194,7 +143,60 @@ function showAccumulatePercentage(data) {
                 }
             },
             title: {
-                text: "初始解值累积频率（%）"
+                text: '最优解持续代数（代）'
+            }
+        },
+        tooltip: {
+            split: true,
+            valueSuffix: '代'
+        },
+        plotOptions: {
+            area: {
+                stacking: 'normal',
+                lineColor: '#666666',
+                lineWidth: 1,
+                marker: {
+                    lineWidth: 1,
+                    lineColor: '#666666'
+                }
+            }
+        },
+        series: [{
+            name: '最优解持续代数',
+            data: data
+        }]
+    });
+}
+
+function showMutationRate(data) {
+    jQuery("#MutationRateContainer").highcharts({
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: '基因变异概率变化图'
+        },
+        credits: {
+            enabled: false // 禁用版权信息
+        },
+        xAsis: {
+            labels: {
+                style: {
+                    fontSize: '32px'
+                }
+            },
+            title: {
+                text: '代数'
+            }
+        },
+        yAsis: {
+            labels: {
+                style: {
+                    fontSize: '32px'
+                }
+            },
+            title: {
+                text: '基因变异概率（%）'
             }
         },
         tooltip: {
@@ -213,8 +215,8 @@ function showAccumulatePercentage(data) {
             }
         },
         series: [{
-            name: '初始解值分布累积百分比',
-            data: data.AccumulatePercentage
+            name: '最优解持续代数',
+            data: data
         }]
     });
 }

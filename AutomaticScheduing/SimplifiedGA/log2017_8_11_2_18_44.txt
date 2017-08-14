@@ -1,0 +1,765 @@
+------------------------------
+Iterator: 1
+Best Solution Continuing Iterator: 1
+Score: 180 ~ 930
+Quantity: 88 ~ 107
+Mutation Rate: 0.000693145
+Best Score: 180
+------------------------------
+
+------------------------------
+Iterator: 2
+Best Solution Continuing Iterator: 2
+Score: 180 ~ 1080
+Quantity: 182 ~ 215
+Mutation Rate: 0.000662891
+Best Score: 180
+------------------------------
+
+------------------------------
+Iterator: 3
+Best Solution Continuing Iterator: 1
+Score: 168 ~ 1091
+Quantity: 264 ~ 274
+Mutation Rate: 0.000679203
+Best Score: 168
+------------------------------
+
+------------------------------
+Iterator: 4
+Best Solution Continuing Iterator: 1
+Score: 155 ~ 893
+Quantity: 293 ~ 309
+Mutation Rate: 0.000711888
+Best Score: 155
+------------------------------
+
+------------------------------
+Iterator: 5
+Best Solution Continuing Iterator: 2
+Score: 155 ~ 576
+Quantity: 315 ~ 322
+Mutation Rate: 0.000752478
+Best Score: 155
+------------------------------
+
+------------------------------
+Iterator: 6
+Best Solution Continuing Iterator: 1
+Score: 153 ~ 525
+Quantity: 263 ~ 283
+Mutation Rate: 0.000797703
+Best Score: 153
+------------------------------
+
+------------------------------
+Iterator: 7
+Best Solution Continuing Iterator: 1
+Score: 149 ~ 545
+Quantity: 300 ~ 316
+Mutation Rate: 0.000846044
+Best Score: 149
+------------------------------
+
+------------------------------
+Iterator: 8
+Best Solution Continuing Iterator: 1
+Score: 140 ~ 515
+Quantity: 317 ~ 330
+Mutation Rate: 0.000896707
+Best Score: 140
+------------------------------
+
+------------------------------
+Iterator: 9
+Best Solution Continuing Iterator: 1
+Score: 99 ~ 499
+Quantity: 322 ~ 345
+Mutation Rate: 0.000949238
+Best Score: 99
+------------------------------
+
+------------------------------
+Iterator: 10
+Best Solution Continuing Iterator: 2
+Score: 99 ~ 451
+Quantity: 322 ~ 325
+Mutation Rate: 0.00100336
+Best Score: 99
+------------------------------
+
+------------------------------
+Iterator: 11
+Best Solution Continuing Iterator: 1
+Score: 95 ~ 515
+Quantity: 270 ~ 283
+Mutation Rate: 0.0010589
+Best Score: 95
+------------------------------
+
+------------------------------
+Iterator: 12
+Best Solution Continuing Iterator: 2
+Score: 95 ~ 415
+Quantity: 308 ~ 318
+Mutation Rate: 0.00111574
+Best Score: 95
+------------------------------
+
+------------------------------
+Iterator: 13
+Best Solution Continuing Iterator: 1
+Score: 84 ~ 409
+Quantity: 265 ~ 278
+Mutation Rate: 0.0011738
+Best Score: 84
+------------------------------
+
+------------------------------
+Iterator: 14
+Best Solution Continuing Iterator: 1
+Score: 74 ~ 459
+Quantity: 312 ~ 321
+Mutation Rate: 0.00123302
+Best Score: 74
+------------------------------
+
+------------------------------
+Iterator: 15
+Best Solution Continuing Iterator: 2
+Score: 74 ~ 522
+Quantity: 320 ~ 346
+Mutation Rate: 0.00129337
+Best Score: 74
+------------------------------
+
+------------------------------
+Iterator: 16
+Best Solution Continuing Iterator: 1
+Score: 62 ~ 459
+Quantity: 279 ~ 291
+Mutation Rate: 0.00135481
+Best Score: 62
+------------------------------
+
+------------------------------
+Iterator: 17
+Best Solution Continuing Iterator: 2
+Score: 62 ~ 455
+Quantity: 306 ~ 319
+Mutation Rate: 0.00141731
+Best Score: 62
+------------------------------
+
+------------------------------
+Iterator: 18
+Best Solution Continuing Iterator: 1
+Score: 59 ~ 359
+Quantity: 243 ~ 286
+Mutation Rate: 0.00148087
+Best Score: 59
+------------------------------
+
+------------------------------
+Iterator: 19
+Best Solution Continuing Iterator: 2
+Score: 59 ~ 467
+Quantity: 279 ~ 336
+Mutation Rate: 0.00154547
+Best Score: 59
+------------------------------
+
+------------------------------
+Iterator: 20
+Best Solution Continuing Iterator: 3
+Score: 59 ~ 378
+Quantity: 256 ~ 282
+Mutation Rate: 0.0016111
+Best Score: 59
+------------------------------
+
+------------------------------
+Iterator: 21
+Best Solution Continuing Iterator: 1
+Score: 58 ~ 344
+Quantity: 253 ~ 265
+Mutation Rate: 0.00167775
+Best Score: 58
+------------------------------
+
+------------------------------
+Iterator: 22
+Best Solution Continuing Iterator: 1
+Score: 56 ~ 371
+Quantity: 289 ~ 318
+Mutation Rate: 0.00174542
+Best Score: 56
+------------------------------
+
+------------------------------
+Iterator: 23
+Best Solution Continuing Iterator: 2
+Score: 56 ~ 344
+Quantity: 307 ~ 325
+Mutation Rate: 0.0018141
+Best Score: 56
+------------------------------
+
+------------------------------
+Iterator: 24
+Best Solution Continuing Iterator: 3
+Score: 56 ~ 418
+Quantity: 268 ~ 277
+Mutation Rate: 0.00188379
+Best Score: 56
+------------------------------
+
+------------------------------
+Iterator: 25
+Best Solution Continuing Iterator: 4
+Score: 56 ~ 383
+Quantity: 245 ~ 258
+Mutation Rate: 0.00195449
+Best Score: 56
+------------------------------
+
+------------------------------
+Iterator: 26
+Best Solution Continuing Iterator: 1
+Score: 44 ~ 318
+Quantity: 245 ~ 256
+Mutation Rate: 0.00202619
+Best Score: 44
+------------------------------
+
+------------------------------
+Iterator: 27
+Best Solution Continuing Iterator: 2
+Score: 44 ~ 346
+Quantity: 276 ~ 295
+Mutation Rate: 0.00209889
+Best Score: 44
+------------------------------
+
+------------------------------
+Iterator: 28
+Best Solution Continuing Iterator: 1
+Score: 43 ~ 346
+Quantity: 250 ~ 262
+Mutation Rate: 0.00217259
+Best Score: 43
+------------------------------
+
+------------------------------
+Iterator: 29
+Best Solution Continuing Iterator: 2
+Score: 43 ~ 426
+Quantity: 288 ~ 302
+Mutation Rate: 0.0022473
+Best Score: 43
+------------------------------
+
+------------------------------
+Iterator: 30
+Best Solution Continuing Iterator: 1
+Score: 33 ~ 321
+Quantity: 250 ~ 268
+Mutation Rate: 0.002323
+Best Score: 33
+------------------------------
+
+------------------------------
+Iterator: 31
+Best Solution Continuing Iterator: 2
+Score: 33 ~ 324
+Quantity: 284 ~ 301
+Mutation Rate: 0.00239971
+Best Score: 33
+------------------------------
+
+------------------------------
+Iterator: 32
+Best Solution Continuing Iterator: 3
+Score: 33 ~ 304
+Quantity: 252 ~ 267
+Mutation Rate: 0.00247741
+Best Score: 33
+------------------------------
+
+------------------------------
+Iterator: 33
+Best Solution Continuing Iterator: 4
+Score: 33 ~ 318
+Quantity: 243 ~ 256
+Mutation Rate: 0.00255612
+Best Score: 33
+------------------------------
+
+------------------------------
+Iterator: 34
+Best Solution Continuing Iterator: 5
+Score: 33 ~ 243
+Quantity: 243 ~ 256
+Mutation Rate: 0.00263583
+Best Score: 33
+------------------------------
+
+------------------------------
+Iterator: 35
+Best Solution Continuing Iterator: 6
+Score: 33 ~ 318
+Quantity: 257 ~ 265
+Mutation Rate: 0.00271654
+Best Score: 33
+------------------------------
+
+------------------------------
+Iterator: 36
+Best Solution Continuing Iterator: 1
+Score: 31 ~ 377
+Quantity: 275 ~ 294
+Mutation Rate: 0.00279825
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 37
+Best Solution Continuing Iterator: 2
+Score: 31 ~ 371
+Quantity: 302 ~ 324
+Mutation Rate: 0.00288096
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 38
+Best Solution Continuing Iterator: 3
+Score: 31 ~ 318
+Quantity: 267 ~ 274
+Mutation Rate: 0.00296468
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 39
+Best Solution Continuing Iterator: 4
+Score: 31 ~ 320
+Quantity: 251 ~ 265
+Mutation Rate: 0.00304941
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 40
+Best Solution Continuing Iterator: 5
+Score: 31 ~ 318
+Quantity: 257 ~ 266
+Mutation Rate: 0.00313514
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 41
+Best Solution Continuing Iterator: 6
+Score: 31 ~ 316
+Quantity: 259 ~ 271
+Mutation Rate: 0.00322187
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 42
+Best Solution Continuing Iterator: 7
+Score: 31 ~ 375
+Quantity: 281 ~ 301
+Mutation Rate: 0.00330962
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 43
+Best Solution Continuing Iterator: 8
+Score: 31 ~ 316
+Quantity: 271 ~ 283
+Mutation Rate: 0.00339838
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 44
+Best Solution Continuing Iterator: 9
+Score: 31 ~ 316
+Quantity: 249 ~ 276
+Mutation Rate: 0.00348814
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 45
+Best Solution Continuing Iterator: 10
+Score: 31 ~ 375
+Quantity: 240 ~ 268
+Mutation Rate: 0.00357892
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 46
+Best Solution Continuing Iterator: 11
+Score: 31 ~ 316
+Quantity: 243 ~ 250
+Mutation Rate: 0.00367072
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 47
+Best Solution Continuing Iterator: 12
+Score: 31 ~ 237
+Quantity: 231 ~ 242
+Mutation Rate: 0.00376352
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 48
+Best Solution Continuing Iterator: 13
+Score: 31 ~ 290
+Quantity: 226 ~ 246
+Mutation Rate: 0.00385735
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 49
+Best Solution Continuing Iterator: 14
+Score: 31 ~ 316
+Quantity: 231 ~ 245
+Mutation Rate: 0.00395219
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 50
+Best Solution Continuing Iterator: 15
+Score: 31 ~ 316
+Quantity: 222 ~ 245
+Mutation Rate: 0.00404805
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 51
+Best Solution Continuing Iterator: 16
+Score: 31 ~ 370
+Quantity: 226 ~ 245
+Mutation Rate: 0.00414493
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 52
+Best Solution Continuing Iterator: 17
+Score: 31 ~ 316
+Quantity: 221 ~ 238
+Mutation Rate: 0.00424284
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 53
+Best Solution Continuing Iterator: 18
+Score: 31 ~ 256
+Quantity: 226 ~ 236
+Mutation Rate: 0.00434177
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 54
+Best Solution Continuing Iterator: 19
+Score: 31 ~ 256
+Quantity: 230 ~ 246
+Mutation Rate: 0.00444172
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 55
+Best Solution Continuing Iterator: 20
+Score: 31 ~ 267
+Quantity: 231 ~ 242
+Mutation Rate: 0.00454271
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 56
+Best Solution Continuing Iterator: 21
+Score: 31 ~ 375
+Quantity: 223 ~ 227
+Mutation Rate: 0.00464472
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 57
+Best Solution Continuing Iterator: 22
+Score: 31 ~ 318
+Quantity: 215 ~ 228
+Mutation Rate: 0.00474776
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 58
+Best Solution Continuing Iterator: 23
+Score: 31 ~ 400
+Quantity: 220 ~ 226
+Mutation Rate: 0.00485183
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 59
+Best Solution Continuing Iterator: 24
+Score: 31 ~ 316
+Quantity: 216 ~ 234
+Mutation Rate: 0.00495694
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 60
+Best Solution Continuing Iterator: 25
+Score: 31 ~ 316
+Quantity: 209 ~ 220
+Mutation Rate: 0.00506308
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 61
+Best Solution Continuing Iterator: 26
+Score: 31 ~ 316
+Quantity: 212 ~ 228
+Mutation Rate: 0.00517026
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 62
+Best Solution Continuing Iterator: 27
+Score: 31 ~ 316
+Quantity: 214 ~ 222
+Mutation Rate: 0.00527848
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 63
+Best Solution Continuing Iterator: 28
+Score: 31 ~ 316
+Quantity: 210 ~ 225
+Mutation Rate: 0.00538774
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 64
+Best Solution Continuing Iterator: 29
+Score: 31 ~ 316
+Quantity: 224 ~ 238
+Mutation Rate: 0.00549805
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 65
+Best Solution Continuing Iterator: 30
+Score: 31 ~ 321
+Quantity: 229 ~ 237
+Mutation Rate: 0.00560939
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 66
+Best Solution Continuing Iterator: 31
+Score: 31 ~ 375
+Quantity: 224 ~ 235
+Mutation Rate: 0.00572179
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 67
+Best Solution Continuing Iterator: 32
+Score: 31 ~ 375
+Quantity: 211 ~ 221
+Mutation Rate: 0.00583523
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 68
+Best Solution Continuing Iterator: 33
+Score: 31 ~ 291
+Quantity: 218 ~ 237
+Mutation Rate: 0.00594972
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 69
+Best Solution Continuing Iterator: 34
+Score: 31 ~ 335
+Quantity: 224 ~ 236
+Mutation Rate: 0.00606526
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 70
+Best Solution Continuing Iterator: 35
+Score: 31 ~ 316
+Quantity: 219 ~ 237
+Mutation Rate: 0.00618186
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 71
+Best Solution Continuing Iterator: 36
+Score: 31 ~ 316
+Quantity: 217 ~ 231
+Mutation Rate: 0.00629951
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 72
+Best Solution Continuing Iterator: 37
+Score: 31 ~ 268
+Quantity: 214 ~ 225
+Mutation Rate: 0.00641822
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 73
+Best Solution Continuing Iterator: 38
+Score: 31 ~ 316
+Quantity: 222 ~ 236
+Mutation Rate: 0.00653799
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 74
+Best Solution Continuing Iterator: 39
+Score: 31 ~ 310
+Quantity: 214 ~ 229
+Mutation Rate: 0.00665882
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 75
+Best Solution Continuing Iterator: 40
+Score: 31 ~ 316
+Quantity: 221 ~ 225
+Mutation Rate: 0.00678071
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 76
+Best Solution Continuing Iterator: 41
+Score: 31 ~ 316
+Quantity: 215 ~ 230
+Mutation Rate: 0.00690366
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 77
+Best Solution Continuing Iterator: 42
+Score: 31 ~ 316
+Quantity: 221 ~ 228
+Mutation Rate: 0.00702769
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 78
+Best Solution Continuing Iterator: 43
+Score: 31 ~ 370
+Quantity: 214 ~ 242
+Mutation Rate: 0.00715278
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 79
+Best Solution Continuing Iterator: 44
+Score: 31 ~ 316
+Quantity: 229 ~ 241
+Mutation Rate: 0.00727894
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 80
+Best Solution Continuing Iterator: 45
+Score: 31 ~ 316
+Quantity: 218 ~ 233
+Mutation Rate: 0.00740617
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 81
+Best Solution Continuing Iterator: 46
+Score: 31 ~ 242
+Quantity: 211 ~ 229
+Mutation Rate: 0.00753448
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 82
+Best Solution Continuing Iterator: 47
+Score: 31 ~ 370
+Quantity: 221 ~ 237
+Mutation Rate: 0.00766386
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 83
+Best Solution Continuing Iterator: 48
+Score: 31 ~ 316
+Quantity: 223 ~ 234
+Mutation Rate: 0.00779432
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 84
+Best Solution Continuing Iterator: 49
+Score: 31 ~ 316
+Quantity: 230 ~ 234
+Mutation Rate: 0.00792587
+Best Score: 31
+------------------------------
+
+------------------------------
+Iterator: 85
+Best Solution Continuing Iterator: 50
+Score: 31 ~ 375
+Quantity: 217 ~ 235
+Mutation Rate: 0.00805849
+Best Score: 31
+------------------------------
+
