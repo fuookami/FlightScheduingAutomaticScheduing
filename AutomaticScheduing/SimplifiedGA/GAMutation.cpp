@@ -20,7 +20,7 @@ namespace GA
 				}
 			}
 
-			return std::move(ret);
+			return ret;
 		}
 
 		Solution mutate(const Solution &solt, const double rate, const Setting &setting)
@@ -41,7 +41,7 @@ namespace GA
 			{
 				ret[pos] = dis(gen);
 			}
-			return std::move(ret);
+			return ret;
 		}
 
 		void refreshCurrIterMutationRate(const Setting &setting)
@@ -71,7 +71,7 @@ namespace GA
 					}
 				}
 
-				return std::move(ret);
+				return ret;
 			}
 		};
 	};

@@ -20,8 +20,7 @@ std::string FlightInfo::toString(void) const
 {
 	std::ostringstream sout;
 	sout << *this;
-	std::string &str(sout.str());
-	return std::move(str);
+	return sout.str();
 }
 
 bool operator<(const FlightInfo &lop, const FlightInfo &rop)
@@ -76,12 +75,12 @@ void Flight::setPropagatedDelayFollow(const Flight & preFlight)
 
 Time Flight::getPropagatedDelayIfFollowedBy(const std::shared_ptr<FlightInfo> ptrNextInfo) const
 {
-	return std::move(calPropagatedDealy(ptrInfo, propagatedDelay, ptrNextInfo));
+	return calPropagatedDealy(ptrInfo, propagatedDelay, ptrNextInfo);
 }
 
 Time Flight::getPropagatedDelayIfFollow(const std::shared_ptr<FlightInfo> ptrPrepInfo, const Time & prepPropagatedDealy) const
 {
-	return std::move(calPropagatedDealy(ptrPrepInfo, prepPropagatedDealy, ptrInfo));
+	return calPropagatedDealy(ptrPrepInfo, prepPropagatedDealy, ptrInfo);
 }
 
 bool Flight::canBeFollowedBy(const std::shared_ptr<FlightInfo> ptrNextInfo) const
@@ -93,8 +92,7 @@ std::string Flight::toString(void) const
 {
 	std::ostringstream sout;
 	sout << *this;
-	std::string &str(sout.str());
-	return std::move(str);
+	return sout.str();
 }
 
 Time Flight::calPropagatedDealy(const std::shared_ptr<FlightInfo> ptrPrepInfo, const Time & prepPropagatedDealy, const std::shared_ptr<FlightInfo> ptrThisInfo)
@@ -103,7 +101,8 @@ Time Flight::calPropagatedDealy(const std::shared_ptr<FlightInfo> ptrPrepInfo, c
 		+ SpecialTime::MinMCT - ptrThisInfo->planDepTime;
 	if (propagatedDelay < SpecialTime::ZeroTime)
 		propagatedDelay = SpecialTime::ZeroTime;
-	return std::move(propagatedDelay);
+
+	return propagatedDelay;
 }
 
 FlightBunch::~FlightBunch()
@@ -144,7 +143,7 @@ bool FlightBunch::addFlight(const std::shared_ptr<FlightInfo> pFlightInfo)
 
 			if (prep && sufix)
 			{
-				flight.insert(flight.begin() + i, std::move(Flight(pFlightInfo)));
+				flight.insert(flight.begin() + i, Flight(pFlightInfo));
 				flag = true;
 				break;
 			}
@@ -221,7 +220,7 @@ Time FlightBunch::addedDelayIfAddFlight(const std::shared_ptr<FlightInfo> pFligh
 		}
 	}
 
-	return std::move(addedDelay);
+	return addedDelay;
 }
 
 const Time & FlightBunch::delay(void) const

@@ -1,6 +1,7 @@
 #include "GAFrame.h"
 #include <random>
 #include <algorithm>
+#include <iterator>
 
 namespace GA
 {
@@ -14,7 +15,7 @@ namespace GA
 			for (unsigned int i(0), j(shade.size()); i != j; ++i)
 			{
 				if (shade[i])
-					newPairs.push_back(pairs[i]);
+					newPairs.push_back(std::move(pairs[i]));
 			}
 			pairs = std::move(newPairs);
 		}
@@ -24,7 +25,7 @@ namespace GA
 			unsigned int targetNum(getCurrIterSolutionNum(pairs.size(), setting));
 			std::vector<bool> ret(Operator::Tournament(pairs, targetNum, compareFun, setting));
 			ret.front() = true;
-			return std::move(ret);
+			return ret;
 		}
 
 		unsigned int getCurrIterSolutionNum(unsigned int currSolutionNum, const Setting &setting)
@@ -58,7 +59,7 @@ namespace GA
 				{
 					std::random_shuffle(lIt->begin(), lIt->end());
 					auto moveBgIt(lIt->begin()), moveEdIt(lIt->begin() + lIt->size() / 2);
-					rIt->insert(rIt->end(), moveBgIt, moveEdIt);
+					std::move(moveBgIt, moveEdIt, std::back_inserter(*rIt));
 					lIt->erase(moveBgIt, moveEdIt);
 				}
 
@@ -89,7 +90,7 @@ namespace GA
 						ret[selected] = true;
 				}
 
-				return std::move(ret);
+				return ret;
 			}
 		};
 	};

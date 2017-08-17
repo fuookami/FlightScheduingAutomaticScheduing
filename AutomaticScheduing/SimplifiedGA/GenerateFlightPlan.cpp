@@ -80,7 +80,7 @@ namespace GenerateFlightPlan
 			for (auto &thread : threads)
 				thread.join();
 
-			return std::move(initialSolution);
+			return initialSolution;
 		}
 
 		std::vector<std::pair<PlanTable, unsigned int>> planTable2Score(const std::vector<PlanTable> &planTables, bool FaultTolerant)
@@ -121,7 +121,7 @@ namespace GenerateFlightPlan
 
 			if (lastIt != ret.end())
 				ret.erase(lastIt, ret.end());
-			return std::move(ret);
+			return ret;
 		}
 
 		bool ComparePlanTable(const std::pair<PlanTable, unsigned int> & lop, const std::pair<PlanTable, unsigned int> & rop)

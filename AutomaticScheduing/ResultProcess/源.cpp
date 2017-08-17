@@ -78,6 +78,26 @@ void output(void)
 	}
 	fout << "\t]," << std::endl;
 
+	fout << "\t\"Best\": [" << std::endl;
+	for (uint32 i(0), j(scores.size()); i != j; )
+	{
+		uint32 thisMax = j - i;
+		thisMax = thisMax > 5 ? 5 : thisMax;
+		fout << "\t\t";
+		for (uint32 m(i), n(i + thisMax); m != n; ++m)
+		{
+			fout << scores[i].first;
+			if (m + 1 != j)
+			{
+				fout << ", ";
+			}
+		}
+		fout << std::endl;
+
+		i += thisMax;
+	}
+	fout << "\t]," << std::endl;
+
 	fout << "\t\"BestContinuingIterators\": [" << std::endl;
 	for (uint32 i(0), j(bestContinuingIterators.size()); i != j; )
 	{

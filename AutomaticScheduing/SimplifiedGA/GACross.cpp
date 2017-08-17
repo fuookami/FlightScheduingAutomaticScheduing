@@ -1,5 +1,7 @@
 #include "GAFrame.h"
 #include <random>
+#include <algorithm>
+#include <iterator>
 
 namespace GA
 {
@@ -30,10 +32,10 @@ namespace GA
 			for (std::vector<Solution> &group : groups)
 			{
 				cross(group);
-				ret.insert(ret.end(), group.cbegin(), group.cend());
+				std::move(group.begin(), group.end(), std::back_inserter(ret));
 			}
 
-			return std::move(ret);
+			return ret;
 		}
 
 		void cross(std::vector<Solution> &pairs)
@@ -61,9 +63,36 @@ namespace GA
 		{
 			std::vector<bool> MultiPoint(const unsigned int size)
 			{
-				std::vector<bool> ret;
+				static std::random_device rd;
+				static std::mt19937_64 gen(rd());
+				std::poisson_distribution<> dis(1);
+				std::uniform_int_distribution<> udis(0, size - 1);
+				std::uniform_int_distribution<> bdis(0, 1);
 
-				return std::move(ret);
+				unsigned int pointNum(dis(gen) + 3);
+				std::vector<bool> ret(size, false);
+
+				std::set<unsigned int> pointSet;
+				while (pointSet.size() != pointNum)
+				{
+					pointSet.insert(udis(gen));
+				}
+
+				std::vector<unsigned int> points(pointSet.cbegin(), pointSet.cend());
+				std::sort(points.begin(), points.end());
+
+				for (unsigned int i(0), j(points.size() - 1); i != j; ++i)
+				{
+					if (bdis(gen) == 1)
+					{
+						for (unsigned int k(points[i]), l(points[i + 1]); k != l; ++k)
+						{
+							ret[k] = true;
+						}
+					}	
+				}
+
+				return ret;
 			}
 		};
 	};

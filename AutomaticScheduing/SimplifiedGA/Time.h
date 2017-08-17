@@ -20,7 +20,7 @@ public:
 	Time(int mins) : totalMin(mins) {}
 	Time(int hour, int min) : totalMin(hour * MinsOfOneHour + min) {}
 	Time(const Time &ano) : totalMin(ano.totalMin) {}
-	Time(const Time &&ano) : totalMin(std::move(ano.totalMin)) {}
+	Time(const Time &&ano) : totalMin(ano.totalMin) {}
 
 	Time &setHour(int hour) { totalMin = hour * MinsOfOneHour + totalMin % MinsOfOneHour; return *this; }
 	Time &setMin(int min) { totalMin = MinsOfOneHour * (totalMin / MinsOfOneHour) + min; return *this; }

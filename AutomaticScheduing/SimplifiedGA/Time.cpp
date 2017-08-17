@@ -69,7 +69,7 @@ Time & Time::operator=(const Time & ano)
 
 Time & Time::operator=(const Time && ano)
 {
-	totalMin = std::move(ano.totalMin);
+	totalMin = ano.totalMin;
 	return *this;
 }
 

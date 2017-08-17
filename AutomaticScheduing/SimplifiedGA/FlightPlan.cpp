@@ -1,4 +1,4 @@
-#include "FlightPlan.h"
+ï»¿#include "FlightPlan.h"
 
 #include <algorithm>
 #include <random>
@@ -84,7 +84,7 @@ void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, co
 		}
 	}
 
-	*pRet = std::move(pNewPlan->getPlanTable());
+	*pRet = pNewPlan->getPlanTable();
 }
 
 std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTable(const PlanTable & t, const FlightInfoMap & infoMap)
@@ -134,18 +134,18 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 						std::vector<std::pair<unsigned int, int>>()));
 				else
 				{
-					// Ñ°ÕÒÒ»Ìõ¿Õº½°à´®
+					// å¯»æ‰¾ä¸€æ¡ç©ºèˆªç­ä¸²
 					unsigned int p(0), q(pNewPlan->m_bunches.size());
 					for (; p != q && pNewPlan->m_bunches[p].size() != 0; ++p);
 					if (p != q)
 					{
-						// ¼ÓÈëµ½ÕâÌõº½°à´®Àï
+						// åŠ å…¥åˆ°è¿™æ¡èˆªç­ä¸²é‡Œ
 						pNewPlan->m_bunches[p].addFlight(pThisFlight);
 						tCopy[i] = p;
 					}
 					else
 					{
-						// ¼ÓÈëaddedDealyTable±íÀï
+						// åŠ å…¥addedDealyTableè¡¨é‡Œ
 						addedDealyTable.push_back(std::make_pair(i, 
 							std::vector<std::pair<unsigned int, int>>()));
 					}
@@ -156,16 +156,16 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 		/*
 		for <flight_id, vector<bunch_id, cost>> in addedDealyTable
 			for bunch in pNewPlan
-				if bunch.cost(flight)²»ÊÇÎŞÇî´ó
-					½«<bunch_id, cost>·ÅÈëaddedDealyTable[flight_id]
-			if Õâ¸öº½°àÓĞº½°à´®ÄÜÈû½øÈ¥
-				¸ù¾İcost¶Ôvector<bunch_id, cost>½øĞĞÅÅĞò£¬´ÓĞ¡µ½´ó
+				if bunch.cost(flight)ä¸æ˜¯æ— ç©·å¤§
+					å°†<bunch_id, cost>æ”¾å…¥addedDealyTable[flight_id]
+			if è¿™ä¸ªèˆªç­æœ‰èˆªç­ä¸²èƒ½å¡è¿›å»
+				æ ¹æ®costå¯¹vector<bunch_id, cost>è¿›è¡Œæ’åºï¼Œä»å°åˆ°å¤§
 			else
-				Ñ°ÕÒÒ»Ìõ¿Õº½°à´®
-				if ´æÔÚĞÂº½°à
-					¼ÓÈëµ½ÕâÌõº½°àÀï
+				å¯»æ‰¾ä¸€æ¡ç©ºèˆªç­ä¸²
+				if å­˜åœ¨æ–°èˆªç­
+					åŠ å…¥åˆ°è¿™æ¡èˆªç­é‡Œ
 				else
-					ÖØĞÂÉú³É
+					é‡æ–°ç”Ÿæˆ
 		*/
 		for (std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>> 
 			&ele : addedDealyTable)
@@ -221,14 +221,14 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 		while (!addedDealyTable.empty())
 		{
 			/*
-			´æÔÚÓÚÕâ¸öÏòÁ¿µÄº½°àid±íÊ¾Î´¼ÓÈëº½°à´®¼¯ÖĞ
+			å­˜åœ¨äºè¿™ä¸ªå‘é‡çš„èˆªç­idè¡¨ç¤ºæœªåŠ å…¥èˆªç­ä¸²é›†ä¸­
 			*/
 
 			/*
-			¸ù¾İ vector<bunch_id, cost>[0].cost ¶Ô addedDealyTable(<flight_id, vector<bunch_id, cost>>) ½øĞĞÅÅĞò£¬´ÓĞ¡µ½´ó
-			°ØËÉ·Ö²¼Ñ¡ÔñÒ»¸ö£¬½«Õâ¸öµ¯³öaddedDealyTable
-			°ØËÉ·Ö²¼Ñ¡Ôñbunch_id»òÕß¼ÓÈëµ½ĞÂµÄº½°à´®Àï
-			¼Ç·ÅÈëµÄº½°à´®Îªnew_bunch_id
+			æ ¹æ® vector<bunch_id, cost>[0].cost å¯¹ addedDealyTable(<flight_id, vector<bunch_id, cost>>) è¿›è¡Œæ’åºï¼Œä»å°åˆ°å¤§
+			æŸæ¾åˆ†å¸ƒé€‰æ‹©ä¸€ä¸ªï¼Œå°†è¿™ä¸ªå¼¹å‡ºaddedDealyTable
+			æŸæ¾åˆ†å¸ƒé€‰æ‹©bunch_idæˆ–è€…åŠ å…¥åˆ°æ–°çš„èˆªç­ä¸²é‡Œ
+			è®°æ”¾å…¥çš„èˆªç­ä¸²ä¸ºnew_bunch_id
 			*/
 			std::sort(addedDealyTable.begin(), addedDealyTable.end(), []
 			(std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>> &lps,
@@ -250,17 +250,17 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 			addedDealyTable.erase(pSelect);
 
 			/*
-			¸üĞÂaddedDealyTable±í
+			æ›´æ–°addedDealyTableè¡¨
 			for <flight_id, vector<bunch_id, cost>> in addedDealyTable
 				bool flag2
-				if new_bunch_id ´æÔÚÓÚ vector<bunch_id, cost> ÖĞ
-					if bunch.cost(flight) ²»ÊÇÎŞÇî´ó
-						¸üĞÂcost
+				if new_bunch_id å­˜åœ¨äº vector<bunch_id, cost> ä¸­
+					if bunch.cost(flight) ä¸æ˜¯æ— ç©·å¤§
+						æ›´æ–°cost
 					else
-						É¾³ı
+						åˆ é™¤
 					flag2 = true
 				if flag2
-					¸ù¾İcost¶Ôvector<bunch_id, cost>½øĞĞÅÅĞò£¬´ÓĞ¡µ½´ó
+					æ ¹æ®costå¯¹vector<bunch_id, cost>è¿›è¡Œæ’åºï¼Œä»å°åˆ°å¤§
 			*/
 			for (std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>>>::iterator
 				currIt(addedDealyTable.begin()); currIt != addedDealyTable.end();)
@@ -355,7 +355,7 @@ PlanTable FlightPlan::getPlanTable(void) const
 		}
 	}
 
-	return std::move(ret);
+	return ret;
 }
 
 const std::vector<FlightBunch> &FlightPlan::bunches(void) const

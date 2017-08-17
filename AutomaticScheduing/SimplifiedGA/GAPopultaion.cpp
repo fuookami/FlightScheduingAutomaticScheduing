@@ -1,6 +1,7 @@
 #include "GAFrame.h"
 #include <thread>
 #include <algorithm>
+#include <iterator>
 
 namespace GA
 {
@@ -18,7 +19,7 @@ namespace GA
 			for (unsigned int i(1); i != PopulationNum; ++i)
 				ret.push_back(std::shared_ptr<PopulationData>(new PopulationData(*pPopulation)));
 
-			return std::move(ret);
+			return ret;
 		}
 
 		void run(std::vector<std::shared_ptr<PopulationData>> &populations, GenerateFlightPlan::SolutionScoreFunction_t toScoreFun, bool FaultToTerant,
@@ -49,13 +50,13 @@ namespace GA
 
 			auto newIterAfterCross(Cross::run(population.paris, setting));
 			auto newIterWithScoreAfterCross(toScoreFun(newIterAfterCross, FaultToTerant));
-			population.paris.insert(population.paris.end(), newIterWithScoreAfterCross.begin(), newIterWithScoreAfterCross.end());
+			std::move(newIterWithScoreAfterCross.begin(), newIterWithScoreAfterCross.end(), std::back_inserter(population.paris));
 
 			auto newIterAfterMutation(Mutation::run(population.paris, setting));
 			if (!newIterAfterMutation.empty())
 			{
 				auto newIterWithScoreAfterMutation(toScoreFun(newIterAfterMutation, FaultToTerant));
-				population.paris.insert(population.paris.end(), newIterWithScoreAfterMutation.begin(), newIterWithScoreAfterMutation.end());
+				std::move(newIterWithScoreAfterMutation.begin(), newIterWithScoreAfterMutation.end(), std::back_inserter(population.paris));
 			}
 
 			std::sort(population.paris.begin(), population.paris.end(),

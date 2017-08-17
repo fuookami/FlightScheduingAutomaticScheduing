@@ -2,6 +2,7 @@ jQuery(document).ready(function() {
     jQuery.getJSON("ResultProcess.json", function(data) {
         showQuantities(data.Quantities);
         showScores(data.Scores);
+        showBest(data.Best);
         showBestContinuingIter(data.BestContinuingIterators);
         showMutationRate(data.MutationRate);
     });
@@ -115,6 +116,59 @@ function showScores(data) {
     });
 }
 
+function showBest(data) {
+    jQuery("#BestContainer").highcharts({
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: '最优解波及延误变化图'
+        },
+        credits: {
+            enabled: false // 禁用版权信息
+        },
+        xAsis: {
+            labels: {
+                style: {
+                    fontSize: '32px'
+                }
+            },
+            title: {
+                text: '代数'
+            }
+        },
+        yAsis: {
+            labels: {
+                style: {
+                    fontSize: '32px'
+                }
+            },
+            title: {
+                text: '波及延误（分钟）'
+            }
+        },
+        tooltip: {
+            split: true,
+            valueSuffix: '分钟'
+        },
+        plotOptions: {
+            area: {
+                stacking: 'normal',
+                lineColor: '#666666',
+                lineWidth: 1,
+                marker: {
+                    lineWidth: 1,
+                    lineColor: '#666666'
+                }
+            }
+        },
+        series: [{
+            name: '最优解波及延误',
+            data: data
+        }]
+    });
+}
+
 function showBestContinuingIter(data) {
     jQuery("#BestIteratorsContainer").highcharts({
         chart: {
@@ -215,7 +269,7 @@ function showMutationRate(data) {
             }
         },
         series: [{
-            name: '最优解持续代数',
+            name: '基因变异概率',
             data: data
         }]
     });

@@ -57,7 +57,7 @@ namespace GA
 
 		fout.close();
 
-		return std::move(output);
+		return output;
 	};
 
 	namespace Sub
