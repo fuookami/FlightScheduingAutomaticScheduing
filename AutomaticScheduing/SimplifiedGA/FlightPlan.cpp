@@ -99,8 +99,6 @@ void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, co
 
 		return;
 	}
-
-	
 }
 
 std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTable(const PlanTable & t, const FlightInfoMap & infoMap)
@@ -129,8 +127,8 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 	bool flag(true);
 	PlanTable tCopy;
 	
-	unsigned int maxTime((maxRank + 5 * maxRank * d(gen)) * 10);
-	maxTime = maxTime > 1000 ? 1000 : maxTime;
+	unsigned int maxTime(maxRank + 5 * maxRank * d(gen));
+	maxTime = maxTime > 100 ? 100 : maxTime;
 	unsigned int counter(0);
 	for (; flag && counter != maxTime; ++counter)
 	{
@@ -150,18 +148,18 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 						std::vector<std::pair<unsigned int, int>>()));
 				else
 				{
-					// 寻找一条空航班串
+					// Ѱ��һ���պ��മ
 					unsigned int p(0), q(pNewPlan->m_bunches.size());
 					for (; p != q && pNewPlan->m_bunches[p].size() != 0; ++p);
 					if (p != q)
 					{
-						// 加入到这条航班串里
+						// ���뵽�������മ��
 						pNewPlan->m_bunches[p].addFlight(pThisFlight);
 						tCopy[i] = p;
 					}
 					else
 					{
-						// 加入addedDealyTable表里
+						// ����addedDealyTable����
 						addedDealyTable.push_back(std::make_pair(i, 
 							std::vector<std::pair<unsigned int, int>>()));
 					}
@@ -172,16 +170,16 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 		/*
 		for <flight_id, vector<bunch_id, cost>> in addedDealyTable
 			for bunch in pNewPlan
-				if bunch.cost(flight)不是无穷大
-					将<bunch_id, cost>放入addedDealyTable[flight_id]
-			if 这个航班有航班串能塞进去
-				根据cost对vector<bunch_id, cost>进行排序，从小到大
+				if bunch.cost(flight)���������
+					��<bunch_id, cost>����addedDealyTable[flight_id]
+			if ��������к��മ������ȥ
+				����cost��vector<bunch_id, cost>�������򣬴�С����
 			else
-				寻找一条空航班串
-				if 存在新航班
-					加入到这条航班里
+				Ѱ��һ���պ��മ
+				if �����º���
+					���뵽����������
 				else
-					重新生成
+					��������
 		*/
 		for (std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>> 
 			&ele : addedDealyTable)
@@ -237,14 +235,14 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 		while (!addedDealyTable.empty())
 		{
 			/*
-			存在于这个向量的航班id表示未加入航班串集中
+			��������������ĺ���id��ʾδ���뺽�മ����
 			*/
 
 			/*
-			根据 vector<bunch_id, cost>[0].cost 对 addedDealyTable(<flight_id, vector<bunch_id, cost>>) 进行排序，从小到大
-			柏松分布选择一个，将这个弹出addedDealyTable
-			柏松分布选择bunch_id或者加入到新的航班串里
-			记放入的航班串为new_bunch_id
+			���� vector<bunch_id, cost>[0].cost �� addedDealyTable(<flight_id, vector<bunch_id, cost>>) �������򣬴�С����
+			���ɷֲ�ѡ��һ�������������addedDealyTable
+			���ɷֲ�ѡ��bunch_id���߼��뵽�µĺ��മ��
+			�Ƿ���ĺ��മΪnew_bunch_id
 			*/
 			std::sort(addedDealyTable.begin(), addedDealyTable.end(), []
 			(std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>> &lps,
@@ -266,17 +264,17 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 			addedDealyTable.erase(pSelect);
 
 			/*
-			更新addedDealyTable表
+			����addedDealyTable��
 			for <flight_id, vector<bunch_id, cost>> in addedDealyTable
 				bool flag2
-				if new_bunch_id 存在于 vector<bunch_id, cost> 中
-					if bunch.cost(flight) 不是无穷大
-						更新cost
+				if new_bunch_id ������ vector<bunch_id, cost> ��
+					if bunch.cost(flight) ���������
+						����cost
 					else
-						删除
+						ɾ��
 					flag2 = true
 				if flag2
-					根据cost对vector<bunch_id, cost>进行排序，从小到大
+					����cost��vector<bunch_id, cost>�������򣬴�С����
 			*/
 			for (std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>>>::iterator
 				currIt(addedDealyTable.begin()); currIt != addedDealyTable.end();)
@@ -371,7 +369,7 @@ PlanTable FlightPlan::getPlanTable(void) const
 		}
 	}
 
-	return ret;
+	return std::move(ret);
 }
 
 const std::vector<FlightBunch> &FlightPlan::bunches(void) const
