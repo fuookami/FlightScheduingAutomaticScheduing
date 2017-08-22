@@ -4,11 +4,13 @@
 #include <thread>
 #include <algorithm>
 #include <map>
+#include <random>
 
 namespace GenerateFlightPlan
 {
 	unsigned int FlighterNum = 0;
 	unsigned int FlightInfoNum = 0;
+	unsigned int InitailSolutionNum = 0;
 
 	FlightInfoSet flightInfoSet;
 	FlightInfoMap flightInfoMap;
@@ -32,9 +34,11 @@ namespace GenerateFlightPlan
 
 	void run(bool FaultToTerant, SolveFunction_t solveFun, const std::pair<double, double> &solutionNumRate, const std::string &dataOutputFileName)
 	{
-		std::vector<PlanTable> initialSolution(SubFun::generateInitialSolution());
+		std::vector<PlanTable> initialSolution(SubFun::generateInitailSolution());
+		InitailSolutionNum = initialSolution.size();
+
 		OutputDatas outputData(solveFun(initialSolution, FaultToTerant, 
-			std::make_pair(initialSolution.size() * solutionNumRate.first, initialSolution.size() * solutionNumRate.second),
+			std::make_pair(InitailSolutionNum * solutionNumRate.first, InitailSolutionNum * solutionNumRate.second),
 			std::make_pair(0, FlighterNum), 
 			&SubFun::planTable2Score, &SubFun::ComparePlanTable));
 		SubFun::outputDatas(outputData, dataOutputFileName);
@@ -48,7 +52,7 @@ namespace GenerateFlightPlan
 		unsigned int num(0);
 		for (unsigned int i(0), j(time / GenerateFlightPlan::FlighterNum + 1); i != j; ++i)
 		{
-			std::vector<PlanTableWithScore> thisInitialSolution(SubFun::planTable2Score(SubFun::generateInitialSolution()));
+			std::vector<PlanTableWithScore> thisInitialSolution(SubFun::planTable2Score(SubFun::generateInitailSolution()));
 			for (const PlanTableWithScore &thisSolution : thisInitialSolution)
 			{
 				++counter[thisSolution.second];
@@ -68,19 +72,26 @@ namespace GenerateFlightPlan
 
 	namespace SubFun
 	{
-		std::vector<PlanTable> generateInitialSolution(void)
+		std::vector<PlanTable> generateInitailSolution(void)
 		{
-			std::vector<PlanTable> initialSolution(GenerateFlightPlan::FlighterNum, PlanTable());
+			std::vector<PlanTable> initailSolution(GenerateFlightPlan::FlighterNum, PlanTable());
+
 			std::vector<std::thread> threads;
 
-			for (unsigned int i(0), j(initialSolution.size()); i != j; ++i)
+			for (unsigned int i(0), j(initailSolution.size()); i != j; ++i)
 				threads.push_back(std::thread(
-					FlightPlan::generatePlanTableWithRandomGreedyAlgorithm, &(initialSolution[i]), flightInfoMap));
+					FlightPlan::generatePlanTableWithRandomGreedyAlgorithm, &(initailSolution[i]), flightInfoMap));
 
 			for (auto &thread : threads)
 				thread.join();
 
-			return initialSolution;
+			initailSolution.erase(std::remove_if(initailSolution.begin(), initailSolution.end(),
+				[](const PlanTable &t) -> bool
+			{
+				return t.empty();
+			}), initailSolution.end());
+
+			return initailSolution;
 		}
 
 		std::vector<std::pair<PlanTable, unsigned int>> planTable2Score(const std::vector<PlanTable> &planTables, bool FaultTolerant)

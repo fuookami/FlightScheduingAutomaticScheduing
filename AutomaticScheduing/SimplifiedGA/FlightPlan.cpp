@@ -27,6 +27,7 @@ void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, co
 	static std::random_device rd;
 	static std::mt19937 gen(rd());
 	static std::poisson_distribution<> d(maxRank - 1);
+	static const unsigned int maxTime(100000);
 
 	static auto randomRank([]()->unsigned int {
 		unsigned int currNum(d(gen) / maxRank);
@@ -35,7 +36,9 @@ void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, co
 
 	std::shared_ptr<FlightPlan> pNewPlan(nullptr);
 	bool flag(true);
-	while (flag)
+
+	unsigned int counter(0);
+	for (; flag && counter != maxTime; ++counter)
 	{
 		pNewPlan.reset(new FlightPlan());
 		flag = false;
@@ -84,7 +87,20 @@ void FlightPlan::generatePlanTableWithRandomGreedyAlgorithm(PlanTable * pRet, co
 		}
 	}
 
-	*pRet = pNewPlan->getPlanTable();
+	if (!flag)
+	{
+		*pRet = pNewPlan->getPlanTable();
+
+		return;
+	}
+	else
+	{
+		*pRet = PlanTable();
+
+		return;
+	}
+
+	
 }
 
 std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTable(const PlanTable & t, const FlightInfoMap & infoMap)
@@ -113,8 +129,8 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 	bool flag(true);
 	PlanTable tCopy;
 	
-	unsigned int maxTime(maxRank + d(gen));
-	maxTime = maxTime > 10 ? 10 : maxTime;
+	unsigned int maxTime((maxRank + 5 * maxRank * d(gen)) * 100);
+	maxTime = maxTime > 10000 ? 10000 : maxTime;
 	unsigned int counter(0);
 	for (; flag && counter != maxTime; ++counter)
 	{

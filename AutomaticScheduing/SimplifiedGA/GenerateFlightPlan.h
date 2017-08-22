@@ -9,6 +9,7 @@ namespace GenerateFlightPlan
 {
 	extern unsigned int FlighterNum;
 	extern unsigned int FlightInfoNum;
+	extern unsigned int InitailSolutionNum;
 
 	extern FlightInfoSet flightInfoSet;
 	extern FlightInfoMap flightInfoMap;
@@ -27,7 +28,7 @@ namespace GenerateFlightPlan
 
 	namespace SubFun 
 	{
-		std::vector<PlanTable> generateInitialSolution(void);
+		std::vector<PlanTable> generateInitailSolution(void);
 		std::vector<std::pair<PlanTable, unsigned int>> planTable2Score(const std::vector<PlanTable> &planTables, bool FaultTolerant = true);
 		bool ComparePlanTable(const std::pair<PlanTable, unsigned int> &lop, const std::pair<PlanTable, unsigned int> &rop);
 		void outputDatas(const OutputDatas &datas, const std::string &dataOutputFileName);
