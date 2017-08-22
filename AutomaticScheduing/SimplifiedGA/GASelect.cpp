@@ -11,13 +11,19 @@ namespace GA
 		{
 			std::vector<bool> shade(select(pairs, compareFun, setting));
 
-			std::vector<SolutionWithScore> newPairs;
+			unsigned int k(0);
 			for (unsigned int i(0), j(shade.size()); i != j; ++i)
 			{
 				if (shade[i])
-					newPairs.push_back(std::move(pairs[i]));
+				{
+					if (i != k)
+					{
+						pairs[k] = std::move(pairs[i]);
+					}
+					++k;
+				}
 			}
-			pairs = std::move(newPairs);
+			pairs.erase(pairs.begin() + k, pairs.end());
 		}
 
 		std::vector<bool> select(const std::vector<SolutionWithScore> &pairs, GenerateFlightPlan::SolutionCompareFunciont_t compareFun, const Setting &setting)

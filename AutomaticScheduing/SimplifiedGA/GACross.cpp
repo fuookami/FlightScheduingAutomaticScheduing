@@ -65,9 +65,9 @@ namespace GA
 			{
 				static std::random_device rd;
 				static std::mt19937_64 gen(rd());
-				std::poisson_distribution<> dis(1);
+				static std::poisson_distribution<> dis(1);
 				std::uniform_int_distribution<> udis(0, size - 1);
-				std::uniform_int_distribution<> bdis(0, 1);
+				static std::uniform_int_distribution<> bdis(0, 1);
 
 				unsigned int pointNum(dis(gen) + 3);
 				std::vector<bool> ret(size, false);
