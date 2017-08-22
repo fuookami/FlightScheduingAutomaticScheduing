@@ -26,7 +26,7 @@ namespace GA
 
 	static const unsigned int maxBestContinueIter = 50;
 	static const unsigned int maxIter = 1000;
-	static const std::pair<double, double> solutionNumRate(std::make_pair(0.75, 4));
+	static const std::pair<double, double> solutionNumRate(std::make_pair(0.75, 2));
 
 	GenerateFlightPlan::OutputDatas run(const std::vector<Solution> &initialSolution, bool FaultToTerant, 
 		const std::pair<unsigned int, unsigned int> &_solutionNumRange, const std::pair<unsigned int, unsigned int> &_range, 

@@ -144,23 +144,23 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 			if (!pNewPlan->m_bunches[tCopy[i]].addFlight(pThisFlight))
 			{
 				if (d(gen) < maxRank)
-					addedDealyTable.push_back(std::make_pair(i, 
+					addedDealyTable.push_back(std::make_pair(i,
 						std::vector<std::pair<unsigned int, int>>()));
 				else
 				{
-					// Ѱ��һ���պ��മ
+					// 寻找一条空航班串
 					unsigned int p(0), q(pNewPlan->m_bunches.size());
 					for (; p != q && pNewPlan->m_bunches[p].size() != 0; ++p);
 					if (p != q)
 					{
-						// ���뵽�������മ��
+						// 加入到这条航班串里
 						pNewPlan->m_bunches[p].addFlight(pThisFlight);
 						tCopy[i] = p;
 					}
 					else
 					{
-						// ����addedDealyTable����
-						addedDealyTable.push_back(std::make_pair(i, 
+						// 加入addedDealyTable表里
+						addedDealyTable.push_back(std::make_pair(i,
 							std::vector<std::pair<unsigned int, int>>()));
 					}
 				}
@@ -170,18 +170,18 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 		/*
 		for <flight_id, vector<bunch_id, cost>> in addedDealyTable
 			for bunch in pNewPlan
-				if bunch.cost(flight)���������
-					��<bunch_id, cost>����addedDealyTable[flight_id]
-			if ��������к��മ������ȥ
-				����cost��vector<bunch_id, cost>�������򣬴�С����
-			else
-				Ѱ��һ���պ��മ
-				if �����º���
-					���뵽����������
+				if bunch.cost(flight)不是无穷大
+					将<bunch_id, cost>放入addedDealyTable[flight_id]
+				if 这个航班有航班串能塞进去
+					根据cost对vector<bunch_id, cost>进行排序，从小到大
 				else
-					��������
+					寻找一条空航班串
+					if 存在新航班
+						加入到这条航班里
+					else
+						重新生成
 		*/
-		for (std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>> 
+		for (std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>>
 			&ele : addedDealyTable)
 		{
 			std::shared_ptr<FlightInfo> pThisFlight(infoMap.find(ele.first)->second);
@@ -235,14 +235,14 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 		while (!addedDealyTable.empty())
 		{
 			/*
-			��������������ĺ���id��ʾδ���뺽�മ����
+			存在于这个向量的航班id表示未加入航班串集中
 			*/
 
 			/*
-			���� vector<bunch_id, cost>[0].cost �� addedDealyTable(<flight_id, vector<bunch_id, cost>>) �������򣬴�С����
-			���ɷֲ�ѡ��һ�������������addedDealyTable
-			���ɷֲ�ѡ��bunch_id���߼��뵽�µĺ��മ��
-			�Ƿ���ĺ��മΪnew_bunch_id
+			根据 vector<bunch_id, cost>[0].cost 对 addedDealyTable(<flight_id, vector<bunch_id, cost>>) 进行排序，从小到大
+			柏松分布选择一个，将这个弹出addedDealyTable
+			柏松分布选择bunch_id或者加入到新的航班串里
+			记放入的航班串为new_bunch_id
 			*/
 			std::sort(addedDealyTable.begin(), addedDealyTable.end(), []
 			(std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>> &lps,
@@ -253,7 +253,7 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 
 			unsigned int selectRank(d(gen));
 			selectRank = selectRank >= addedDealyTable.size() ? addedDealyTable.size() - 1 : selectRank;
-			std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int, 
+			std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int,
 				int>>>>::iterator pSelect(addedDealyTable.begin() + selectRank);
 
 			unsigned int selectBunch(d(gen));
@@ -264,17 +264,17 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 			addedDealyTable.erase(pSelect);
 
 			/*
-			����addedDealyTable��
+			更新addedDealyTable表
 			for <flight_id, vector<bunch_id, cost>> in addedDealyTable
 				bool flag2
-				if new_bunch_id ������ vector<bunch_id, cost> ��
-					if bunch.cost(flight) ���������
-						����cost
+				if new_bunch_id 存在于 vector<bunch_id, cost> 中
+					if bunch.cost(flight) 不是无穷大
+						更新cost
 					else
-						ɾ��
+						删除
 					flag2 = true
-				if flag2
-					����cost��vector<bunch_id, cost>�������򣬴�С����
+			if flag2
+				根据cost对vector<bunch_id, cost>进行排序，从小到大
 			*/
 			for (std::vector<std::pair<unsigned int, std::vector<std::pair<unsigned int, int>>>>::iterator
 				currIt(addedDealyTable.begin()); currIt != addedDealyTable.end();)
@@ -284,9 +284,9 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 				std::vector<std::pair<unsigned int, int>>::iterator pSelectBunch(
 					std::find_if(currIt->second.begin(), currIt->second.end(), [bunchId]
 					(std::pair<unsigned int, int> &lop) -> bool
-					{
-						return lop.first == bunchId;
-					})
+				{
+					return lop.first == bunchId;
+				})
 				);
 				if (pSelectBunch == currIt->second.end())
 				{

@@ -74,22 +74,27 @@ namespace GenerateFlightPlan
 	{
 		std::vector<PlanTable> generateInitailSolution(void)
 		{
-			std::vector<PlanTable> initailSolution(GenerateFlightPlan::FlighterNum, PlanTable());
+			std::vector<PlanTable> initailSolution;
 
-			std::vector<std::thread> threads;
-
-			for (unsigned int i(0), j(initailSolution.size()); i != j; ++i)
-				threads.push_back(std::thread(
-					FlightPlan::generatePlanTableWithRandomGreedyAlgorithm, &(initailSolution[i]), flightInfoMap));
-
-			for (auto &thread : threads)
-				thread.join();
-
-			initailSolution.erase(std::remove_if(initailSolution.begin(), initailSolution.end(),
-				[](const PlanTable &t) -> bool
+			while (initailSolution.empty())
 			{
-				return t.empty();
-			}), initailSolution.end());
+				initailSolution.assign(GenerateFlightPlan::FlighterNum, PlanTable());
+
+				std::vector<std::thread> threads;
+
+				for (unsigned int i(0), j(initailSolution.size()); i != j; ++i)
+					threads.push_back(std::thread(
+						FlightPlan::generatePlanTableWithRandomGreedyAlgorithm, &(initailSolution[i]), flightInfoMap));
+
+				for (auto &thread : threads)
+					thread.join();
+
+				initailSolution.erase(std::remove_if(initailSolution.begin(), initailSolution.end(),
+					[](const PlanTable &t) -> bool
+				{
+					return t.empty();
+				}), initailSolution.end());
+			}
 
 			return initailSolution;
 		}
