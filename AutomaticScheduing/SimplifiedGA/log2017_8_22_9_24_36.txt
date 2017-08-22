@@ -1,0 +1,27 @@
+------------------------------
+Iterator: 1
+Best Solution Continuing Iterator: 1
+Score: 241 ~ 1008
+Quantity: 77 ~ 101
+Mutation Rate: 0.000693145
+Best Score: 241
+------------------------------
+
+------------------------------
+Iterator: 2
+Best Solution Continuing Iterator: 2
+Score: 241 ~ 1148
+Quantity: 156 ~ 222
+Mutation Rate: 0.000662891
+Best Score: 241
+------------------------------
+
+------------------------------
+Iterator: 3
+Best Solution Continuing Iterator: 1
+Score: 164 ~ 1157
+Quantity: 287 ~ 369
+Mutation Rate: 0.000679203
+Best Score: 164
+------------------------------
+

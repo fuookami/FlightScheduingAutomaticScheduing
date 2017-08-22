@@ -129,8 +129,8 @@ std::shared_ptr<FlightPlan> FlightPlan::generateFromPlanTableWithFaultTolerant(P
 	bool flag(true);
 	PlanTable tCopy;
 	
-	unsigned int maxTime((maxRank + 5 * maxRank * d(gen)) * 100);
-	maxTime = maxTime > 10000 ? 10000 : maxTime;
+	unsigned int maxTime((maxRank + 5 * maxRank * d(gen)) * 10);
+	maxTime = maxTime > 1000 ? 1000 : maxTime;
 	unsigned int counter(0);
 	for (; flag && counter != maxTime; ++counter)
 	{
